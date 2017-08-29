@@ -1,4 +1,4 @@
-# Zen Cart Collect Info Through Tabs In New Style (CITTENS)
+# Zen Cart Collect Info Through Tabs In New Style (CITTINS)
 
 The current collect info page can be quit long, and is not very user friendly. Therefore I started searching for a better solution.
 
