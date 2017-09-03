@@ -635,8 +635,8 @@ if (zen_get_product_is_linked($_GET['pID']) == 'true' and $_GET['pID'] > 0) {
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_DATE_AVAILABLE, 'products_date_available', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-3">
-              <div class="input-group date" id="datepicker">
-                <?php echo zen_draw_input_field('products_date_available', $pInfo->products_date_available, 'date-date-format="YYYY-MM-DD" class="form-control"'); ?><span class="input-group-btn"><button type="button" class="btn btn-default"><i class="fa fa-calendar"></i></button></span>
+              <div class="date" id="datepicker">
+                <?php echo zen_draw_input_field('products_date_available', $pInfo->products_date_available, 'class="form-control"'); ?><i class="fa fa-calendar fa-lg"></i>
               </div>
             </div>
           </div>
@@ -870,7 +870,7 @@ if (zen_get_product_is_linked($_GET['pID']) == 'true' and $_GET['pID'] > 0) {
           <?php
 // hidden fields not changeable on products page
           if (!array_search('categories', $extraTabsContents) && $_GET['pID'] > 0) {
-          echo zen_draw_hidden_field('master_categories_id', $pInfo->master_categories_id);
+            echo zen_draw_hidden_field('master_categories_id', $pInfo->master_categories_id);
           }
           if (!array_search('discounts', $extraTabsContents)) {
             echo zen_draw_hidden_field('products_discount_type', $pInfo->products_discount_type);
@@ -919,30 +919,42 @@ if (zen_get_product_is_linked($_GET['pID']) == 'true' and $_GET['pID'] > 0) {
 <!-- Product preview modal-->
 <?php include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
 <!-- script for datepicker -->
-<script>
-  $(function () {
-      $('#datepicker').datetimepicker({
-          format: 'YYYY-MM-DD',
-          locale: '<?php echo $_SESSION['languages_code']; ?>',
-          showTodayButton: true,
-          keepOpen: true
-      });
-  });
+<script type="text/javascript">
+  $('input[name="products_date_available"]').daterangepicker({
+      "singleDatePicker": true,
+      "showDropdowns": true,
+      "locale": {
+          "format": 'YYYY-MM-DD',
+          "monthNames": [
+              "<?php echo _JANUARY; ?>",
+              "<?php echo _FEBRUARY; ?>",
+              "<?php echo _MARCH; ?>",
+              "<?php echo _APRIL; ?>",
+              "<?php echo _MAY; ?>",
+              "<?php echo _JUNE; ?>",
+              "<?php echo _JULY; ?>",
+              "<?php echo _AUGUST; ?>",
+              "<?php echo _SEPTEMBER; ?>",
+              "<?php echo _OCTOBER; ?>",
+              "<?php echo _NOVEMBER; ?>",
+              "<?php echo _DECEMBER; ?>"
+          ]
+      }
+  }
+  );
 </script>
 <!-- script for tooltips -->
-<script>
+<script type="text/javascript">
   $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
-  });
-</script>
+  });</script>
 <!-- script for image popup -->
-<script>
+<script type="text/javascript">
   $("#imagePopUp").on("click", function () {
       $('#imageModal').modal('show');
-  });
-</script>
+  });</script>
 <!-- script for preview popup -->
-<script>
+<script type="text/javascript">
   $('#previewPopUp').on('click', function () {
       $('#previewmodal').modal('show');
   });
