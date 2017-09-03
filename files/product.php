@@ -94,6 +94,7 @@
     $messageStack->add(ERROR_CATALOG_IMAGE_DIRECTORY_DOES_NOT_EXIST, 'error');
   }
 ?>
+<?php /* BOF Zen4All - CITTINS - 1 of 2 */ ?>
 <!doctype html>
 <html <?php echo HTML_PARAMS; ?>>
 <head>
@@ -101,11 +102,12 @@
 <title><?php echo TITLE; ?></title>
 <link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
 <link rel="stylesheet" type="text/css" href="includes/cssjsmenuhover.css" media="all" id="hoverJS">
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ= sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.4.0.min.js" integrity="sha256-nxdiQ4FdTm28eUNNQIJz5JodTMCF5/l32g5LwfUwZUo= sha384-2yjFZNAHmmlUAVQM/LTTOrqZVLyN8Iy+6BQ5FI/FpQFGXYw3vsVB8zeDCfk1QLNn sha512-kGOP6gGP2NZ4CGooYnldK9UPdvLZxY7sXKm6KeY1lnOKgsN7JM9Dc7V6l/4TxovN/JKqvMcGyZ7UbGl4Xmmttw==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ= sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.4.0.min.js" integrity="sha256-nxdiQ4FdTm28eUNNQIJz5JodTMCF5/l32g5LwfUwZUo= sha384-2yjFZNAHmmlUAVQM/LTTOrqZVLyN8Iy+6BQ5FI/FpQFGXYw3vsVB8zeDCfk1QLNn sha512-kGOP6gGP2NZ4CGooYnldK9UPdvLZxY7sXKm6KeY1lnOKgsN7JM9Dc7V6l/4TxovN/JKqvMcGyZ7UbGl4Xmmttw==" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="includes/menu.js"></script>
 <script type="text/javascript" src="includes/general.js"></script>
+<?php /* EOF Zen4All - CITTINS - 1 of 2 */ ?>
 <script type="text/javascript">
   <!--
   function init()
@@ -121,7 +123,9 @@
 </script>
 <?php if ($action != 'new_product_meta_tags' && $editor_handler != '') include ($editor_handler); ?>
 </head>
+<?php /* BOF Zen4All - CITTINS - 2 of 2 */ ?>
 <body onload="init()">
+<?php /* EOF Zen4All - CITTINS - 2 of 2 */ ?>
 <div id="spiffycalendar" class="text"></div>
 <!-- header //-->
 <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
