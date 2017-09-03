@@ -869,8 +869,10 @@ if (zen_get_product_is_linked($_GET['pID']) == 'true' and $_GET['pID'] > 0) {
       <span>
           <?php
 // hidden fields not changeable on products page
+          if (!array_search('categories', $extraTabsContents) && $_GET['pID'] > 0) {
           echo zen_draw_hidden_field('master_categories_id', $pInfo->master_categories_id);
-          if (array_search('discounts', $extraTabsContents)) {
+          }
+          if (!array_search('discounts', $extraTabsContents)) {
             echo zen_draw_hidden_field('products_discount_type', $pInfo->products_discount_type);
             echo zen_draw_hidden_field('products_discount_type_from', $pInfo->products_discount_type_from);
           }
