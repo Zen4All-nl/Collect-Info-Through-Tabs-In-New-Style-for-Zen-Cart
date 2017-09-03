@@ -1,10 +1,11 @@
 <?php
-/* 
+/*
  * @package admin
  * @copyright Copyright 2008-2017 Zen4All
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: functions_extra_product_info.php Zen4All $
+ * @version $Id: functionsCollectProductInfoExtra.php Zen4All $
  */
+
 
 /*
  * Return all files with a certain name in a directory including sub-directories
@@ -18,6 +19,7 @@
  * </p>
  * @return array <p>An array wich contains the retrieved files, including their paths</p>
  */
+
 function dirList($path, $file) {
   $dirs = glob($path . '*', GLOB_ONLYDIR);
   $files = array();
