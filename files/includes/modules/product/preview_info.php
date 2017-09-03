@@ -11,17 +11,89 @@ if (!defined('IS_ADMIN_FLAG')) {
 }
 
 if (zen_not_null($_POST)) {
+  /* BOF Zen4All - CITTINS - 1 of 7 */
+  if ($_POST['metatags_products_name_status'] == 'on' || $_POST['metatags_products_name_status'] == '1') {
+    $_POST['metatags_products_name_status'] = 1;
+  } else {
+    $_POST['metatags_products_name_status'] = 0;
+  }
+  if ($_POST['metatags_title_status'] == 'on' || $_POST['metatags_title_status'] == '1') {
+    $_POST['metatags_title_status'] = 1;
+  } else {
+    $_POST['metatags_title_status'] = 0;
+  }
+  if ($_POST['metatags_model_status'] == 'on' || $_POST['metatags_model_status'] == '1') {
+    $_POST['metatags_model_status'] = 1;
+  } else {
+    $_POST['metatags_model_status'] = 0;
+  }
+  if ($_POST['metatags_price_status'] == 'on' || $_POST['metatags_price_status'] == '1') {
+    $_POST['metatags_price_status'] = 1;
+  } else {
+    $_POST['metatags_price_status'] = 0;
+  }
+  if ($_POST['metatags_title_tagline_status'] == 'on' || $_POST['metatags_title_tagline_status'] == '1') {
+    $_POST['metatags_title_tagline_status'] = 1;
+  } else {
+    $_POST['metatags_title_tagline_status'] = 0;
+  }
+  if ($_POST['products_status'] == 'on' || $_POST['products_status'] == '1') {
+    $_POST['products_status'] = 1;
+  } else {
+    $_POST['products_status'] = 0;
+  }
+  if ($_POST['product_is_free'] == 'on' || $_POST['product_is_free'] == '1') {
+    $_POST['product_is_free'] = 1;
+  } else {
+    $_POST['product_is_free'] = 0;
+  }
+  if ($_POST['product_is_call'] == 'on' || $_POST['product_is_call'] == '1') {
+    $_POST['product_is_call'] = 1;
+  } else {
+    $_POST['product_is_call'] = 0;
+  }
+  if ($_POST['products_priced_by_attribute'] == 'on' || $_POST['products_priced_by_attribute'] == '1') {
+    $_POST['products_priced_by_attribute'] = 1;
+  } else {
+    $_POST['products_priced_by_attribute'] = 0;
+  }
+  if ($_POST['products_virtual'] == 'on' || $_POST['products_virtual'] == '1') {
+    $_POST['products_virtual'] = 1;
+  } else {
+    $_POST['products_virtual'] = 0;
+  }
+  if ($_POST['products_qty_box_status'] == 'on' || $_POST['products_qty_box_status'] == '1') {
+    $_POST['products_qty_box_status'] = 1;
+  } else {
+    $_POST['products_qty_box_status'] = 0;
+  }
+  if ($_POST['products_quantity_mixed'] == 'on' || $_POST['products_quantity_mixed'] == '1') {
+    $_POST['products_quantity_mixed'] = 1;
+  } else {
+    $_POST['products_quantity_mixed'] = 0;
+  }
+  if ($_POST['image_delete'] == 'on' || $_POST['image_delete'] == '1') {
+    $_POST['image_delete'] = 1;
+  } else {
+    $_POST['image_delete'] = 0;
+  }
+  if ($_POST['overwrite'] == 'on' || $_POST['overwrite'] == '1') {
+    $_POST['overwrite'] = 1;
+  } else {
+    $_POST['overwrite'] = 0;
+  }
+  /* EOF Zen4All - CITTINS - 1 of 7 */
   $pInfo = new objectInfo($_POST);
   $products_name = $_POST['products_name'];
   $products_description = $_POST['products_description'];
   $products_url = $_POST['products_url'];
-  /* BOF Zen4All - CITTINS - 1 of 6 */
+  /* BOF Zen4All - CITTINS - 2 of 7 */
   $metatags_title = $_POST['metatags_title'];
   $metatags_keywords = $_POST['metatags_keywords'];
   $metatags_description = $_POST['metatags_description'];
-  /* EOF Zen4All - CITTINS - 1 of 6 */
+  /* EOF Zen4All - CITTINS - 2 of 7 */
 } else {
-  /* BOF Zen4All - CITTINS - 2 of 6 */
+  /* BOF Zen4All - CITTINS - 3 of 7 */
   $product = $db->Execute("select p.products_id, pd.language_id, pd.products_name,
                                       pd.products_description, pd.products_url, p.products_quantity,
                                       p.products_model, p.products_image, p.products_price, p.products_virtual,
@@ -38,7 +110,7 @@ if (zen_not_null($_POST)) {
                                where p.products_id = pd.products_id
                                and p.products_id = mtpd.products_id
                                and p.products_id = '" . (int)$_GET['pID'] . "'");
-  /* EOF Zen4All - CITTINS - 2 of 6 */
+  /* EOF Zen4All - CITTINS - 3 of 7 */
 
   $pInfo = new objectInfo($product->fields);
   $products_image_name = $pInfo->products_image;
@@ -52,20 +124,20 @@ for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
     $pInfo->products_name = zen_get_products_name($pInfo->products_id, $languages[$i]['id']);
     $pInfo->products_description = zen_get_products_description($pInfo->products_id, $languages[$i]['id']);
     $pInfo->products_url = zen_get_products_url($pInfo->products_id, $languages[$i]['id']);
-    /* BOF Zen4All - CITTINS - 3 of 6 */
+    /* BOF Zen4All - CITTINS - 4 of 7 */
     $pInfo->metatags_title = zen_get_metatags_title($pInfo->products_id, $languages[$i]['id']);
     $pInfo->metatags_keywords = zen_get_metatags_keywords($pInfo->products_id, $languages[$i]['id']);
     $pInfo->metatags_description = zen_get_metatags_description($pInfo->products_id, $languages[$i]['id']);
-    /* EOF Zen4All - CITTINS - 3 of 6 */
+    /* EOF Zen4All - CITTINS - 4 of 7 */
   } else {
     $pInfo->products_name = zen_db_prepare_input($products_name[$languages[$i]['id']]);
     $pInfo->products_description = zen_db_prepare_input($products_description[$languages[$i]['id']]);
     $pInfo->products_url = zen_db_prepare_input($products_url[$languages[$i]['id']]);
-    /* BOF Zen4All - CITTINS - 4 of 6 */
+    /* BOF Zen4All - CITTINS - 5 of 7 */
     $pInfo->metatags_title = zen_db_prepare_input($metatags_title[$languages[$i]['id']]);
     $pInfo->metatags_keywords = zen_db_prepare_input($metatags_keywords[$languages[$i]['id']]);
     $pInfo->metatags_description = zen_db_prepare_input($metatags_description[$languages[$i]['id']]);
-    /* EOF Zen4All - CITTINS - 4 of 6 */
+    /* EOF Zen4All - CITTINS - 5 of 7 */
   }
 
   $specials_price = zen_get_products_special_price($pID);
@@ -174,16 +246,16 @@ for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
           echo zen_draw_hidden_field('products_name[' . $languages[$i]['id'] . ']', htmlspecialchars(stripslashes($products_name[$languages[$i]['id']]), ENT_COMPAT, CHARSET, TRUE));
           echo zen_draw_hidden_field('products_description[' . $languages[$i]['id'] . ']', htmlspecialchars(stripslashes($products_description[$languages[$i]['id']]), ENT_COMPAT, CHARSET, TRUE));
           echo zen_draw_hidden_field('products_url[' . $languages[$i]['id'] . ']', htmlspecialchars(stripslashes($products_url[$languages[$i]['id']]), ENT_COMPAT, CHARSET, TRUE));
-          /* BOF Zen4All - CITTINS - 5 of 6 */
+          /* BOF Zen4All - CITTINS - 6 of 7 */
           echo zen_draw_hidden_field('metatags_title[' . $languages[$i]['id'] . ']', htmlspecialchars(stripslashes($metatags_title[$languages[$i]['id']]), ENT_COMPAT, CHARSET, TRUE));
           echo zen_draw_hidden_field('metatags_keywords[' . $languages[$i]['id'] . ']', htmlspecialchars(stripslashes($metatags_keywords[$languages[$i]['id']]), ENT_COMPAT, CHARSET, TRUE));
           echo zen_draw_hidden_field('metatags_description[' . $languages[$i]['id'] . ']', htmlspecialchars(stripslashes($metatags_description[$languages[$i]['id']]), ENT_COMPAT, CHARSET, TRUE));
-          /* EOF Zen4All - CITTINS - 5 of 6 */
+          /* EOF Zen4All - CITTINS - 6 of 7 */
         }
         echo zen_draw_hidden_field('products_image', stripslashes($products_image_name));
         echo ( (isset($_GET['search']) && !empty($_GET['search'])) ? zen_draw_hidden_field('search', $_GET['search']) : '') . ( (isset($_POST['search']) && !empty($_POST['search']) && empty($_GET['search'])) ? zen_draw_hidden_field('search', $_POST['search']) : '');
 
-        /* BOF Zen4All - CITTINS - 6 of 6 */
+        /* BOF Zen4All - CITTINS - 7 of 7 */
         $extraTabsPreview = dirList(DIR_WS_MODULES . 'extra_tabs/', 'tab_preview_info.php');
         if (isset($extraTabsPreview) && $extraTabsPreview != '') {
           foreach ($extraTabsPreview as $tabPreview) {
@@ -192,7 +264,7 @@ for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
             <?php
           }
         }
-        /* EOF Zen4All - CITTINS - 6 of 6 */
+        /* EOF Zen4All - CITTINS - 7 of 7 */
 
         echo zen_image_submit('button_back.gif', IMAGE_BACK, 'name="edit"') . '&nbsp;&nbsp;';
         if (isset($_GET['pID'])) {

@@ -62,3 +62,56 @@
       top: auto;
       cursor: pointer;
   }
+/*
+  label.btn span {
+  	font-size: 1.5em;
+  }
+  */
+  label input[type="radio"] ~ i.fa.fa-circle-o {
+  	color: #c8c8c8;
+  	display: inline;
+  }
+  label input[type="radio"] ~ i.fa.fa-dot-circle-o {
+  	display: none;
+  }
+  label input[type="radio"]:checked ~ i.fa.fa-circle-o {
+  	display: none;
+  }
+  label input[type="radio"]:checked ~ i.fa.fa-dot-circle-o {
+  	color: #337ab7;
+  	display: inline;
+  }
+  label:hover input[type="radio"] ~ i.fa {
+  	color: #337ab7;
+  }
+  div[data-toggle="buttons"] label.active {
+  	color: #337ab7;
+  }
+  div[data-toggle="buttons"] label {
+  	display: inline-block;
+  	padding: 6px 12px;
+  	margin-bottom: 0px;
+  	font-size: 14px;
+  	font-weight: normal;
+  	line-height: 2em;
+  	text-align: left;
+  	white-space: nowrap;
+  	vertical-align: top;
+  	cursor: pointer;
+  	background-color: none;
+  	border: 0px solid #c8c8c8;
+  	border-radius: 3px;
+  	color: #c8c8c8;
+  	-webkit-user-select: none;
+  	-moz-user-select: none;
+  	-ms-user-select: none;
+  	-o-user-select: none;
+  	user-select: none;
+  }
+  div[data-toggle="buttons"] label:hover {
+  	color: #337ab7;
+  }
+  div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
+  	-webkit-box-shadow: none;
+  	box-shadow: none;
+  }
