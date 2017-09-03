@@ -1,12 +1,9 @@
 /*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : 28-aug-2017, 0:42:06
-    Author     : Erik Kerkhoven
-*/
+ * @package admin
+ * @copyright Copyright 2008-2017 Zen4All
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: collect_info.css Zen4All $
+ */
 
   /* Navs */
   .nav > li.disabled > a {
@@ -57,4 +54,11 @@ and open the template in the editor.
   }
   .fa-folder {
       text-shadow: 1px 1px 1px rgba(1,1,1,0.5);
+  }
+  #datepicker i {
+      position: absolute;
+      bottom: 10px;
+      right: 24px;
+      top: auto;
+      cursor: pointer;
   }
