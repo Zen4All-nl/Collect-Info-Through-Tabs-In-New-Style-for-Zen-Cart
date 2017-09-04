@@ -355,7 +355,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 <div class="form-group">
                     <?php echo zen_draw_label(TEXT_PRODUCTS_DESCRIPTION, 'products_description[' . $languages[$i]['id'] . ']', 'class="col-sm-3 control-label"'); ?>
                   <div class="col-sm-9">
-                      <?php echo zen_draw_textarea_field('products_description[' . $languages[$i]['id'] . ']', 'soft', '100%', '30', htmlspecialchars((isset($products_description[$languages[$i]['id']])) ? stripslashes($products_description[$languages[$i]['id']]) : zen_get_products_description($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="editorHook"'); ?>
+                      <?php echo zen_draw_textarea_field('products_description[' . $languages[$i]['id'] . ']', 'soft', '100%', '30', htmlspecialchars((isset($products_description[$languages[$i]['id']])) ? stripslashes($products_description[$languages[$i]['id']]) : zen_get_products_description($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="editorHook form-control"'); ?>
                   </div>
                 </div>
                 <div class="form-group">
@@ -367,13 +367,13 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 <div class="form-group">
                     <?php echo zen_draw_label(TEXT_META_TAGS_KEYWORDS, 'metatags_keywords', 'class="col-sm-3 control-label"'); ?>
                   <div class="col-sm-9">
-                      <?php echo zen_draw_textarea_field('metatags_keywords[' . $languages[$i]['id'] . ']', 'soft', '100%', '10', htmlspecialchars((isset($metatags_keywords[$languages[$i]['id']])) ? stripslashes($metatags_keywords[$languages[$i]['id']]) : zen_get_metatags_keywords($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="noEditor"'); ?>
+                      <?php echo zen_draw_textarea_field('metatags_keywords[' . $languages[$i]['id'] . ']', 'soft', '100%', '10', htmlspecialchars((isset($metatags_keywords[$languages[$i]['id']])) ? stripslashes($metatags_keywords[$languages[$i]['id']]) : zen_get_metatags_keywords($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="noEditor form-control"'); ?>
                   </div>
                 </div>
                 <div class="form-group">
                     <?php echo zen_draw_label(TEXT_META_TAGS_DESCRIPTION, 'metatags_description', 'class="col-sm-3 control-label"'); ?>
                   <div class="col-sm-9">
-                      <?php echo zen_draw_textarea_field('metatags_description[' . $languages[$i]['id'] . ']', 'soft', '100%', '10', htmlspecialchars((isset($metatags_description[$languages[$i]['id']])) ? stripslashes($metatags_description[$languages[$i]['id']]) : zen_get_metatags_description($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="noEditor"'); ?>
+                      <?php echo zen_draw_textarea_field('metatags_description[' . $languages[$i]['id'] . ']', 'soft', '100%', '10', htmlspecialchars((isset($metatags_description[$languages[$i]['id']])) ? stripslashes($metatags_description[$languages[$i]['id']]) : zen_get_metatags_description($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="noEditor form-control"'); ?>
                   </div>
                 </div>
               </div>
