@@ -1,6 +1,6 @@
 # Zen Cart Collect Info Through Tabs In New Style (CITTINS)
 
-The current collect info page can be quit long, and is not very user friendly. Therefore I started searching for a better solution.
+The current collect info page can be quite long, and is not very user friendly. Therefore I started searching for a better solution.
 
 After looking at many other shopping cart frameworks, I have a pretty good idea of how I want the new  collect info page to look.
 It will be a page with tabs for different categories of information. The default tabs are:
