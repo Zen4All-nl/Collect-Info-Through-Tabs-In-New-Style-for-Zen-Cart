@@ -1,0 +1,216 @@
+<?php
+include (DIR_WS_LANGUAGES . $_SESSION['language'] . '/products_price_manager.php');
+if (isset($_GET['pID']) && empty($_POST)) {
+  $product_mdq = $db->Execute("SELECT products_mixed_discount_quantity FROM " . TABLE_PRODUCTS . " WHERE products_id = " . (int)$_GET['pID']);
+  $pInfo->updateObjectInfo($product_mdq->fields);
+}
+?>
+<?php
+// Products can be purchased with mixed attributes for discount
+if (!isset($pInfo->products_mixed_discount_quantity))
+  $pInfo->products_mixed_discount_quantity = '1';
+switch ($pInfo->products_mixed_discount_quantity) {
+  case '0':
+    $in_products_mixed_discount_quantity = false;
+    $out_products_mixed_discount_quantity = true;
+    break;
+  case '1':
+    $in_products_mixed_discount_quantity = true;
+    $out_products_mixed_discount_quantity = false;
+    break;
+  default:
+    $in_products_mixed_discount_quantity = true;
+    $out_products_mixed_discount_quantity = false;
+}
+// Product is product discount type - None, Percentage, Actual Price, $$ off
+$discount_type_array = array(
+  array('id' => '0', 'text' => DISCOUNT_TYPE_DROPDOWN_0),
+  array('id' => '1', 'text' => DISCOUNT_TYPE_DROPDOWN_1),
+  array('id' => '2', 'text' => DISCOUNT_TYPE_DROPDOWN_2),
+  array('id' => '3', 'text' => DISCOUNT_TYPE_DROPDOWN_3));
+
+// Product is product discount type from price or special
+$discount_type_from_array = array(
+  array('id' => '0', 'text' => DISCOUNT_TYPE_FROM_DROPDOWN_0),
+  array('id' => '1', 'text' => DISCOUNT_TYPE_FROM_DROPDOWN_1));
+if (isset($pInfo->products_id) && $pInfo->products_id != '') {
+  $discounts_qty = $db->Execute("SELECT * FROM " . TABLE_PRODUCTS_DISCOUNT_QUANTITY . " WHERE products_id = '" . $pInfo->products_id . "' ORDER BY discount_qty");
+}
+$i = 0;
+$discount_name = array();
+
+if (isset($discounts_qty) && $discounts_qty->RecordCount() > 0) {
+  foreach ($discounts_qty as $item) {
+    $i++;
+    $discount_name[] = array(
+      'id' => $i,
+      'discount_qty' => $item['discount_qty'],
+      'discount_price' => $item['discount_price']);
+  }
+} elseif (isset($pInfo->discount_qty) && $pInfo->discount_qty != '') {
+  $tempDiscountQty= $pInfo->discount_qty;
+  $tempDiscountPrice = $pInfo->discount_price;
+  for ($i = 0, $n = sizeof($tempDiscountQty); $i < $n; $i++) {
+    $tempDiscount[$i + 1] = array(
+      'discount_qty' => $tempDiscountQty[$i + 1],
+      'discount_price' => $tempDiscountPrice[$i + 1]);
+  }
+
+  foreach ($tempDiscount as $item) {
+    $i++;
+    $discount_name[] = array(
+      'id' => $i,
+      'discount_qty' => $item['discount_qty'],
+      'discount_price' => $item['discount_price']);
+  }
+}
+$disqountRow = sizeof($discount_name);
+?>
+<div class="table-responsive">
+  <table id="qty_discount" class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <td colspan="6"><?php echo TEXT_PRODUCTS_MIXED_DISCOUNT_QUANTITY; ?>&nbsp;&nbsp;<?php echo zen_draw_checkbox_field('products_mixed_discount_quantity', '', $pInfo->products_mixed_discount_quantity); ?></td>
+      </tr>
+      <tr>
+        <td colspan="2" class="main">
+            <?php echo TEXT_DISCOUNT_TYPE_INFO; ?>
+        </td>
+        <td colspan="2" class="main">
+            <?php echo TEXT_DISCOUNT_TYPE . ' ' . zen_draw_pull_down_menu('products_discount_type', $discount_type_array, $pInfo->products_discount_type, 'class="form-control"'); ?>
+        </td>
+        <td colspan="2" class="main">
+            <?php echo TEXT_DISCOUNT_TYPE_FROM . ' ' . zen_draw_pull_down_menu('products_discount_type_from', $discount_type_from_array, $pInfo->products_discount_type_from, 'class="form-control"'); ?>
+        </td>
+      </tr>
+      <tr>
+        <td><?php echo TEXT_PRODUCTS_DISCOUNT_QTY_TITLE; ?></td>
+        <td><?php echo TEXT_PRODUCTS_DISCOUNT_QTY; ?></td>
+        <td><?php echo TEXT_PRODUCTS_DISCOUNT_PRICE; ?></td>
+        <?php
+        if (DISPLAY_PRICE_WITH_TAX_ADMIN == 'true') {
+          ?>
+          <td class="text-center"><?php echo TEXT_PRODUCTS_DISCOUNT_PRICE_EACH_TAX; ?></td>
+          <td class="text-center"><?php echo TEXT_PRODUCTS_DISCOUNT_PRICE_EXTENDED_TAX; ?></td>
+        <?php } else { ?>
+          <td class="text-center"><?php echo TEXT_PRODUCTS_DISCOUNT_PRICE_EACH; ?></td>
+          <td class="text-center"><?php echo TEXT_PRODUCTS_DISCOUNT_PRICE_EXTENDED; ?></td>
+        <?php } ?>
+        <td>&nbsp;</td>
+      </tr>
+    </thead>
+    <tbody>
+        <?php
+        foreach ($discount_name as $row) {
+          switch ($pInfo->products_discount_type) {
+            // none
+            case '0':
+              $discounted_price = 0;
+              break;
+            // percentage discount
+            case '1':
+              if ($pInfo->products_discount_type_from == '0') {
+                $discounted_price = $display_price - ($display_price * ($row['discount_price'] / 100));
+              } else {
+                if (!$display_specials_price) {
+                  $discounted_price = $display_price - ($display_price * ($row['discount_price'] / 100));
+                } else {
+                  $discounted_price = $display_specials_price - ($display_specials_price * ($row['discount_price'] / 100));
+                }
+              }
+
+              break;
+            // actual price
+            case '2':
+              if ($pInfo->products_discount_type_from == '0') {
+                $discounted_price = $row['discount_price'];
+              } else {
+                $discounted_price = $row['discount_price'];
+              }
+              break;
+            // amount offprice
+            case '3':
+              if ($pInfo->products_discount_type_from == '0') {
+                $discounted_price = $display_price - $row['discount_price'];
+              } else {
+                if (!$display_specials_price) {
+                  $discounted_price = $display_price - $row['discount_price'];
+                } else {
+                  $discounted_price = $display_specials_price - $row['discount_price'];
+                }
+              }
+              break;
+          }
+          ?>
+        <tr id="discount-row<?php echo $row['id'] ?>">
+          <td><?php echo TEXT_PRODUCTS_DISCOUNT . ' ' . $row['id']; ?></td>
+          <td><?php echo zen_draw_input_field('discount_qty[' . $row['id'] . ']', $row['discount_qty'], 'class="form-control"'); ?></td>
+          <td>
+              <?php echo zen_draw_input_field('discount_price[' . $row['id'] . ']', $row['discount_price'], 'class="form-control"'); ?>
+          </td>
+          <?php
+          if (DISPLAY_PRICE_WITH_TAX_ADMIN == 'true') {
+            ?>
+            <td class="text-right"><?php echo $currencies->display_price($discounted_price, 0, 1) . ' ' . $currencies->display_price($discounted_price, zen_get_tax_rate(1), 1); ?></td>
+            <td class="text-right"><?php echo ' x ' . number_format($row['discount_qty']) . ' = ' . $currencies->display_price($discounted_price, 0, $row['discount_qty']) . ' ' . $currencies->display_price($discounted_price, zen_get_tax_rate(1), $row['discount_qty']); ?></td>
+            <?php
+          } else {
+            ?>
+            <?php zc_dump($discounted_price); ?>
+            <td class="text-right"><?php echo $currencies->display_price($discounted_price, 0, 1); ?></td>
+            <td class="text-right"><?php echo ' x ' . number_format($row['discount_qty']) . ' = ' . $currencies->display_price($discounted_price, 0, $row['discount_qty']); ?></td>
+            <?php
+          }
+          ?>
+          <td><button type="button" onclick="$('#discount-row<?php echo $row['id'] ?>').remove();" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove Dicount"><i class="fa fa-minus-circle"></i></button></td>
+        </tr>
+        <?php
+      }
+      ?>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5">&nbsp;</td>
+        <td><button type="button" onclick="addDiscount();" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Add Discount"><i class="fa fa-plus-circle"></i></button></td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<script type="text/javascript">
+  var discount_row = <?php echo $disqountRow + 1; ?>;
+
+  function addDiscount() {
+      html = '<tr id="discount-row' + discount_row + '">';
+      html += '  <td><?php echo TEXT_PRODUCTS_DISCOUNT; ?>' + discount_row + '</td>';
+      html += '  <td><input type="text" name="discount_qty[' + discount_row + ']" value="" class="form-control" /></td>';
+      html += '  <td><input type="text" name="discount_price[' + discount_row + ']" value="" class="form-control" /></td>';
+<?php
+if (DISPLAY_PRICE_WITH_TAX_ADMIN == 'true') {
+  ?>
+        html += '  <td class="text-right"></td>';
+        html += '  <td class="text-right"></td>';
+  <?php
+} else {
+  ?>
+        html += '  <td class="text-right"></td>';
+        html += '  <td class="text-right"></td>';
+  <?php
+}
+?>
+      html += '  <td class="text-left"><button type="button" onclick="$(\'#discount-row' + discount_row + '\').remove();" data-toggle="tooltip" title="Remove" class="btn btn-danger"><i class="fa fa-minus-circle"></i></button></td>';
+      html += '</tr>';
+
+      $('#qty_discount tbody').append(html);
+
+      discount_row++;
+  }
+</script>
+<!-- script for sliding checkbox -->
+<script type="text/javascript">
+  $("[name='products_mixed_discount_quantity']").bootstrapSwitch({
+      onText: '<?php echo TEXT_YES; ?>',
+      offText: '<?php echo TEXT_NO; ?>',
+      animate: true
+  });
+  </script>
