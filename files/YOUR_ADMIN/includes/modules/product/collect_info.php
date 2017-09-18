@@ -591,12 +591,12 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
               </thead>
               <tbody>
                 <tr>
-                  <td class="text-left">
-                    <a href="#" id="imagePopUp">
-                        <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'class="img-thumbnail" id="mainImage"'); ?>
+                  <td class="text-center" id="mainImage">
+                    <span style="cursor: pointer;">
+                        <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'class="img-thumbnail" id="mainImage" data-toggle="modal" data-target="#imagePreviewModal"'); ?>
                       <br/>
                       <?php echo CLICK_TO_ENLARGE; ?>
-                    </a>
+                    </span>
                     <?php echo zen_draw_hidden_field('products_image', $pInfo->products_image); ?>
                   </td>
                   <td class="text-left">
@@ -739,14 +739,15 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
   $height = MEDIUM_IMAGE_HEIGHT;
 }
 ?>
-<div id="imageModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<!-- Product main image preview modal-->
+<div id="imagePreviewModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <h4 class="modal-title" id="imageModalLabel">Image preview</h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body text-center">
           <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', $width, $height) ?>
       </div>
       <div class="modal-footer">
@@ -758,7 +759,7 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
 <!-- Product preview modal-->
 <?php include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
 <!-- script for datepicker -->
-<script type="text/javascript">
+<script>
   $('input[name="products_date_available"]').daterangepicker({
       "singleDatePicker": true,
       "showDropdowns": true,
@@ -783,22 +784,17 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
   );
 </script>
 <!-- script for tooltips -->
-<script type="text/javascript">
+<script>
   $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
   });</script>
-<!-- script for image popup -->
-<script type="text/javascript">
-  $("#imagePopUp").on("click", function () {
-      $('#imageModal').modal('show');
-  });</script>
 <!-- script for preview popup -->
-<script type="text/javascript">
+<script>
   $('#previewPopUp').on('click', function () {
       $('#previewmodal').modal('show');
   });</script>
 <!-- script for sliding checkbox -->
-<script type="text/javascript">
+<script>
   $("[name='metatags_products_name_status']").bootstrapSwitch({
       onText: '<?php echo TEXT_YES; ?>',
       offText: '<?php echo TEXT_NO; ?>',
