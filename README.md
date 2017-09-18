@@ -24,6 +24,6 @@ Extra tabs that are planned are:
 Also I a want to add ajax to add thing like (additional) images dynamically.
 
 Some screenshots:
-![screenshot1](/docs/images/collect_info_01.png)
-![screenshot2](/docs/images/collect_info_02.png)
-![screenshot3](/docs/images/collect_info_03.png)
+![screenshot1](/Documentation/images/collect_info_01.png)
+![screenshot2](/Documentation/images/collect_info_02.png)
+![screenshot3](/Documentation/images/collect_info_03.png)
