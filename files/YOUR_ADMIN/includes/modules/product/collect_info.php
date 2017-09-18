@@ -595,7 +595,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                     <span style="cursor: pointer;">
                         <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'class="img-thumbnail" id="mainImage" data-toggle="modal" data-target="#imagePreviewModal"'); ?>
                       <br/>
-                      <?php echo CLICK_TO_ENLARGE; ?>
+                      <?php echo TEXT_CLICK_TO_ENLARGE; ?>
                     </span>
                     <?php echo zen_draw_hidden_field('products_image', $pInfo->products_image); ?>
                   </td>
@@ -757,7 +757,7 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
   </div>
 </div>
 <!-- Product preview modal-->
-<?php include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
+<?php // include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
 <!-- script for datepicker -->
 <script>
   $('input[name="products_date_available"]').daterangepicker({
