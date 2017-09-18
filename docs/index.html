@@ -40,7 +40,7 @@
         </div>
         <div class="tab-pane fade" id="about">
           <h2>What does this module do?</h2>
-          <p>The current collect info page can be quit long, and is not very user friendly. Therefore I started searching for a better solution.</p>
+          <p>The current collect info page can be quite long, and is not very user friendly. Therefore I started searching for a better solution.</p>
           <p>After looking at many other shopping cart frameworks, I have a pretty good idea of how I want the new collect info page to look. It will be a page with tabs for different categories of information. The default tabs are:</p>
           <ul>
             <li>General</li>
@@ -73,20 +73,40 @@
         </div>
         <div class="tab-pane fade" id="installation">
           <h2>Installation</h2>
-          <p></p>
+          <p>All files are arranged in the correct Zen Cart v1.5.x structure.</p>
+          <ol>
+            <li>Rename the YOUR_ADMIN folder to the admin folder name you are using</li>
+            <li style="font-weight: bold">Make sure you have made a back up of all your existing files, and database.</li>
+            <li>Upload the files to your store. In the file list below you can see which files are new and which files need merging. If you are sure the original files you have in your store are un altered, yo can overwrite the files mark in orange. Else you need to merge in the differences. The changes are marked clearly in the files, like this:<br>
+              <code>/* BOF Zen4All - CITTINS - 1 of 1 */<br>
+                CHANGED CODE<br>
+                /* EOF Zen4All - CITTINS - 1 of 1 */
+              </code>
+            </li>
+            <li>Login to your store's admin</li>
+          </ol>
+          <p>Files to upload</p>
           <ul>
-            <li>YOUR_ADMIN\includes\css\bootstrap-switch.min.css</li>
-            <li>YOUR_ADMIN\includes\css\collect_info.css</li>
-            <li>YOUR_ADMIN\includes\functions\extra_functions\functionsCollectProductInfoExtra.php</li>
-            <li>YOUR_ADMIN\includes\javascript\bootstrap-switch.min.js</li>
-            <li>YOUR_ADMIN\includes\modules\product\collect_info.php</li>
-            <li>YOUR_ADMIN\includes\modules\product\preview_info.php</li>
-            <li>YOUR_ADMIN\includes\modules\update_product.php</li>
-            <li>YOUR_ADMIN\includes\ckeditor.php</li>
-            <li>YOUR_ADMIN\includes\header.php</li>
-            <li>YOUR_ADMIN\includes\stylesheet.css</li>
-            <li>YOUR_ADMIN\product.php</li>
+            <li style="color: green">YOUR_ADMIN\includes\css\bootstrap-switch.min.css</li>
+            <li style="color: green">YOUR_ADMIN\includes\css\collect_info.css</li>
+            <li style="color: green">YOUR_ADMIN\includes\functions\extra_functions\functionsCollectProductInfoExtra.php</li>
+            <li style="color: green">YOUR_ADMIN\includes\javascript\bootstrap-switch.min.js</li>
+            <li style="color: orange">YOUR_ADMIN\includes\languages\english\product.php</li>
+            <li style="color: orange">YOUR_ADMIN\includes\languages\english.php</li>
+            <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs\category\tab_contents_collect_info.php</li>
+            <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs\category\tab_preview_info.php</li>
+            <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs\category\tab_title_collect_info.php</li>
+            <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs\category\tab_update_product.php</li>
+            <li style="color: orange">YOUR_ADMIN\includes\modules\product\collect_info.php</li>
+            <li style="color: orange">YOUR_ADMIN\includes\modules\product\preview_info.php</li>
+            <li style="color: orange">YOUR_ADMIN\includes\modules\update_product.php</li>
+            <li style="color: orange">YOUR_ADMIN\includes\ckeditor.php</li>
+            <li style="color: orange">YOUR_ADMIN\includes\header.php</li>
+            <li style="color: orange">YOUR_ADMIN\includes\stylesheet.css</li>
+            <li style="color: orange">YOUR_ADMIN\product.php</li>
           </ul>
+          <h3>Un-install CITINS</h3>
+          <p>To un-install this module undo all the file-changes you made above.</p>
         </div>
         <div class="tab-pane fade" id="use">
           <h2>How to Use</h2>
