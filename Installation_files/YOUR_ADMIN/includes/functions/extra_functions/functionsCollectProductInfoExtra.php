@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @package admin
  * @copyright Copyright 2008-2017 Zen4All
@@ -43,7 +44,6 @@ function dirList($path, $file) {
   return $results;
 }
 
-
 function getImageFolderContents() {
 
   $directory = DIR_FS_CATALOG_IMAGES;
@@ -58,26 +58,21 @@ function getImageFolderContents() {
     $directories = array();
   }
 
-  // zc_dump($directories);
   // Get files
   $files = glob($directory . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
 
   if (!$files) {
     $files = array();
   }
-  // zc_dump($files);
   // Merge directories and files
   $images = array_merge($directories, $files);
-//  zc_dump($images);
   // Get total number of files and directories
   $image_total = count($images);
 
   // Split the array based on current page number and max number of items per page of 10
   $pageImages = array_splice($images, ($page - 1) * 16, 16);
-  // zc_dump($pageImages);
   foreach ($pageImages as $image) {
     $name = str_split(basename($image), 14);
- //   zc_dump($name);
 
     if (is_dir($image)) {
       $url = '';
@@ -103,39 +98,5 @@ function getImageFolderContents() {
       );
     }
   }
- // zc_dump($data);
   return $data;
-}
-  function findAdditionalImages(&$array, $directory, $extension, $base) {
-
-  $image = $base . $extension;
-
-  // Check for additional matching images
-  if ($dir = @dir($directory)) {
-    while ($file = $dir->read()) {
-      if (!is_dir($directory . $file)) {
-        if (preg_match("/^" . $base . "/i", $file) == '1') {
-          // echo "BASE: ".$base.' FILE: '.$file.'<br />';
-          if (substr($file, 0, strrpos($file, '.')) != substr($image, 0, strrpos($image, '.'))) {
-            if ($base . preg_replace("/^$base/", '', $file) == $file) {
-              $array[] = $file;
-              // echo 'I AM A MATCH ' . $products_image_directory . '/'.$file . $products_image_extension .'<br />';
-            } else {
-              // echo 'I AM NOT A MATCH ' . $file . '<br />';
-            }
-          }
-        }
-      }
-    }
-
-    if (sizeof($array) > 1) {
-      sort($array);
-    }
-
-    $dir->close();
-
-    return 1;
-  }
-
-  return 0;
 }
