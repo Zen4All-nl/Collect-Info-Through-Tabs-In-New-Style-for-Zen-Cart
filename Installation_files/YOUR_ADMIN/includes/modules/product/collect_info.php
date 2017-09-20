@@ -638,49 +638,6 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
               </tbody>
             </table>
           </div>
-          <!-- /* BOF future code */ -->
-          <!--
-            <div class="table-responsive">
-              <table class="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <td class="text-left">Additional images</td>
-                    <td class="text-left">Image name</td>
-                    <td class="text-right">Actions</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="text-left">
-          <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', '', '', 'class="img-thumbnail"'); ?>
-                    </td>
-                    <td class="text-left">
-          <?php echo $pInfo->products_image; ?>
-                    </td>
-                    <td class="text-right">
-                      <div class="btn-group">
-                        <button type="button" id="button-edit-additional-image-1" class="btn btn-primary" data-original-title="<?php echo TEXT_CHANGE_IMAGE; ?>"><i class="fa fa-pencil"></i></button> <button type="button" id="button-delete-additional-image-1" class="btn btn-danger" data-original-title="<?php ?>"><i class="fa fa-trash-o"></i></button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-left">
-                    </td>
-                    <td class="text-left">
-      
-                    </td>
-                    <td class="text-right">
-                      <div class="btn-group">
-                        <button type="button" id="button-add-additional-image-1" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          -->
-          <!-- /* EOF future code */ -->
         </div>
         <?php
         $extraTabsContents = dirList(DIR_WS_MODULES . 'extra_tabs/', 'tab_contents_collect_info.php');
