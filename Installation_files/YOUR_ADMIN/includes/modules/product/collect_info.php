@@ -308,7 +308,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           <a data-toggle="tab" href="#productTabs2">Data</a>
         </li>
         <li>
-          <a data-toggle="tab" href="#productTabs3">Links</a>
+          <a data-toggle="tab" href="#productTabs3">Manufacturers</a>
         </li>
         <li>
           <a data-toggle="tab" href="#productTabs4">Image</a>
@@ -618,13 +618,13 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                         <?php echo zen_draw_label(TEXT_IMAGES_DELETE, 'image_delete', 'class="col-sm-3 control-label"'); ?>
                       <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="top" title data-original-title="<?php echo TEXT_IMAGES_DELETE_NOTE; ?>"></i>
                       <div class="col-sm-9">
-                          <?php echo zen_draw_checkbox_field('image_delete'); ?>
+                          <?php echo zen_draw_radio_field('image_delete', '0', $off_image_delete) . '&nbsp;' . TABLE_HEADING_NO . ' ' . zen_draw_radio_field('image_delete', '1', $on_image_delete) . '&nbsp;' . TABLE_HEADING_YES; ?>
                       </div>
                     </div>
                     <div class="form-group">
                         <?php echo zen_draw_label(TEXT_IMAGES_OVERWRITE, 'overwrite', 'class="col-sm-3 control-label"'); ?>
                       <div class="col-sm-9">
-                          <?php echo zen_draw_checkbox_field('overwrite', '', true); ?>
+                          <?php echo zen_draw_radio_field('overwrite', '0', $off_overwrite) . '&nbsp;' . TABLE_HEADING_NO . ' ' . zen_draw_radio_field('overwrite', '1', $on_overwrite) . '&nbsp;' . TABLE_HEADING_YES; ?>
                       </div>
                     </div>
                     <div class="form-group">
@@ -810,16 +810,6 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
   $("[name='products_quantity_mixed']").bootstrapSwitch({
       onText: '<?php echo TEXT_YES; ?>',
       offText: '<?php echo TEXT_NO; ?>',
-      animate: true
-  });
-  $("[name='image_delete']").bootstrapSwitch({
-      onText: '<?php echo TABLE_HEADING_YES; ?>',
-      offText: '<?php echo TABLE_HEADING_NO; ?>',
-      animate: true
-  });
-  $("[name='overwrite']").bootstrapSwitch({
-      onText: '<?php echo TABLE_HEADING_YES; ?>',
-      offText: '<?php echo TABLE_HEADING_NO; ?>',
       animate: true
   });
 </script>
