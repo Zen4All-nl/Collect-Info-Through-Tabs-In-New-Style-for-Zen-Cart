@@ -27,3 +27,14 @@ Some screenshots:
 ![screenshot1](/Documentation/images/collect_info_01.png)
 ![screenshot2](/Documentation/images/collect_info_02.png)
 ![screenshot3](/Documentation/images/collect_info_03.png)
+
+--------------------
+
+Installation
+------------
+
+Installation is simple:
+
+1. [Download CITTINS](https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style/releases)
+2. Unzip the downloaded zip file
+3. Read the instructions from the readme found in the documentation folder.
