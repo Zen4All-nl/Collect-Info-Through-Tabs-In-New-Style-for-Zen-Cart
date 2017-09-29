@@ -7,18 +7,13 @@
  */
 
 /*@import url("css/bootstrap.min.css");*/
-@import url("//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css");
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css");
 
 @import url("menu.css");
 
 /* @import url("css/font-awesome.min.css");*/
-@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
-/* BOF Zen4All - CITTINS - 1 of 1 */
-@import url("css/collect_info.css");
-@import url("https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css");
-@import url("css/bootstrap-switch.min.css");
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
-/* EOF Zen4All - CITTINS - 1 of 1 */
 a {
     color: #0000ff;
     text-decoration: none;

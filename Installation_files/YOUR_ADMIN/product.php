@@ -104,8 +104,15 @@
 <title><?php echo TITLE; ?></title>
 <link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
 <link rel="stylesheet" type="text/css" href="includes/cssjsmenuhover.css" media="all" id="hoverJS">
-<script type="text/javascript" src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ= sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
-<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.4.0.min.js" integrity="sha256-nxdiQ4FdTm28eUNNQIJz5JodTMCF5/l32g5LwfUwZUo= sha384-2yjFZNAHmmlUAVQM/LTTOrqZVLyN8Iy+6BQ5FI/FpQFGXYw3vsVB8zeDCfk1QLNn sha512-kGOP6gGP2NZ4CGooYnldK9UPdvLZxY7sXKm6KeY1lnOKgsN7JM9Dc7V6l/4TxovN/JKqvMcGyZ7UbGl4Xmmttw==" crossorigin="anonymous"></script>
+<?php if($action == 'new_product'){ ?>
+<link rel="stylesheet" type="text/css" href="includes/css/collect_info.css">
+<link rel="stylesheet" type="text/css" href="includes/css/daterangepicker.css">
+<link rel="stylesheet" type="text/css" href="includes/css/bootstrap-switch.min.css">
+<?php
+}
+?>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ= sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.4.0.min.js" integrity="sha256-nxdiQ4FdTm28eUNNQIJz5JodTMCF5/l32g5LwfUwZUo= sha384-2yjFZNAHmmlUAVQM/LTTOrqZVLyN8Iy+6BQ5FI/FpQFGXYw3vsVB8zeDCfk1QLNn sha512-kGOP6gGP2NZ4CGooYnldK9UPdvLZxY7sXKm6KeY1lnOKgsN7JM9Dc7V6l/4TxovN/JKqvMcGyZ7UbGl4Xmmttw==" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="includes/menu.js"></script>
 <script type="text/javascript" src="includes/general.js"></script>

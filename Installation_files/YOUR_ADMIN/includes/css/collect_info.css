@@ -116,5 +116,13 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     box-shadow: none;
 }
 .align-middle{
-    vertical-align: middle;
+    vertical-align: middle !important;
+}
+@media (min-width: 768px) {
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
 }
