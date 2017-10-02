@@ -72,16 +72,6 @@ if (zen_not_null($_POST)) {
   } else {
     $_POST['products_quantity_mixed'] = 0;
   }
-  if ($_POST['image_delete'] == 'on' || $_POST['image_delete'] == '1') {
-    $_POST['image_delete'] = 1;
-  } else {
-    $_POST['image_delete'] = 0;
-  }
-  if ($_POST['overwrite'] == 'on' || $_POST['overwrite'] == '1') {
-    $_POST['overwrite'] = 1;
-  } else {
-    $_POST['overwrite'] = 0;
-  }
   /* EOF Zen4All - CITTINS - 1 of 7 */
   $pInfo = new objectInfo($_POST);
   $products_name = $_POST['products_name'];

@@ -10,6 +10,25 @@ if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
 }
 
+// search directories for the needed files
+function recursiveDirList($dir, $prefix = '') {
+  $dir = rtrim($dir, '/');
+  $result = array();
+
+  foreach (glob("$dir/*", GLOB_MARK) as &$f) {
+    if (substr($f, -1) === '/') {
+      $result = array_merge($result, recursiveDirList($f, $prefix . basename($f) . '/'));
+    } else {
+      $result[] = $prefix . basename($f);
+    }
+  }
+
+  return $result;
+}
+
+$extraTabsPath = DIR_WS_MODULES . 'extra_tabs';
+$extraTabsFiles = recursiveDirList($extraTabsPath);
+
 $parameters = array(
   'products_name' => '',
   'products_description' => '',
@@ -127,11 +146,11 @@ $manufacturers_array = array(array(
 $manufacturers = $db->Execute("SELECT manufacturers_id, manufacturers_name
                                FROM " . TABLE_MANUFACTURERS . "
                                ORDER BY manufacturers_name");
-while (!$manufacturers->EOF) {
-  $manufacturers_array[] = array(
-    'id' => $manufacturers->fields['manufacturers_id'],
-    'text' => $manufacturers->fields['manufacturers_name']);
-  $manufacturers->MoveNext();
+foreach ($manufacturers as $manufacturer) {
+  $manufacturers_array[] = [
+    'id' => $manufacturer['manufacturers_id'],
+    'text' => $manufacturer['manufacturers_name']
+  ];
 }
 
 $tax_class_array = array(array(
@@ -140,11 +159,10 @@ $tax_class_array = array(array(
 $tax_class = $db->Execute("SELECT tax_class_id, tax_class_title
                            FROM " . TABLE_TAX_CLASS . "
                            ORDER BY tax_class_title");
-while (!$tax_class->EOF) {
-  $tax_class_array[] = array(
-    'id' => $tax_class->fields['tax_class_id'],
-    'text' => $tax_class->fields['tax_class_title']);
-  $tax_class->MoveNext();
+foreach ($tax_class as $item) {
+  $tax_class_array[] = [
+    'id' => $item['tax_class_id'],
+    'text' => $item['tax_class_title']];
 }
 
 $languages = zen_get_languages();
@@ -154,7 +172,7 @@ if (!isset($pInfo->products_status)) {
 }
 
 // set to out of stock if categories_status is off and new product or existing products_status is off
-if (zen_get_categories_status($current_category_id) == '0' and $pInfo->products_status != '1') {
+if (zen_get_categories_status($current_category_id) == '0' && $pInfo->products_status != '1') {
   $pInfo->products_status = 0;
 }
 
@@ -308,22 +326,24 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           <a data-toggle="tab" href="#productTabs2">Data</a>
         </li>
         <li>
-          <a data-toggle="tab" href="#productTabs3">Links</a>
+          <a data-toggle="tab" href="#productTabs3">Manufacturer</a>
         </li>
         <li>
           <a data-toggle="tab" href="#productTabs4">Image</a>
         </li>
         <?php
-        $extraTabTitles = dirList(DIR_WS_MODULES . 'extra_tabs/', 'tab_title_collect_info.php');
+        $tabTitleNeedle = 'tab_title_';
         $i = 4;
-        if (isset($extraTabTitles) && $extraTabTitles != '') {
-          foreach ($extraTabTitles as $tabTitle) {
-            ?>
-            <li>
-              <a data-toggle="tab" href="#productTabs<?php echo $i + 1; ?>"><?php include($tabTitle); ?></a>
-            </li>
-            <?php
-            $i++;
+        if (isset($extraTabsFiles) && $extraTabsFiles != '') {
+          foreach ($extraTabsFiles as $tabTitle) {
+            if (strpos($tabTitle, $tabTitleNeedle) !== false) {
+              ?>
+              <li>
+                <a data-toggle="tab" href="#productTabs<?php echo $i + 1; ?>"><?php include(DIR_WS_MODULES . 'extra_tabs/' . $tabTitle); ?></a>
+              </li>
+              <?php
+              $i++;
+            }
           }
         }
         ?>
@@ -345,7 +365,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
               <?php
               for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
                 ?>
-              <div class="tab-pane fade in <?php if ($i == 0) echo 'active'; ?>" id="productNameTabs<?php echo ($i + 1); ?>">
+              <div class="tab-pane fade in <?php if ($i == 0) echo 'active'; ?>" <?php echo 'id="productNameTabs' . ($i + 1) . '"'; ?>>
                 <div class="form-group">
                     <?php echo zen_draw_label(TEXT_PRODUCTS_NAME, 'products_name[' . $languages[$i]['id'] . ']', 'class="col-sm-3 control-label"'); ?>
                   <div class="col-sm-9">
@@ -467,28 +487,28 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
               <?php echo zen_draw_label(TEXT_PRODUCT_IS_FREE, 'product_is_free', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
                 <?php echo zen_draw_checkbox_field('product_is_free', '', $pInfo->product_is_free); ?>
-                <?php echo ($pInfo->product_is_free == 1 ? '</label><span class="errorText">' . TEXT_PRODUCTS_IS_FREE_EDIT . '</span>' : ''); ?>
+                <?php echo ($pInfo->product_is_free == 1 ? '<span class="errorText">' . TEXT_PRODUCTS_IS_FREE_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCT_IS_CALL, 'product_is_call', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
                 <?php echo zen_draw_checkbox_field('product_is_call', '', $pInfo->product_is_call); ?>
-                <?php echo ($pInfo->product_is_call == 1 ? '</label><span class="errorText">' . TEXT_PRODUCTS_IS_CALL_EDIT . '</span>' : ''); ?>
+                <?php echo ($pInfo->product_is_call == 1 ? '<span class="errorText">' . TEXT_PRODUCTS_IS_CALL_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES, 'products_priced_by_attribute', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
                 <?php echo zen_draw_checkbox_field('products_priced_by_attribute', '', $pInfo->products_priced_by_attribute); ?>
-                <?php echo ($pInfo->products_priced_by_attribute == 1 ? '</label><span class="errorText">' . TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES_EDIT . '</span>' : ''); ?>
+                <?php echo ($pInfo->products_priced_by_attribute == 1 ? '<span class="errorText">' . TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_VIRTUAL, 'products_virtual', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
                 <?php echo zen_draw_checkbox_field('products_virtual', '', $pInfo->products_virtual); ?>
-                <?php echo ($pInfo->products_virtual == 1 ? '</label><span class="errorText">' . TEXT_VIRTUAL_EDIT . '</span>' : ''); ?>
+                <?php echo ($pInfo->products_virtual == 1 ? '<span class="errorText">' . TEXT_VIRTUAL_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
@@ -519,7 +539,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
               <?php echo zen_draw_label(TEXT_PRODUCTS_QTY_BOX_STATUS, 'products_qty_box_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
                 <?php echo zen_draw_checkbox_field('products_qty_box_status', '', $pInfo->products_qty_box_status); ?>
-                <?php echo ($pInfo->products_qty_box_status == 0 ? '</label><span class="errorText">' . TEXT_PRODUCTS_QTY_BOX_STATUS_EDIT . '</span>' : ''); ?>
+                <?php echo ($pInfo->products_qty_box_status == 0 ? '<span class="errorText">' . TEXT_PRODUCTS_QTY_BOX_STATUS_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
@@ -618,13 +638,13 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                         <?php echo zen_draw_label(TEXT_IMAGES_DELETE, 'image_delete', 'class="col-sm-3 control-label"'); ?>
                       <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="top" title data-original-title="<?php echo TEXT_IMAGES_DELETE_NOTE; ?>"></i>
                       <div class="col-sm-9">
-                          <?php echo zen_draw_checkbox_field('image_delete'); ?>
+                          <?php echo zen_draw_radio_field('image_delete', '0', $off_image_delete) . '&nbsp;' . TABLE_HEADING_NO . ' ' . zen_draw_radio_field('image_delete', '1', $on_image_delete) . '&nbsp;' . TABLE_HEADING_YES; ?>
                       </div>
                     </div>
                     <div class="form-group">
                         <?php echo zen_draw_label(TEXT_IMAGES_OVERWRITE, 'overwrite', 'class="col-sm-3 control-label"'); ?>
                       <div class="col-sm-9">
-                          <?php echo zen_draw_checkbox_field('overwrite', '', true); ?>
+                          <?php echo zen_draw_radio_field('overwrite', '0', $off_overwrite) . '&nbsp;' . TABLE_HEADING_NO . ' ' . zen_draw_radio_field('overwrite', '1', $on_overwrite) . '&nbsp;' . TABLE_HEADING_YES; ?>
                       </div>
                     </div>
                     <div class="form-group">
@@ -638,61 +658,20 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
               </tbody>
             </table>
           </div>
-          <!-- /* BOF future code */ -->
-          <!--
-            <div class="table-responsive">
-              <table class="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <td class="text-left">Additional images</td>
-                    <td class="text-left">Image name</td>
-                    <td class="text-right">Actions</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="text-left">
-          <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', '', '', 'class="img-thumbnail"'); ?>
-                    </td>
-                    <td class="text-left">
-          <?php echo $pInfo->products_image; ?>
-                    </td>
-                    <td class="text-right">
-                      <div class="btn-group">
-                        <button type="button" id="button-edit-additional-image-1" class="btn btn-primary" data-original-title="<?php echo TEXT_CHANGE_IMAGE; ?>"><i class="fa fa-pencil"></i></button> <button type="button" id="button-delete-additional-image-1" class="btn btn-danger" data-original-title="<?php ?>"><i class="fa fa-trash-o"></i></button>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-left">
-                    </td>
-                    <td class="text-left">
-      
-                    </td>
-                    <td class="text-right">
-                      <div class="btn-group">
-                        <button type="button" id="button-add-additional-image-1" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          -->
-          <!-- /* EOF future code */ -->
         </div>
         <?php
-        $extraTabsContents = dirList(DIR_WS_MODULES . 'extra_tabs/', 'tab_contents_collect_info.php');
+        $tabContentsNeedle = 'tab_contents_';
         $j = 4;
-        if (isset($extraTabsContents) && $extraTabsContents != '') {
-          foreach ($extraTabsContents as $tabContent) {
-            ?>
-            <div id="productTabs<?php echo ($j + 1); ?>" class="tab-pane fade">
-                <?php include($tabContent); ?>
-            </div>
-            <?php
-            $j++;
+        if (isset($extraTabsFiles) && $extraTabsFiles != '') {
+          foreach ($extraTabsFiles as $tabContent) {
+            if (strpos($tabContent, $tabContentsNeedle) !== false) {
+              ?>
+              <div <?php echo 'id="productTabs' . ($j + 1) . '"'; ?> class="tab-pane fade">
+                  <?php include(DIR_WS_MODULES . 'extra_tabs/' . $tabContent); ?>
+              </div>
+              <?php
+              $j++;
+            }
           }
         }
         ?>
@@ -701,10 +680,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
       <span>
           <?php
 // hidden fields not changeable on products page
-          if (!array_search('categories', $extraTabsContents) && $_GET['pID'] > 0) {
+          if (!array_search('categories', $extraTabsFiles) && $_GET['pID'] > 0) {
             echo zen_draw_hidden_field('master_categories_id', $pInfo->master_categories_id);
           }
-          if (!array_search('discounts', $extraTabsContents)) {
+          if (!array_search('discounts', $extraTabsFiles)) {
             echo zen_draw_hidden_field('products_discount_type', $pInfo->products_discount_type);
             echo zen_draw_hidden_field('products_discount_type_from', $pInfo->products_discount_type_from);
           }
@@ -757,27 +736,47 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
   </div>
 </div>
 <!-- Product preview modal-->
-<?php // include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
+<?php //  include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
+<!-- Autoload Additional Modals -->
+<?php
+$modalNeedle = 'modal_';
+if (isset($extraTabsFiles) && $extraTabsFiles != '') {
+  foreach ($extraTabsFiles as $modalFile) {
+    if (strpos($modalFile, $modalNeedle) !== false) {
+      include DIR_WS_MODULES . 'extra_tabs/' . $modalFile;
+    }
+  }
+}
+?>
 <!-- script for datepicker -->
 <script>
   $('input[name="products_date_available"]').daterangepicker({
-      "singleDatePicker": true,
-      "showDropdowns": true,
-      "locale": {
-          "format": 'YYYY-MM-DD',
-          "monthNames": [
-              "<?php echo _JANUARY; ?>",
-              "<?php echo _FEBRUARY; ?>",
-              "<?php echo _MARCH; ?>",
-              "<?php echo _APRIL; ?>",
-              "<?php echo _MAY; ?>",
-              "<?php echo _JUNE; ?>",
-              "<?php echo _JULY; ?>",
-              "<?php echo _AUGUST; ?>",
-              "<?php echo _SEPTEMBER; ?>",
-              "<?php echo _OCTOBER; ?>",
-              "<?php echo _NOVEMBER; ?>",
-              "<?php echo _DECEMBER; ?>"
+      'singleDatePicker': true,
+      'showDropdowns': true,
+      'locale': {
+          'format': 'YYYY-MM-DD',
+          'daysOfWeek': [
+            '<?php echo _SUNDAY_SHORT; ?>',
+            '<?php echo _MONDAY_SHORT; ?>',
+            '<?php echo _TUESDAY_SHORT; ?>',
+            '<?php echo _WEDNESDAY_SHORT; ?>',
+            '<?php echo _THURSDAY_SHORT; ?>',
+            '<?php echo _FRIDAY_SHORT; ?>',
+            '<?php echo _SATURDAY_SHORT; ?>'
+          ],
+          'monthNames': [
+              '<?php echo _JANUARY; ?>',
+              '<?php echo _FEBRUARY; ?>',
+              '<?php echo _MARCH; ?>',
+              '<?php echo _APRIL; ?>',
+              '<?php echo _MAY; ?>',
+              '<?php echo _JUNE; ?>',
+              '<?php echo _JULY; ?>',
+              '<?php echo _AUGUST; ?>',
+              '<?php echo _SEPTEMBER; ?>',
+              '<?php echo _OCTOBER; ?>',
+              '<?php echo _NOVEMBER; ?>',
+              '<?php echo _DECEMBER; ?>'
           ]
       }
   }
@@ -855,14 +854,14 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
       offText: '<?php echo TEXT_NO; ?>',
       animate: true
   });
-  $("[name='image_delete']").bootstrapSwitch({
-      onText: '<?php echo TABLE_HEADING_YES; ?>',
-      offText: '<?php echo TABLE_HEADING_NO; ?>',
-      animate: true
-  });
-  $("[name='overwrite']").bootstrapSwitch({
-      onText: '<?php echo TABLE_HEADING_YES; ?>',
-      offText: '<?php echo TABLE_HEADING_NO; ?>',
-      animate: true
-  });
 </script>
+<!-- Autoload Additional javascripts -->
+<?php
+$jscriptNeedle = 'jscript_';
+if (isset($extraTabsFiles) && $extraTabsFiles != '') {
+  foreach ($extraTabsFiles as $jscriptFile) {
+    if (strpos($jscriptFile, $jscriptNeedle) !== false) {
+      include (DIR_WS_MODULES . 'extra_tabs/' . $jscriptFile);
+    }
+  }
+}
