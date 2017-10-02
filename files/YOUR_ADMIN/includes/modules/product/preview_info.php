@@ -84,22 +84,24 @@ if (zen_not_null($_POST)) {
   /* EOF Zen4All - CITTINS - 2 of 7 */
 } else {
   /* BOF Zen4All - CITTINS - 3 of 7 */
-  $product = $db->Execute("select p.products_id, pd.language_id, pd.products_name,
-                                      pd.products_description, pd.products_url, p.products_quantity,
-                                      p.products_model, p.products_image, p.products_price, p.products_virtual,
-                                      p.products_weight, p.products_date_added, p.products_last_modified,
-                                      p.products_date_available, p.products_status, p.manufacturers_id,
-                                      p.products_quantity_order_min, p.products_quantity_order_units, p.products_priced_by_attribute,
-                                      p.product_is_free, p.product_is_call, p.products_quantity_mixed,
-                                      p.product_is_always_free_shipping, p.products_qty_box_status, p.products_quantity_order_max,
-                    p.products_sort_order,
-                    p.metatags_title_status, p.metatags_products_name_status, p.metatags_model_status,
-                                      p.metatags_price_status, p.metatags_title_tagline_status,
-                                      mtpd.metatags_title, mtpd.metatags_keywords, mtpd.metatags_description
-                               from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd
-                               where p.products_id = pd.products_id
-                               and p.products_id = mtpd.products_id
-                               and p.products_id = '" . (int)$_GET['pID'] . "'");
+  $product = $db->Execute("SELECT p.products_id, pd.language_id, pd.products_name,
+                                  pd.products_description, pd.products_url, p.products_quantity,
+                                  p.products_model, p.products_image, p.products_price, p.products_virtual,
+                                  p.products_weight, p.products_date_added, p.products_last_modified,
+                                  p.products_date_available, p.products_status, p.manufacturers_id,
+                                  p.products_quantity_order_min, p.products_quantity_order_units, p.products_priced_by_attribute,
+                                  p.product_is_free, p.product_is_call, p.products_quantity_mixed,
+                                  p.product_is_always_free_shipping, p.products_qty_box_status, p.products_quantity_order_max,
+                                  p.products_sort_order,
+                                  p.metatags_title_status, p.metatags_products_name_status, p.metatags_model_status,
+                                  p.metatags_price_status, p.metatags_title_tagline_status,
+                                  mtpd.metatags_title, mtpd.metatags_keywords, mtpd.metatags_description
+                           FROM " . TABLE_PRODUCTS . " p,
+                                " . TABLE_PRODUCTS_DESCRIPTION . " pd,
+                                " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd
+                           WHERE p.products_id = pd.products_id
+                           AND p.products_id = mtpd.products_id
+                           AND p.products_id = '" . (int)$_GET['pID'] . "'");
   /* EOF Zen4All - CITTINS - 3 of 7 */
 
   $pInfo = new objectInfo($product->fields);
@@ -154,7 +156,7 @@ for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
             $products_image_name = $_POST['img_dir'] . $_POST['products_image_manual'];
             $pInfo->products_name = $products_image_name;
           }
-          if ($_POST['image_delete'] == 1 || $products_image_name == '' and PRODUCTS_IMAGE_NO_IMAGE_STATUS == '1') {
+          if ($_POST['image_delete'] == 1 || $products_image_name == '' && PRODUCTS_IMAGE_NO_IMAGE_STATUS == '1') {
             echo zen_image(DIR_WS_CATALOG_IMAGES . PRODUCTS_IMAGE_NO_IMAGE, $pInfo->products_name, SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'align="right" hspace="5" vspace="5"') . $pInfo->products_description;
           } else {
             echo zen_image(DIR_WS_CATALOG_IMAGES . $products_image_name, $pInfo->products_name, SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'align="right" hspace="5" vspace="5"') . $pInfo->products_description;
