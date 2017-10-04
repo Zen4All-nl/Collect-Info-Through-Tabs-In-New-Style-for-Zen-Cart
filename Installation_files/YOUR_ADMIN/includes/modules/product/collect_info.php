@@ -687,10 +687,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 <div class="radioBtn btn-group">
                   <a class="btn btn-info <?php echo($in_product_is_free == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_free" data-title="1"><?php echo TEXT_YES; ?></a>
                   <a class="btn btn-info <?php echo($out_product_is_free == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_free" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <?php echo ($pInfo->product_is_free == 1 ? '<span class="alert">' . TEXT_PRODUCTS_IS_FREE_EDIT . '</span>' : ''); ?>
                 </div>
                 <?php echo zen_draw_hidden_field('product_is_free', ($in_product_is_free == true ? '1' : '0'), 'class="product_is_free"'); ?>
               </div>
-              <?php echo ($pInfo->product_is_free == 1 ? '<span class="errorText">' . TEXT_PRODUCTS_IS_FREE_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
@@ -700,10 +700,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 <div class="radioBtn btn-group">
                   <a class="btn btn-info <?php echo($in_product_is_call == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_call" data-title="1"><?php echo TEXT_YES; ?></a>
                   <a class="btn btn-info <?php echo($out_product_is_call == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_call" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <?php echo ($pInfo->product_is_call == 1 ? '<span class="alert">' . TEXT_PRODUCTS_IS_CALL_EDIT . '</span>' : ''); ?>
                 </div>
                 <?php echo zen_draw_hidden_field('product_is_call', ($in_product_is_call == true ? '1' : '0'), 'class="product_is_call"'); ?>
               </div>
-              <?php echo ($pInfo->product_is_call == 1 ? '<span class="errorText">' . TEXT_PRODUCTS_IS_CALL_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
@@ -713,10 +713,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 <div class="radioBtn btn-group">
                   <a class="btn btn-info <?php echo($is_products_priced_by_attribute == true ? 'active' : 'notActive'); ?>" data-toggle="products_priced_by_attribute" data-title="1"><?php echo TEXT_PRODUCT_IS_PRICED_BY_ATTRIBUTE; ?></a>
                   <a class="btn btn-info <?php echo($not_products_priced_by_attribute == true ? 'active' : 'notActive'); ?>" data-toggle="products_priced_by_attribute" data-title="0"><?php echo TEXT_PRODUCT_NOT_PRICED_BY_ATTRIBUTE; ?></a>
+                  <?php echo ($pInfo->products_priced_by_attribute == 1 ? '<span class="alert">' . TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES_EDIT . '</span>' : ''); ?>
                 </div>
                 <?php echo zen_draw_hidden_field('products_priced_by_attribute', ($is_products_priced_by_attribute == true ? '1' : '0'), 'class="products_priced_by_attribute"'); ?>
               </div>
-              <?php echo ($pInfo->products_priced_by_attribute == 1 ? '<span class="errorText">' . TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
@@ -726,33 +726,22 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 <div class="radioBtn btn-group">
                   <a class="btn btn-info <?php echo($is_virtual == true ? 'active' : 'notActive'); ?>" data-toggle="products_virtual" data-title="1"><?php echo TEXT_PRODUCT_IS_VIRTUAL; ?></a>
                   <a class="btn btn-info <?php echo($not_virtual == true ? 'active' : 'notActive'); ?>" data-toggle="products_virtual" data-title="0"><?php echo TEXT_PRODUCT_NOT_VIRTUAL; ?></a>
+                  <?php echo ($pInfo->products_virtual == 1 ? '<span class="alert">' . TEXT_VIRTUAL_EDIT . '</span>' : ''); ?>
                 </div>
                 <?php echo zen_draw_hidden_field('products_virtual', ($is_virtual == true ? '1' : '0'), 'class="products_virtual"'); ?>
               </div>
-              <?php echo ($pInfo->products_virtual == 1 ? '<span class="errorText">' . TEXT_VIRTUAL_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_IS_ALWAYS_FREE_SHIPPING, 'product_is_always_free_shipping', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-              <div class="btn-group" data-toggle="buttons">
-                <label class="btn <?php echo ($is_product_is_always_free_shipping == true ? 'active' : '') ?>"><?php echo zen_draw_radio_field('product_is_always_free_shipping', '1', $is_product_is_always_free_shipping); ?>
-                  <i class="fa fa-circle-o fa-lg"></i>
-                  <i class="fa fa-dot-circle-o fa-lg"></i>
-                  <span><?php echo TEXT_PRODUCT_IS_ALWAYS_FREE_SHIPPING; ?></span>
-                </label>
-                <label class="btn <?php echo ($not_product_is_always_free_shipping == true ? 'active' : '') ?>">
-                    <?php echo zen_draw_radio_field('product_is_always_free_shipping', '0', $not_product_is_always_free_shipping); ?>
-                  <i class="fa fa-circle-o fa-lg"></i>
-                  <i class="fa fa-dot-circle-o fa-lg"></i>
-                  <span><?php echo TEXT_PRODUCT_NOT_ALWAYS_FREE_SHIPPING; ?></span>
-                </label>
-                <label class="btn <?php echo ($special_product_is_always_free_shipping == true ? 'active' : '') ?>">
-                    <?php echo zen_draw_radio_field('product_is_always_free_shipping', '2', $special_product_is_always_free_shipping); ?>
-                  <i class="fa fa-circle-o fa-lg"></i>
-                  <i class="fa fa-dot-circle-o fa-lg"></i>
-                  <span><?php echo TEXT_PRODUCT_SPECIAL_ALWAYS_FREE_SHIPPING; ?></span>
-                  <?php echo ($pInfo->product_is_always_free_shipping == 1 ? '<span class="errorText">' . TEXT_FREE_SHIPPING_EDIT . '</span>' : ''); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info btn-sm <?php echo($is_product_is_always_free_shipping == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="1"><?php echo TEXT_PRODUCT_IS_ALWAYS_FREE_SHIPPING; ?></a>
+                  <a class="btn btn-info btn-sm <?php echo($not_product_is_always_free_shipping == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="0"><?php echo TEXT_PRODUCT_NOT_ALWAYS_FREE_SHIPPING; ?></a>
+                  <a class="btn btn-info btn-sm <?php echo($special_product_is_always_free_shipping == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="2"><?php echo TEXT_PRODUCT_SPECIAL_ALWAYS_FREE_SHIPPING; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('product_is_always_free_shipping', ($not_product_is_always_free_shipping == true ? '1' : '0'), 'class="product_is_always_free_shipping"'); ?>
               </div>
             </div>
           </div>
@@ -763,10 +752,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 <div class="radioBtn btn-group">
                   <a class="btn btn-info <?php echo($is_products_qty_box_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_qty_box_status" data-title="1"><?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_ON; ?></a>
                   <a class="btn btn-info <?php echo($not_products_qty_box_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_qty_box_status" data-title="0"><?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_OFF; ?></a>
+                  <?php echo ($pInfo->products_qty_box_status == 0 ? '<span class="alert">' . TEXT_PRODUCTS_QTY_BOX_STATUS_EDIT . '</span>' : ''); ?>
                 </div>
                 <?php echo zen_draw_hidden_field('products_qty_box_status', ($is_products_qty_box_status == true ? '1' : '0'), 'class="products_qty_box_status"'); ?>
               </div>
-              <?php echo ($pInfo->products_qty_box_status == 0 ? '<span class="errorText">' . TEXT_PRODUCTS_QTY_BOX_STATUS_EDIT . '</span>' : ''); ?>
             </div>
           </div>
           <div class="form-group">
@@ -1015,18 +1004,17 @@ if (isset($extraTabsFiles) && $extraTabsFiles != '') {
   }
   );
 </script>
-<!-- script for tooltips -->
+
 <script>
+// script for tooltips
   $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
-  });</script>
-<!-- script for preview popup -->
-<script>
+  });
+// script for preview popup
   $('#previewPopUp').on('click', function () {
       $('#previewmodal').modal('show');
-  });</script>
-<!-- script for sliding checkbox -->
-<script>
+  });
+// script for sliding checkbox
   $('.container-fluid').on('click', '.radioBtn a', function () {
       var sel = $(this).data('title');
       var tog = $(this).data('toggle');

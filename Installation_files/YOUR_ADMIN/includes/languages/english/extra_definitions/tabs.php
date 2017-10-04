@@ -13,5 +13,3 @@ define('_WEDNESDAY_SHORT', 'We');
 define('_THURSDAY_SHORT', 'Th');
 define('_FRIDAY_SHORT', 'Fr');
 define('_SATURDAY_SHORT', 'Sa');
-define('', '');
-define('', '');
