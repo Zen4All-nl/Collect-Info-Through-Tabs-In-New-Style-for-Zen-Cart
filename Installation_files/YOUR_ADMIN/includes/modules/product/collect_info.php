@@ -12,12 +12,12 @@ if (!defined('IS_ADMIN_FLAG')) {
 
 // search directories for the needed files
 function recursiveDirList($dir, $prefix = '') {
-  $dir = rtrim($dir, '/');
-  $result = array();
+  $dir = rtrim($dir, DIRECTORY_SEPARATOR );
+  $result = [];
 
-  foreach (glob("$dir/*", GLOB_MARK) as &$f) {
-    if (substr($f, -1) === '/') {
-      $result = array_merge($result, recursiveDirList($f, $prefix . basename($f) . '/'));
+  foreach (glob($dir . DIRECTORY_SEPARATOR . '*', GLOB_MARK) as &$f) {
+    if (substr($f, -1) === DIRECTORY_SEPARATOR) {
+      $result = array_merge($result, recursiveDirList($f, $prefix . basename($f) . DIRECTORY_SEPARATOR));
     } else {
       $result[] = $prefix . basename($f);
     }
@@ -74,9 +74,11 @@ $pInfo = new objectInfo($parameters);
 
 if (isset($_GET['pID']) && empty($_POST)) {
 // check if new meta tags or existing
-  $check_meta_tags_description = $db->Execute("select products_id from " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " where products_id='" . (int)$_GET['pID'] . "'");
+  $check_meta_tags_description = $db->Execute("SELECT products_id
+                                               FROM " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . "
+                                               WHERE products_id = " . (int)$_GET['pID']);
   if ($check_meta_tags_description->RecordCount() <= 0) {
-    $product = $db->Execute("select pd.products_name, pd.products_description, pd.products_url,
+    $product = $db->Execute("SELECT pd.products_name, pd.products_description, pd.products_url,
                                     p.products_id, p.products_quantity, p.products_model,
                                     p.products_image, p.products_price, p.products_virtual, p.products_weight,
                                     p.products_date_added, p.products_last_modified,
@@ -89,12 +91,13 @@ if (isset($_GET['pID']) && empty($_POST)) {
                                     p.products_sort_order,
                                     p.products_discount_type, p.products_discount_type_from,
                                     p.products_price_sorter, p.master_categories_id
-                             from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd
-                             where p.products_id = '" . (int)$_GET['pID'] . "'
-                             and p.products_id = pd.products_id
-                             and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
+                             FROM " . TABLE_PRODUCTS . " p,
+                                  " . TABLE_PRODUCTS_DESCRIPTION . " pd
+                             WHERE p.products_id = " . (int)$_GET['pID'] . "
+                             AND p.products_id = pd.products_id
+                             AND pd.language_id = " . (int)$_SESSION['languages_id']);
   } else {
-    $product = $db->Execute("select pd.products_name, pd.products_description, pd.products_url,
+    $product = $db->Execute("SELECT pd.products_name, pd.products_description, pd.products_url,
                                     p.products_id, p.products_quantity, p.products_model,
                                     p.products_image, p.products_price, p.products_virtual, p.products_weight,
                                     p.products_date_added, p.products_last_modified,
@@ -110,12 +113,14 @@ if (isset($_GET['pID']) && empty($_POST)) {
                                     p.metatags_title_status, p.metatags_products_name_status, p.metatags_model_status,
                                     p.metatags_price_status, p.metatags_title_tagline_status,
                                     mtpd.metatags_title, mtpd.metatags_keywords, mtpd.metatags_description
-                             from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd
-                             where p.products_id = '" . (int)$_GET['pID'] . "'
-                             and p.products_id = pd.products_id
-                             and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'
-                             and p.products_id = mtpd.products_id
-                             and mtpd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
+                             FROM " . TABLE_PRODUCTS . " p,
+                                  " . TABLE_PRODUCTS_DESCRIPTION . " pd,
+                                  " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd
+                             WHERE p.products_id = " . (int)$_GET['pID'] . "
+                             AND p.products_id = pd.products_id
+                             AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
+                             AND p.products_id = mtpd.products_id
+                             AND mtpd.language_id = " . (int)$_SESSION['languages_id']);
   }
 
   $pInfo->updateObjectInfo($product->fields);
@@ -129,11 +134,12 @@ if (isset($_GET['pID']) && empty($_POST)) {
   $metatags_description = $_POST['metatags_description'];
 }
 
-$category_lookup = $db->Execute("select *
-                                 from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd
-                                 where c.categories_id ='" . (int)$current_category_id . "'
-                                 and c.categories_id = cd.categories_id
-                                 and cd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
+$category_lookup = $db->Execute("SELECT *
+                                 FROM " . TABLE_CATEGORIES . " c,
+                                      " . TABLE_CATEGORIES_DESCRIPTION . " cd
+                                 WHERE c.categories_id = " . (int)$current_category_id . "
+                                 AND c.categories_id = cd.categories_id
+                                 AND cd.language_id = " . (int)$_SESSION['languages_id']);
 if (!$category_lookup->EOF) {
   $cInfo = new objectInfo($category_lookup->fields);
 } else {
@@ -472,7 +478,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
     <div class="panel-body">
         <?php
 //  echo $type_admin_handler;
-        echo zen_draw_form('new_product', $type_admin_handler, 'cPath=' . $cPath . (isset($_GET['product_type']) ? '&product_type=' . $_GET['product_type'] : '') . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=new_product_preview' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ( (isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '') . ( (isset($_POST['search']) && !empty($_POST['search']) && empty($_GET['search'])) ? '&search=' . $_POST['search'] : ''), 'post', 'enctype="multipart/form-data" class="form-horizontal"');
+        echo zen_draw_form('new_product', $type_admin_handler, 'cPath=' . $cPath . (isset($_GET['product_type']) ? '&product_type=' . $_GET['product_type'] : '') . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=new_product_preview', 'post', 'enctype="multipart/form-data" class="form-horizontal"');
         ?>
         <?php
         $dir_info = zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES);
@@ -911,20 +917,18 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           }
           echo zen_draw_hidden_field('products_price_sorter', $pInfo->products_price_sorter);
           echo zen_draw_hidden_field('products_date_added', (zen_not_null($pInfo->products_date_added) ? $pInfo->products_date_added : date('Y-m-d')));
-          echo ( (isset($_GET['search']) && !empty($_GET['search'])) ? zen_draw_hidden_field('search', $_GET['search']) : '');
-          echo ( (isset($_POST['search']) && !empty($_POST['search']) && empty($_GET['search'])) ? zen_draw_hidden_field('search', $_POST['search']) : '');
           ?>
 
       </span>
 
       <div class="btn-group">
         <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#">
-          <i class="fa fa-tv"></i> Preview 
+          <i class="fa fa-tv"></i> <?php echo IMAGE_PREVIEW; ?>
         </a>
         <button type="submit" class="btn btn-primary" id="btnsubmit" name="btnsubmit">
-          <i class="fa fa-save"></i> Save
+          <i class="fa fa-save"></i> <?php echo IMAGE_SAVE; ?>
         </button>
-        <a href="<?php echo zen_href_link(FILENAME_CATEGORIES, 'cPath=' . $cPath . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ( (isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '') . ( (isset($_POST['search']) && !empty($_POST['search']) && empty($_GET['search'])) ? '&search=' . $_POST['search'] : '')); ?>" class="btn btn-warning" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
+        <a href="<?php echo zen_href_link(FILENAME_CATEGORIES, 'cPath=' . $cPath . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-warning" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> <?php echo IMAGE_BACK; ?></a>
       </div>
       <?php echo'</form>'; ?>
     </div>
@@ -945,20 +949,20 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="imageModalLabel">Image preview</h4>
+        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only"><?php echo TEXT_CLOSE; ?></span></button>
+        <h4 class="modal-title" id="imageModalLabel"><?php echo IMAGE_PREVIEW; ?></h4>
       </div>
       <div class="modal-body text-center">
           <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', $width, $height) ?>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo TEXT_CLOSE; ?></button>
       </div>
     </div>
   </div>
 </div>
 <!-- Product preview modal-->
-<?php //  include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
+<?php // include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
 <!-- Autoload Additional Modals -->
 <?php
 $modalNeedle = 'modal_';

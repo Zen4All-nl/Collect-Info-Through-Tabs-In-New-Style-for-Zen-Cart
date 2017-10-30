@@ -58,26 +58,21 @@ function getImageFolderContents() {
     $directories = array();
   }
 
-  // zc_dump($directories);
   // Get files
   $files = glob($directory . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
 
   if (!$files) {
     $files = array();
   }
-  // zc_dump($files);
   // Merge directories and files
   $images = array_merge($directories, $files);
-//  zc_dump($images);
   // Get total number of files and directories
   $image_total = count($images);
 
   // Split the array based on current page number and max number of items per page of 10
   $pageImages = array_splice($images, ($page - 1) * 16, 16);
-  // zc_dump($pageImages);
   foreach ($pageImages as $image) {
     $name = str_split(basename($image), 14);
- //   zc_dump($name);
 
     if (is_dir($image)) {
       $url = '';
@@ -103,6 +98,5 @@ function getImageFolderContents() {
       );
     }
   }
- // zc_dump($data);
   return $data;
 }
