@@ -14,7 +14,7 @@
     <script>hljs.initHighlightingOnLoad();</script>
   </head>
   <body>
-    <div class="jumbotron text-center">
+    <div class="page-header text-center">
       <h1>Collect Info Through Tabs In New Style (CITTINS) v1.0</h1>
     </div>
     <div class="container-fluid">
@@ -32,29 +32,29 @@
           <div class="tab-pane fade in active" id="credits">
             <h2>Credits</h2>
             <ul>
-              <li><strong>Version:&nbsp;</strong> v1.0 (Released October, 2017)</li>
+              <li><strong>Version:&nbsp;</strong> v1.0 (Released November, 2017)</li>
               <li><strong>Original Author:</strong> Zen4All (<a href="https://zen4all.nl">https://zen4all.nl</a>)</li>
               <li><strong>Designed for:</strong> Zen Cart &ge; v1.5.5 Release</li>
-              <li><strong>Tabs based on:</strong> Bootstrap</li>
+              <li><strong>Tabs based on:</strong> Bootstrap 3.3.7</li>
               <li><strong>License:</strong> under the <a href="../LICENSE">GPL</a></li>
               <!-- <li><strong>Support:</strong> Given via the <a href="https://www.zen-cart.com/showthread.php?">Zen-Cart Forums</a></li> -->
             </ul>
           </div>
           <div class="tab-pane fade" id="about">
             <h2>What does this module do?</h2>
-            <p>The current collect info page can be quite long, and is not very user friendly. Therefore I started searching for a better solution.</p>
+            <p>The current collect info page can be quite long, specially when having multiple languages, and extra fields. This is not very user friendly. Therefore I started searching for a better solution.</p>
             <p>After looking at many other shopping cart frameworks, I have a pretty good idea of how I want the new collect info page to look. It will be a page with tabs for different categories of information. The default tabs are:</p>
             <ul>
               <li>General</li>
               <li>Data</li>
               <li>Manufacturer</li>
               <li>Image</li>
-              <li>Metatags</li>
               <li>Category</li>
             </ul>
-            <p>This is the information that is currently available by default on the product collect info pages, with one exception, I added the metatags to the collect page.</p>
-            <p>This will be the the initial release.</p>
-            <p>In future releases I plan on adding extra info, by using drop in mudules. This way others can contribute by writing their own tabs, that will be included by dropping the files in a specific folder (for example: admin/includes/modules/extra_tabs). Extra tabs that are planned are:</p>
+            <p>This is the information that is currently available by default on the product collect info pages, with one exception, I added the meta tags to the collect page.</p>
+
+            <h2>Future development</h2>
+            <p>In future releases I plan on adding extra info, by using drop in modules. This way others can contribute by writing their own tabs, that will be included by dropping the files in a specific folder (for example: admin/includes/modules/extra_tabs). Extra tabs that are planned are:</p>
             <ul>
               <li>Product Attributes</li>
               <li>Discounts / specials / featured (maybe one tab or multiple)</li>
@@ -63,7 +63,7 @@
               <li>Also I a want to add ajax to add thing like (additional) images dynamically.</li>
             </ul>
 
-            <p>Some screenshots:</p>
+            <p>Some screen shots:</p>
             <a id="image01" href="#">
               <img id="imgage01" class="img-thumbnail" src="images/collect_info_01_thumbnail.png" alt="General Info" title="General Info" width="250" height="250">
             </a>
@@ -75,12 +75,18 @@
             </a>
           </div>
           <div class="tab-pane fade" id="installation">
+            <h2>Requirments</h2>
+            <ul>
+              <li>Zen Cart 1.5.5e or higher</li>
+              <li>Php 5.4 or Higher</li>
+            </ul>
+              <p>Although this module is designed to work with Zen Cart 1.5.5e or higher, it may also work on lower version. This has not bee ntested, and I am not planning on giving any active (free) support for that. A minimum of php 5.4 is needed, because earlier php versions are lacking some needed functions.</p>
             <h2>Installation</h2>
             <p>All files are arranged in the correct Zen Cart v1.5.x structure.</p>
             <ol>
-              <li>Rename the YOUR_ADMIN folder to the admin folder name you are using</li>
+              <li>Rename the "YOUR_ADMIN" folder to the admin folder name you are using</li>
               <li style="font-weight: bold">Make sure you have made a back up of all your existing files, and database.</li>
-              <li>Upload the files to your store. In the file list below you can see which files are new and which files need merging. If you are sure the original files you have in your store are un altered, you can overwrite the files mark in orange. Else you need to merge in the differences. The changes are marked clearly in the files, like this:<br>
+              <li>Upload the files to your store. In the file list below you can see which files are new and which files need merging. If you are sure the original files you have in your store are un altered, you can overwrite the files marked in orange. Else you need to merge in the differences, using a tool like Beyond Compare, or WinMerge. The changes are marked clearly in the files, like this:<br>
                 <code>/* BOF Zen4All - CITTINS - 1 of 1 */<br>
                   CHANGED CODE<br>
                   /* EOF Zen4All - CITTINS - 1 of 1 */
@@ -93,7 +99,6 @@
               <li style="color: green">YOUR_ADMIN\includes\css\bootstrap-switch.min.css</li>
               <li style="color: green">YOUR_ADMIN\includes\css\collect_info.css</li>
               <li style="color: green">YOUR_ADMIN\includes\functions\extra_functions\functionsCollectProductInfoExtra.php</li>
-              <li style="color: green">YOUR_ADMIN\includes\javascript\bootstrap-switch.min.js</li>
               <li style="color: orange">YOUR_ADMIN\includes\languages\english\product.php</li>
               <li style="color: orange">YOUR_ADMIN\includes\languages\english.php</li>
               <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs\category\tab_contents_collect_info.php</li>

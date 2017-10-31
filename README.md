@@ -1,20 +1,20 @@
 # Zen Cart Collect Info Through Tabs In New Style (CITTINS)
 
-The current collect info page can be quite long, and is not very user friendly. Therefore I started searching for a better solution.
+The current collect info page can be quite long, especially when having multiple languages, , and is not very user friendly. Therefore I started searching for a better solution.
 
 After looking at many other shopping cart frameworks, I have a pretty good idea of how I want the new  collect info page to look.
 It will be a page with tabs for different categories of information. The default tabs are:
  - General
  - Data
- - Links
- - Images
+ - Manufacturer
+ - Image
  - Category
  
-This is the information that is currently available by default on the product collect info pages, with one exception, I added the metatags to the collect page.
+This is the information that is currently available by default on the product collect info pages, with one exception, I added the meta tags to the collect page.
 
 This will be the the initial release.
 
-In future releases I plan on adding extra info, by using drop in mudules. This way others can contribute by writing their own tabs, that will be included by dropping the files in a specific folder (for example: admin/includes/modules/producttabs).
+In future releases I plan on adding extra info, by using drop in modules. This way others can contribute by writing their own tabs, that will be included by dropping the files in a specific folder (for example: admin/includes/modules/extra_tabs).
 Extra tabs that are planned are:
  - Product Attributes
  - Discounts / specials / featured (maybe one tab or multiple)
@@ -23,7 +23,7 @@ Extra tabs that are planned are:
  
 Also I a want to add ajax to add thing like (additional) images dynamically.
 
-Some screenshots:
+Some screen shots:
 ![screenshot1](/docs/images/collect_info_01.png)
 ![screenshot2](/docs/images/collect_info_02.png)
 ![screenshot3](/docs/images/collect_info_03.png)
