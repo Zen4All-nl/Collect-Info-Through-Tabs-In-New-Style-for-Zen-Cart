@@ -922,9 +922,11 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
       </span>
 
       <div class="btn-group">
+        <!--
         <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#">
           <i class="fa fa-tv"></i> <?php echo IMAGE_PREVIEW; ?>
         </a>
+        -->
         <button type="submit" class="btn btn-primary" id="btnsubmit" name="btnsubmit">
           <i class="fa fa-save"></i> <?php echo IMAGE_SAVE; ?>
         </button>
