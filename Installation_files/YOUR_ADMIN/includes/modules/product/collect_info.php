@@ -12,12 +12,12 @@ if (!defined('IS_ADMIN_FLAG')) {
 
 // search directories for the needed files
 function recursiveDirList($dir, $prefix = '') {
-  $dir = rtrim($dir, '/');
-  $result = array();
+  $dir = rtrim($dir, DIRECTORY_SEPARATOR );
+  $result = [];
 
-  foreach (glob("$dir/*", GLOB_MARK) as &$f) {
-    if (substr($f, -1) === '/') {
-      $result = array_merge($result, recursiveDirList($f, $prefix . basename($f) . '/'));
+  foreach (glob($dir . DIRECTORY_SEPARATOR . '*', GLOB_MARK) as &$f) {
+    if (substr($f, -1) === DIRECTORY_SEPARATOR) {
+      $result = array_merge($result, recursiveDirList($f, $prefix . basename($f) . DIRECTORY_SEPARATOR));
     } else {
       $result[] = $prefix . basename($f);
     }
@@ -74,9 +74,11 @@ $pInfo = new objectInfo($parameters);
 
 if (isset($_GET['pID']) && empty($_POST)) {
 // check if new meta tags or existing
-  $check_meta_tags_description = $db->Execute("select products_id from " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " where products_id='" . (int)$_GET['pID'] . "'");
+  $check_meta_tags_description = $db->Execute("SELECT products_id
+                                               FROM " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . "
+                                               WHERE products_id = " . (int)$_GET['pID']);
   if ($check_meta_tags_description->RecordCount() <= 0) {
-    $product = $db->Execute("select pd.products_name, pd.products_description, pd.products_url,
+    $product = $db->Execute("SELECT pd.products_name, pd.products_description, pd.products_url,
                                     p.products_id, p.products_quantity, p.products_model,
                                     p.products_image, p.products_price, p.products_virtual, p.products_weight,
                                     p.products_date_added, p.products_last_modified,
@@ -89,12 +91,13 @@ if (isset($_GET['pID']) && empty($_POST)) {
                                     p.products_sort_order,
                                     p.products_discount_type, p.products_discount_type_from,
                                     p.products_price_sorter, p.master_categories_id
-                             from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd
-                             where p.products_id = '" . (int)$_GET['pID'] . "'
-                             and p.products_id = pd.products_id
-                             and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
+                             FROM " . TABLE_PRODUCTS . " p,
+                                  " . TABLE_PRODUCTS_DESCRIPTION . " pd
+                             WHERE p.products_id = " . (int)$_GET['pID'] . "
+                             AND p.products_id = pd.products_id
+                             AND pd.language_id = " . (int)$_SESSION['languages_id']);
   } else {
-    $product = $db->Execute("select pd.products_name, pd.products_description, pd.products_url,
+    $product = $db->Execute("SELECT pd.products_name, pd.products_description, pd.products_url,
                                     p.products_id, p.products_quantity, p.products_model,
                                     p.products_image, p.products_price, p.products_virtual, p.products_weight,
                                     p.products_date_added, p.products_last_modified,
@@ -110,12 +113,14 @@ if (isset($_GET['pID']) && empty($_POST)) {
                                     p.metatags_title_status, p.metatags_products_name_status, p.metatags_model_status,
                                     p.metatags_price_status, p.metatags_title_tagline_status,
                                     mtpd.metatags_title, mtpd.metatags_keywords, mtpd.metatags_description
-                             from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd
-                             where p.products_id = '" . (int)$_GET['pID'] . "'
-                             and p.products_id = pd.products_id
-                             and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'
-                             and p.products_id = mtpd.products_id
-                             and mtpd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
+                             FROM " . TABLE_PRODUCTS . " p,
+                                  " . TABLE_PRODUCTS_DESCRIPTION . " pd,
+                                  " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd
+                             WHERE p.products_id = " . (int)$_GET['pID'] . "
+                             AND p.products_id = pd.products_id
+                             AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
+                             AND p.products_id = mtpd.products_id
+                             AND mtpd.language_id = " . (int)$_SESSION['languages_id']);
   }
 
   $pInfo->updateObjectInfo($product->fields);
@@ -129,11 +134,12 @@ if (isset($_GET['pID']) && empty($_POST)) {
   $metatags_description = $_POST['metatags_description'];
 }
 
-$category_lookup = $db->Execute("select *
-                                 from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd
-                                 where c.categories_id ='" . (int)$current_category_id . "'
-                                 and c.categories_id = cd.categories_id
-                                 and cd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
+$category_lookup = $db->Execute("SELECT *
+                                 FROM " . TABLE_CATEGORIES . " c,
+                                      " . TABLE_CATEGORIES_DESCRIPTION . " cd
+                                 WHERE c.categories_id = " . (int)$current_category_id . "
+                                 AND c.categories_id = cd.categories_id
+                                 AND cd.language_id = " . (int)$_SESSION['languages_id']);
 if (!$category_lookup->EOF) {
   $cInfo = new objectInfo($category_lookup->fields);
 } else {
@@ -170,10 +176,22 @@ $languages = zen_get_languages();
 if (!isset($pInfo->products_status)) {
   $pInfo->products_status = '1';
 }
-
+switch ($pInfo->products_status) {
+  case '0':
+    $in_status = false;
+    $out_status = true;
+    break;
+  case '1':
+  default:
+    $in_status = true;
+    $out_status = false;
+    break;
+}
 // set to out of stock if categories_status is off and new product or existing products_status is off
 if (zen_get_categories_status($current_category_id) == '0' && $pInfo->products_status != '1') {
   $pInfo->products_status = 0;
+  $in_status = false;
+  $out_status = true;
 }
 
 // Virtual Products
@@ -181,6 +199,23 @@ if (!isset($pInfo->products_virtual)) {
   $pInfo->products_virtual = DEFAULT_PRODUCT_PRODUCTS_VIRTUAL;
 }
 
+// Virtual Products
+if (!isset($pInfo->products_virtual)) {
+  $pInfo->products_virtual = DEFAULT_PRODUCT_PRODUCTS_VIRTUAL;
+}
+switch ($pInfo->products_virtual) {
+  case '0':
+    $is_virtual = false;
+    $not_virtual = true;
+    break;
+  case '1':
+    $is_virtual = true;
+    $not_virtual = false;
+    break;
+  default:
+    $is_virtual = false;
+    $not_virtual = true;
+}
 // Always Free Shipping
 if (!isset($pInfo->product_is_always_free_shipping)) {
   $pInfo->product_is_always_free_shipping = DEFAULT_PRODUCT_PRODUCTS_IS_ALWAYS_FREE_SHIPPING;
@@ -211,45 +246,176 @@ switch ($pInfo->product_is_always_free_shipping) {
 if (!isset($pInfo->products_qty_box_status)) {
   $pInfo->products_qty_box_status = PRODUCTS_QTY_BOX_STATUS;
 }
-
+switch ($pInfo->products_qty_box_status) {
+  case '0':
+    $is_products_qty_box_status = false;
+    $not_products_qty_box_status = true;
+    break;
+  case '1':
+    $is_products_qty_box_status = true;
+    $not_products_qty_box_status = false;
+    break;
+  default:
+    $is_products_qty_box_status = true;
+    $not_products_qty_box_status = false;
+}
+// Product is Priced by Attributes
+if (!isset($pInfo->products_priced_by_attribute)) {
+  $pInfo->products_priced_by_attribute = '0';
+}
+switch ($pInfo->products_priced_by_attribute) {
+  case '0':
+    $is_products_priced_by_attribute = false;
+    $not_products_priced_by_attribute = true;
+    break;
+  case '1':
+    $is_products_priced_by_attribute = true;
+    $not_products_priced_by_attribute = false;
+    break;
+  default:
+    $is_products_priced_by_attribute = false;
+    $not_products_priced_by_attribute = true;
+}
 // Product is Free
 if (!isset($pInfo->product_is_free)) {
   $pInfo->product_is_free = '0';
 }
-
+switch ($pInfo->product_is_free) {
+  case '0':
+    $in_product_is_free = false;
+    $out_product_is_free = true;
+    break;
+  case '1':
+    $in_product_is_free = true;
+    $out_product_is_free = false;
+    break;
+  default:
+    $in_product_is_free = false;
+    $out_product_is_free = true;
+}
 // Product is Call for price
 if (!isset($pInfo->product_is_call)) {
   $pInfo->product_is_call = '0';
 }
-
+switch ($pInfo->product_is_call) {
+  case '0':
+    $in_product_is_call = false;
+    $out_product_is_call = true;
+    break;
+  case '1':
+    $in_product_is_call = true;
+    $out_product_is_call = false;
+    break;
+  default:
+    $in_product_is_call = false;
+    $out_product_is_call = true;
+}
 // Products can be purchased with mixed attributes retail
 if (!isset($pInfo->products_quantity_mixed)) {
   $pInfo->products_quantity_mixed = '0';
+}
+switch ($pInfo->products_quantity_mixed) {
+  case '0':
+    $in_products_quantity_mixed = false;
+    $out_products_quantity_mixed = true;
+    break;
+  case '1':
+    $in_products_quantity_mixed = true;
+    $out_products_quantity_mixed = false;
+    break;
+  default:
+    $in_products_quantity_mixed = true;
+    $out_products_quantity_mixed = false;
 }
 
 // metatags_products_name_status shows
 if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
   $pInfo->metatags_products_name_status = zen_get_show_product_switch($_GET['pID'], 'metatags_products_name_status');
 }
+switch ($pInfo->metatags_products_name_status) {
+  case '0':
+    $is_metatags_products_name_status = false;
+    $not_metatags_products_name_status = true;
+    break;
+  case '1':
+    $is_metatags_products_name_status = true;
+    $not_metatags_products_name_status = false;
+    break;
+  default:
+    $is_metatags_products_name_status = true;
+    $not_metatags_products_name_status = false;
+}
 
 // metatags_title_status shows
 if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
   $pInfo->metatags_title_status = zen_get_show_product_switch($_GET['pID'], 'metatags_title_status');
+}
+switch ($pInfo->metatags_title_status) {
+  case '0':
+    $is_metatags_title_status = false;
+    $not_metatags_title_status = true;
+    break;
+  case '1':
+    $is_metatags_title_status = true;
+    $not_metatags_title_status = false;
+    break;
+  default:
+    $is_metatags_title_status = true;
+    $not_metatags_title_status = false;
 }
 
 // metatags_model_status shows
 if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
   $pInfo->metatags_model_status = zen_get_show_product_switch($_GET['pID'], 'metatags_model_status');
 }
+switch ($pInfo->metatags_model_status) {
+  case '0':
+    $is_metatags_model_status = false;
+    $not_metatags_model_status = true;
+    break;
+  case '1':
+    $is_metatags_model_status = true;
+    $not_metatags_model_status = false;
+    break;
+  default:
+    $is_metatags_model_status = true;
+    $not_metatags_model_status = false;
+}
 
 // metatags_price_status shows
 if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
   $pInfo->metatags_price_status = zen_get_show_product_switch($_GET['pID'], 'metatags_price_status');
 }
+switch ($pInfo->metatags_price_status) {
+  case '0':
+    $is_metatags_price_status = false;
+    $not_metatags_price_status = true;
+    break;
+  case '1':
+    $is_metatags_price_status = true;
+    $not_metatags_price_status = false;
+    break;
+  default:
+    $is_metatags_price_status = true;
+    $not_metatags_price_status = false;
+}
 
 // metatags_title_tagline_status shows TITLE and TAGLINE in metatags_header.php
 if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
   $pInfo->metatags_title_tagline_status = zen_get_show_product_switch($_GET['pID'], 'metatags_title_tagline_status');
+}
+switch ($pInfo->metatags_title_tagline_status) {
+  case '0':
+    $is_metatags_title_tagline_status = false;
+    $not_metatags_title_tagline_status = true;
+    break;
+  case '1':
+    $is_metatags_title_tagline_status = true;
+    $not_metatags_title_tagline_status = false;
+    break;
+  default:
+    $is_metatags_title_tagline_status = true;
+    $not_metatags_title_tagline_status = false;
 }
 
 // set image overwrite
@@ -312,7 +478,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
     <div class="panel-body">
         <?php
 //  echo $type_admin_handler;
-        echo zen_draw_form('new_product', $type_admin_handler, 'cPath=' . $cPath . (isset($_GET['product_type']) ? '&product_type=' . $_GET['product_type'] : '') . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=new_product_preview' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ( (isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '') . ( (isset($_POST['search']) && !empty($_POST['search']) && empty($_GET['search'])) ? '&search=' . $_POST['search'] : ''), 'post', 'enctype="multipart/form-data" class="form-horizontal"');
+        echo zen_draw_form('new_product', $type_admin_handler, 'cPath=' . $cPath . (isset($_GET['product_type']) ? '&product_type=' . $_GET['product_type'] : '') . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=new_product_preview', 'post', 'enctype="multipart/form-data" class="form-horizontal"');
         ?>
         <?php
         $dir_info = zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES);
@@ -409,31 +575,61 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_METATAGS_PRODUCTS_NAME_STATUS, 'metatags_products_name_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('metatags_products_name_status', '', $pInfo->metatags_products_name_status); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($is_metatags_products_name_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_products_name_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($not_metatags_products_name_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_products_name_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('metatags_products_name_status', ($is_metatags_products_name_status == true ? '1' : '0'), 'class="metatags_products_name_status"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_METATAGS_TITLE_STATUS, 'metatags_title_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('metatags_title_status', '', $pInfo->metatags_title_status); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($is_metatags_title_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($not_metatags_title_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('metatags_title_status', ($is_metatags_title_status == true ? '1' : '0'), 'class="metatags_title_status"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_METATAGS_MODEL_STATUS, 'metatags_model_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('metatags_model_status', '', $pInfo->metatags_model_status); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($is_metatags_model_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_model_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($not_metatags_model_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_model_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('metatags_model_status', ($is_metatags_model_status == true ? '1' : '0'), 'class="metatags_model_status"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_METATAGS_PRICE_STATUS, 'metatags_price_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('metatags_price_status', '', $pInfo->metatags_price_status); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($is_metatags_price_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_price_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($not_metatags_price_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_price_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('metatags_price_status', ($is_metatags_price_status == true ? '1' : '0'), 'class="metatags_price_status"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
             <?php echo zen_draw_label(TEXT_PRODUCTS_METATAGS_TITLE_TAGLINE_STATUS, 'metatags_title_tagline_status', 'class="col-sm-3 control-label"'); ?> <i class="fa fa-lg fa-question-circle" data-toggle="tooltip" data-placement="top" title="<?php echo TEXT_INFO_META_TAGS_USAGE; ?>"></i>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('metatags_title_tagline_status', '', $pInfo->metatags_title_tagline_status); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($is_metatags_title_tagline_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_tagline_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($not_metatags_title_tagline_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_tagline_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('metatags_title_tagline_status', ($is_metatags_title_tagline_status == true ? '1' : '0'), 'class="metatags_title_tagline_status"'); ?>
+              </div>
             </div>
           </div>
         </div>
@@ -466,7 +662,14 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_STATUS, 'products_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('products_status', '', $pInfo->products_status); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($in_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_status" data-title="1"><?php echo TEXT_PRODUCT_AVAILABLE; ?></a>
+                  <a class="btn btn-info <?php echo($out_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_status" data-title="0"><?php echo TEXT_PRODUCT_NOT_AVAILABLE; ?></a>
+                  <?php echo (zen_get_categories_status($current_category_id) == '0' ? TEXT_CATEGORIES_STATUS_INFO_OFF : '') . ($out_status == true ? ' ' . TEXT_PRODUCTS_STATUS_INFO_OFF : ''); ?>
+                </div>
+                <?php echo zen_draw_hidden_field('products_status', ($in_status == true ? '1' : '0'), 'class="products_status"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -486,60 +689,79 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCT_IS_FREE, 'product_is_free', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('product_is_free', '', $pInfo->product_is_free); ?>
-                <?php echo ($pInfo->product_is_free == 1 ? '<span class="errorText">' . TEXT_PRODUCTS_IS_FREE_EDIT . '</span>' : ''); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($in_product_is_free == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_free" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($out_product_is_free == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_free" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <?php echo ($pInfo->product_is_free == 1 ? '<span class="alert">' . TEXT_PRODUCTS_IS_FREE_EDIT . '</span>' : ''); ?>
+                </div>
+                <?php echo zen_draw_hidden_field('product_is_free', ($in_product_is_free == true ? '1' : '0'), 'class="product_is_free"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCT_IS_CALL, 'product_is_call', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('product_is_call', '', $pInfo->product_is_call); ?>
-                <?php echo ($pInfo->product_is_call == 1 ? '<span class="errorText">' . TEXT_PRODUCTS_IS_CALL_EDIT . '</span>' : ''); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($in_product_is_call == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_call" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($out_product_is_call == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_call" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <?php echo ($pInfo->product_is_call == 1 ? '<span class="alert">' . TEXT_PRODUCTS_IS_CALL_EDIT . '</span>' : ''); ?>
+                </div>
+                <?php echo zen_draw_hidden_field('product_is_call', ($in_product_is_call == true ? '1' : '0'), 'class="product_is_call"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES, 'products_priced_by_attribute', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('products_priced_by_attribute', '', $pInfo->products_priced_by_attribute); ?>
-                <?php echo ($pInfo->products_priced_by_attribute == 1 ? '<span class="errorText">' . TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES_EDIT . '</span>' : ''); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($is_products_priced_by_attribute == true ? 'active' : 'notActive'); ?>" data-toggle="products_priced_by_attribute" data-title="1"><?php echo TEXT_PRODUCT_IS_PRICED_BY_ATTRIBUTE; ?></a>
+                  <a class="btn btn-info <?php echo($not_products_priced_by_attribute == true ? 'active' : 'notActive'); ?>" data-toggle="products_priced_by_attribute" data-title="0"><?php echo TEXT_PRODUCT_NOT_PRICED_BY_ATTRIBUTE; ?></a>
+                  <?php echo ($pInfo->products_priced_by_attribute == 1 ? '<span class="alert">' . TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES_EDIT . '</span>' : ''); ?>
+                </div>
+                <?php echo zen_draw_hidden_field('products_priced_by_attribute', ($is_products_priced_by_attribute == true ? '1' : '0'), 'class="products_priced_by_attribute"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_VIRTUAL, 'products_virtual', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('products_virtual', '', $pInfo->products_virtual); ?>
-                <?php echo ($pInfo->products_virtual == 1 ? '<span class="errorText">' . TEXT_VIRTUAL_EDIT . '</span>' : ''); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($is_virtual == true ? 'active' : 'notActive'); ?>" data-toggle="products_virtual" data-title="1"><?php echo TEXT_PRODUCT_IS_VIRTUAL; ?></a>
+                  <a class="btn btn-info <?php echo($not_virtual == true ? 'active' : 'notActive'); ?>" data-toggle="products_virtual" data-title="0"><?php echo TEXT_PRODUCT_NOT_VIRTUAL; ?></a>
+                  <?php echo ($pInfo->products_virtual == 1 ? '<span class="alert">' . TEXT_VIRTUAL_EDIT . '</span>' : ''); ?>
+                </div>
+                <?php echo zen_draw_hidden_field('products_virtual', ($is_virtual == true ? '1' : '0'), 'class="products_virtual"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_IS_ALWAYS_FREE_SHIPPING, 'product_is_always_free_shipping', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-              <div class="btn-group" data-toggle="buttons">
-                <label class="btn <?php echo ($is_product_is_always_free_shipping == true ? 'active' : '') ?>"><?php echo zen_draw_radio_field('product_is_always_free_shipping', '1', $is_product_is_always_free_shipping); ?>
-                  <i class="fa fa-circle-o fa-lg"></i>
-                  <i class="fa fa-dot-circle-o fa-lg"></i>
-                  <span><?php echo TEXT_PRODUCT_IS_ALWAYS_FREE_SHIPPING; ?></span>
-                </label>
-                <label class="btn <?php echo ($not_product_is_always_free_shipping == true ? 'active' : '') ?>">
-                    <?php echo zen_draw_radio_field('product_is_always_free_shipping', '0', $not_product_is_always_free_shipping); ?>
-                  <i class="fa fa-circle-o fa-lg"></i>
-                  <i class="fa fa-dot-circle-o fa-lg"></i>
-                  <span><?php echo TEXT_PRODUCT_NOT_ALWAYS_FREE_SHIPPING; ?></span>
-                </label>
-                <label class="btn <?php echo ($special_product_is_always_free_shipping == true ? 'active' : '') ?>">
-                    <?php echo zen_draw_radio_field('product_is_always_free_shipping', '2', $special_product_is_always_free_shipping); ?>
-                  <i class="fa fa-circle-o fa-lg"></i>
-                  <i class="fa fa-dot-circle-o fa-lg"></i>
-                  <span><?php echo TEXT_PRODUCT_SPECIAL_ALWAYS_FREE_SHIPPING; ?></span>
-                  <?php echo ($pInfo->product_is_always_free_shipping == 1 ? '<span class="errorText">' . TEXT_FREE_SHIPPING_EDIT . '</span>' : ''); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info btn-sm <?php echo($is_product_is_always_free_shipping == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="1"><?php echo TEXT_PRODUCT_IS_ALWAYS_FREE_SHIPPING; ?></a>
+                  <a class="btn btn-info btn-sm <?php echo($not_product_is_always_free_shipping == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="0"><?php echo TEXT_PRODUCT_NOT_ALWAYS_FREE_SHIPPING; ?></a>
+                  <a class="btn btn-info btn-sm <?php echo($special_product_is_always_free_shipping == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="2"><?php echo TEXT_PRODUCT_SPECIAL_ALWAYS_FREE_SHIPPING; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('product_is_always_free_shipping', ($not_product_is_always_free_shipping == true ? '1' : '0'), 'class="product_is_always_free_shipping"'); ?>
               </div>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_QTY_BOX_STATUS, 'products_qty_box_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('products_qty_box_status', '', $pInfo->products_qty_box_status); ?>
-                <?php echo ($pInfo->products_qty_box_status == 0 ? '<span class="errorText">' . TEXT_PRODUCTS_QTY_BOX_STATUS_EDIT . '</span>' : ''); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($is_products_qty_box_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_qty_box_status" data-title="1"><?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_ON; ?></a>
+                  <a class="btn btn-info <?php echo($not_products_qty_box_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_qty_box_status" data-title="0"><?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_OFF; ?></a>
+                  <?php echo ($pInfo->products_qty_box_status == 0 ? '<span class="alert">' . TEXT_PRODUCTS_QTY_BOX_STATUS_EDIT . '</span>' : ''); ?>
+                </div>
+                <?php echo zen_draw_hidden_field('products_qty_box_status', ($is_products_qty_box_status == true ? '1' : '0'), 'class="products_qty_box_status"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -563,7 +785,13 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_MIXED, 'products_quantity_mixed', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_checkbox_field('products_quantity_mixed', '', $pInfo->products_quantity_mixed); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-info <?php echo($in_products_quantity_mixed == true ? 'active' : 'notActive'); ?>" data-toggle="products_quantity_mixed" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($out_products_quantity_mixed == true ? 'active' : 'notActive'); ?>" data-toggle="products_quantity_mixed" data-title="0"><?php echo TEXT_NO; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('products_quantity_mixed', ($in_products_quantity_mixed == true ? '1' : '0'), 'class="products_quantity_mixed"'); ?>
+              </div>
             </div>
           </div>
           <div class="form-group">
@@ -689,20 +917,20 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           }
           echo zen_draw_hidden_field('products_price_sorter', $pInfo->products_price_sorter);
           echo zen_draw_hidden_field('products_date_added', (zen_not_null($pInfo->products_date_added) ? $pInfo->products_date_added : date('Y-m-d')));
-          echo ( (isset($_GET['search']) && !empty($_GET['search'])) ? zen_draw_hidden_field('search', $_GET['search']) : '');
-          echo ( (isset($_POST['search']) && !empty($_POST['search']) && empty($_GET['search'])) ? zen_draw_hidden_field('search', $_POST['search']) : '');
           ?>
 
       </span>
 
       <div class="btn-group">
+        <!--
         <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#">
-          <i class="fa fa-tv"></i> Preview 
+          <i class="fa fa-tv"></i> <?php echo IMAGE_PREVIEW; ?>
         </a>
+        -->
         <button type="submit" class="btn btn-primary" id="btnsubmit" name="btnsubmit">
-          <i class="fa fa-save"></i> Save
+          <i class="fa fa-save"></i> <?php echo IMAGE_SAVE; ?>
         </button>
-        <a href="<?php echo zen_href_link(FILENAME_CATEGORIES, 'cPath=' . $cPath . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ( (isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '') . ( (isset($_POST['search']) && !empty($_POST['search']) && empty($_GET['search'])) ? '&search=' . $_POST['search'] : '')); ?>" class="btn btn-warning" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
+        <a href="<?php echo zen_href_link(FILENAME_CATEGORIES, 'cPath=' . $cPath . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-warning" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> <?php echo IMAGE_BACK; ?></a>
       </div>
       <?php echo'</form>'; ?>
     </div>
@@ -723,20 +951,20 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="imagePreviewModalLabel">Image preview</h4>
+        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only"><?php echo TEXT_CLOSE; ?></span></button>
+        <h4 class="modal-title" id="imageModalLabel"><?php echo IMAGE_PREVIEW; ?></h4>
       </div>
       <div class="modal-body text-center">
           <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', $width, $height) ?>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo TEXT_CLOSE; ?></button>
       </div>
     </div>
   </div>
 </div>
 <!-- Product preview modal-->
-<?php //  include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
+<?php // include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
 <!-- Autoload Additional Modals -->
 <?php
 $modalNeedle = 'modal_';
@@ -751,99 +979,61 @@ if (isset($extraTabsFiles) && $extraTabsFiles != '') {
 <!-- script for datepicker -->
 <script>
   $('input[name="products_date_available"]').daterangepicker({
-      "singleDatePicker": true,
-      "showDropdowns": true,
-      "locale": {
-          "format": 'YYYY-MM-DD',
-          "monthNames": [
-              "<?php echo _JANUARY; ?>",
-              "<?php echo _FEBRUARY; ?>",
-              "<?php echo _MARCH; ?>",
-              "<?php echo _APRIL; ?>",
-              "<?php echo _MAY; ?>",
-              "<?php echo _JUNE; ?>",
-              "<?php echo _JULY; ?>",
-              "<?php echo _AUGUST; ?>",
-              "<?php echo _SEPTEMBER; ?>",
-              "<?php echo _OCTOBER; ?>",
-              "<?php echo _NOVEMBER; ?>",
-              "<?php echo _DECEMBER; ?>"
+      'singleDatePicker': true,
+      'showDropdowns': true,
+      'locale': {
+          'format': 'YYYY-MM-DD',
+          'daysOfWeek': [
+              '<?php echo _SUNDAY_SHORT; ?>',
+              '<?php echo _MONDAY_SHORT; ?>',
+              '<?php echo _TUESDAY_SHORT; ?>',
+              '<?php echo _WEDNESDAY_SHORT; ?>',
+              '<?php echo _THURSDAY_SHORT; ?>',
+              '<?php echo _FRIDAY_SHORT; ?>',
+              '<?php echo _SATURDAY_SHORT; ?>'
+          ],
+          'monthNames': [
+              '<?php echo _JANUARY; ?>',
+              '<?php echo _FEBRUARY; ?>',
+              '<?php echo _MARCH; ?>',
+              '<?php echo _APRIL; ?>',
+              '<?php echo _MAY; ?>',
+              '<?php echo _JUNE; ?>',
+              '<?php echo _JULY; ?>',
+              '<?php echo _AUGUST; ?>',
+              '<?php echo _SEPTEMBER; ?>',
+              '<?php echo _OCTOBER; ?>',
+              '<?php echo _NOVEMBER; ?>',
+              '<?php echo _DECEMBER; ?>'
           ]
       }
   }
   );
 </script>
-<!-- script for tooltips -->
+
 <script>
+// script for tooltips
   $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
-  });</script>
-<!-- script for preview popup -->
-<script>
+  });
+// script for preview popup
   $('#previewPopUp').on('click', function () {
       $('#previewmodal').modal('show');
-  });</script>
-<!-- script for sliding checkbox -->
-<script>
-  $("[name='metatags_products_name_status']").bootstrapSwitch({
-      onText: '<?php echo TEXT_YES; ?>',
-      offText: '<?php echo TEXT_NO; ?>',
-      animate: true
   });
-  $("[name='metatags_title_status']").bootstrapSwitch({
-      onText: '<?php echo TEXT_YES; ?>',
-      offText: '<?php echo TEXT_NO; ?>',
-      animate: true
+// script for sliding checkbox
+  $('.container-fluid').on('click', '.radioBtn a', function () {
+      var sel = $(this).data('title');
+      var tog = $(this).data('toggle');
+      $(this).parent().next('.' + tog).prop('value', sel);
+      $(this).parent().find('a[data-toggle="' + tog + '"]').not('[data-title="' + sel + '"]').removeClass('active').addClass('notActive');
+      $(this).parent().find('a[data-toggle="' + tog + '"][data-title="' + sel + '"]').removeClass('notActive').addClass('active');
   });
-  $("[name='metatags_model_status']").bootstrapSwitch({
-      onText: '<?php echo TEXT_YES; ?>',
-      offText: '<?php echo TEXT_NO; ?>',
-      animate: true
-  });
-  $("[name='metatags_price_status']").bootstrapSwitch({
-      onText: '<?php echo TEXT_YES; ?>',
-      offText: '<?php echo TEXT_NO; ?>',
-      animate: true
-  });
-  $("[name='metatags_title_tagline_status']").bootstrapSwitch({
-      onText: '<?php echo TEXT_YES; ?>',
-      offText: '<?php echo TEXT_NO; ?>',
-      animate: true
-  });
-  $("[name='products_status']").bootstrapSwitch({
-      onText: '<?php echo TEXT_PRODUCT_AVAILABLE; ?>',
-      offText: '<?php echo TEXT_PRODUCT_NOT_AVAILABLE; ?>',
-      animate: true
-  });
-  $("[name='product_is_free']").bootstrapSwitch({
-      onText: '<?php echo TEXT_YES; ?>',
-      offText: '<?php echo TEXT_NO; ?>',
-      animate: true
-  });
-  $("[name='product_is_call']").bootstrapSwitch({
-      onText: '<?php echo TEXT_YES; ?>',
-      offText: '<?php echo TEXT_NO; ?>',
-      animate: true
-  });
-  $("[name='products_priced_by_attribute']").bootstrapSwitch({
-      onText: '<?php echo TEXT_PRODUCT_IS_PRICED_BY_ATTRIBUTE; ?>',
-      offText: '<?php echo TEXT_PRODUCT_NOT_PRICED_BY_ATTRIBUTE; ?>',
-      animate: true
-  });
-  $("[name='products_virtual']").bootstrapSwitch({
-      onText: '<?php echo TEXT_PRODUCT_IS_VIRTUAL; ?>',
-      offText: '<?php echo TEXT_PRODUCT_NOT_VIRTUAL; ?>',
-      animate: true
-  });
-  $("[name='products_qty_box_status']").bootstrapSwitch({
-      onText: '<?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_ON; ?>',
-      offText: '<?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_OFF; ?>',
-      animate: true
-  });
-  $("[name='products_quantity_mixed']").bootstrapSwitch({
-      onText: '<?php echo TEXT_YES; ?>',
-      offText: '<?php echo TEXT_NO; ?>',
-      animate: true
+  $('#mainImageEditModal').on('click', '.radioBtn a', function () {
+      var sel = $(this).data('title');
+      var tog = $(this).data('toggle');
+      $(this).parent().next('.' + tog).prop('value', sel);
+      $(this).parent().find('a[data-toggle="' + tog + '"]').not('[data-title="' + sel + '"]').removeClass('active').addClass('notActive');
+      $(this).parent().find('a[data-toggle="' + tog + '"][data-title="' + sel + '"]').removeClass('notActive').addClass('active');
   });
 </script>
 <!-- Autoload Additional javascripts -->

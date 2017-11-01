@@ -115,14 +115,18 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
     -webkit-box-shadow: none;
     box-shadow: none;
 }
+.radioBtn .notActive{
+    color: #333;
+    background-color: #fff;
+}
 .align-middle{
     vertical-align: middle !important;
 }
 @media (min-width: 768px) {
-.row-eq-height {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-}
+    .row-eq-height {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
 }

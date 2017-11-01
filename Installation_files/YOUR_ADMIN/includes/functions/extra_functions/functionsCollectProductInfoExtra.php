@@ -1,5 +1,4 @@
 <?php
-
 /*
  * @package admin
  * @copyright Copyright 2008-2017 Zen4All
@@ -43,6 +42,7 @@ function dirList($path, $file) {
 
   return $results;
 }
+
 
 function getImageFolderContents() {
 
