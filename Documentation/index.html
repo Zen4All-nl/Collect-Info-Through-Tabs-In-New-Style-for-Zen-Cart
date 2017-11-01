@@ -49,18 +49,39 @@
               <li>Data</li>
               <li>Manufacturer</li>
               <li>Image</li>
-              <li>Category</li>
             </ul>
             <p>This is the information that is currently available by default on the product collect info pages, with one exception, I added the meta tags to the collect page.</p>
-
-            <h2>Future development</h2>
-            <p>In future releases I plan on adding extra info, by using drop in modules. This way others can contribute by writing their own tabs, that will be included by dropping the files in a specific folder (for example: admin/includes/modules/extra_tabs). Extra tabs that are planned are:</p>
+            <h2>Extra Tabs</h2>
+            <p>There are some extra tabs available at this time of writing:</p>
             <ul>
-              <li>Product Attributes</li>
-              <li>Discounts / specials / featured (maybe one tab or multiple)</li>
+              <li>Discounts
+                <ul>
+                  <li>This tab can be used to add quantity discounts to a product. Although it is a standard function in Zen Cart it is well hidden</li>
+                </ul>
+              </li>
+              <li>Information
+                <ul>
+                  <li>Very basic, needs updating with more useful info</li>
+                </ul>
+              </li>
+              <li>Product Attributes
+                <ul>
+                  <li>This tab adds the full functionality off the Attributes controller page to your product edit page.</li>
+                </ul>
+              </li>
+              <li>Category
+                <ul>
+                  <li>Adds the ability to link products to multiple categories, and to set the master category.</li>
+                </ul>
+              </li>
+            </ul>
+            <h2>Future development</h2>
+            <p>In future releases I plan on adding extra info, by using more drop in modules. This way others can contribute by writing their own tabs, that will be included by dropping the files in a specific folder (for example: admin/includes/modules/extra_tabs). Extra tabs that are planned are:</p>
+            <ul>
+              <li>Specials / featured (maybe one tab, combined in the Discounts tab, or multiple)</li>
               <li>Product history</li>
               <li>Product reports (Views, purchases, etc.)</li>
-              <li>Also I a want to add ajax to add thing like (additional) images dynamically.</li>
+              <li>Also I a want to add ajax to add things like (additional) images dynamically, or a dynamic preview eliminating the need for the preview_info.php, and update_product.php files.</li>
             </ul>
 
             <p>Some screen shots:</p>
@@ -75,12 +96,12 @@
             </a>
           </div>
           <div class="tab-pane fade" id="installation">
-            <h2>Requirments</h2>
+            <h2>Minimum Requirements</h2>
             <ul>
               <li>Zen Cart 1.5.5e or higher</li>
-              <li>Php 5.4 or Higher</li>
+              <li>PHP 5.4 or Higher</li>
             </ul>
-              <p>Although this module is designed to work with Zen Cart 1.5.5e or higher, it may also work on lower version. This has not bee ntested, and I am not planning on giving any active (free) support for that. A minimum of php 5.4 is needed, because earlier php versions are lacking some needed functions.</p>
+            <p>Although this module is designed to work with Zen Cart 1.5.5e or higher, it may also work on lower version. This has not bee n tested, and I am not planning on giving any active (free) support for that.<br>A minimum of php 5.4 is needed, because earlier php versions are lacking some needed functions.</p>
             <h2>Installation</h2>
             <p>All files are arranged in the correct Zen Cart v1.5.x structure.</p>
             <ol>
@@ -96,15 +117,12 @@
             </ol>
             <p>Files to upload</p>
             <ul>
-              <li style="color: green">YOUR_ADMIN\includes\css\bootstrap-switch.min.css</li>
               <li style="color: green">YOUR_ADMIN\includes\css\collect_info.css</li>
               <li style="color: green">YOUR_ADMIN\includes\functions\extra_functions\functionsCollectProductInfoExtra.php</li>
+              <li style="color: green">YOUR_ADMIN\includes\languages\english\extra_definitions\tabs.php</li>
               <li style="color: orange">YOUR_ADMIN\includes\languages\english\product.php</li>
               <li style="color: orange">YOUR_ADMIN\includes\languages\english.php</li>
-              <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs\category\tab_contents_collect_info.php</li>
-              <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs\category\tab_preview_info.php</li>
-              <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs\category\tab_title_collect_info.php</li>
-              <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs\category\tab_update_product.php</li>
+              <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs (empty folder)</li>
               <li style="color: orange">YOUR_ADMIN\includes\modules\product\collect_info.php</li>
               <li style="color: orange">YOUR_ADMIN\includes\modules\product\preview_info.php</li>
               <li style="color: orange">YOUR_ADMIN\includes\modules\update_product.php</li>
@@ -118,7 +136,7 @@
           </div>
           <div class="tab-pane fade" id="use">
             <h2>How to Use</h2>
-            <p>&nbsp;</p>
+            <p>This replaces the default collect info page, but the functionality is the same. Add/edit your info on the different tabs. Press save and you will continue to the product preview page as usually.</p>
           </div>
           <div class="tab-pane fade" id="notes">
             <h2>Notes</h2>
@@ -190,17 +208,17 @@
     </div>
     <script>
       $("#image01").on("click", function () {
-          $('#imageModal01').modal('show');
+        $('#imageModal01').modal('show');
       });
     </script>
     <script>
       $("#image02").on("click", function () {
-          $('#imageModal02').modal('show');
+        $('#imageModal02').modal('show');
       });
     </script>
     <script>
       $("#image03").on("click", function () {
-          $('#imageModal03').modal('show');
+        $('#imageModal03').modal('show');
       });
     </script>
   </body>
