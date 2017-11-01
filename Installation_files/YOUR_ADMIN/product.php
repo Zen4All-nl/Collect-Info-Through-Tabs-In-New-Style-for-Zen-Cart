@@ -115,6 +115,7 @@
 
 <script src="includes/menu.js"></script>
 <script src="includes/general.js"></script>
+<?php /* EOF Zen4All - CITTINS - 1 of 2 */ ?>
 <script>
   function init() {
     cssjsmenu('navbar');
@@ -126,8 +127,9 @@
 </script>
 <?php if ($action != 'new_product_meta_tags' && $editor_handler != '') include ($editor_handler); ?>
 </head>
+<?php /* BOF Zen4All - CITTINS - 2 of 2 */ ?>
 <body onload="init()">
-<?php /* EOF Zen4All - CITTINS - 1 of 2 */ ?>
+<?php /* EOF Zen4All - CITTINS - 2 of 2 */ ?>
 <!-- header //-->
 <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
 <!-- header_eof //-->
