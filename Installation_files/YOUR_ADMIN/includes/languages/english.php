@@ -677,7 +677,7 @@ define('ENTRY_NOTHING_TO_SEND','You haven\'t entered any content for your messag
   define('TEXT_IMAGE_OVERWRITE_WARNING','WARNING: FILENAME was updated but not overwritten ');
   define('TEXT_IMAGES_DELETE', '<strong>Delete Image?</strong>');
   define('TEXT_IMAGES_DELETE_NOTE', 'Removes Image from Product, Image is NOT removed from server');
-    /* BOF Zen4All - CITTINS - 2 of 2 */
+    /* EOF Zen4All - CITTINS - 2 of 2 */
   define('TEXT_IMAGE_CURRENT', 'Image Name: ');
 
   define('ERROR_DEFINE_OPTION_NAMES', 'Warning: No Option Names have been defined');

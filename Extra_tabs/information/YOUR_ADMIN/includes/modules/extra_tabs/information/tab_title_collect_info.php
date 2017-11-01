@@ -1,0 +1,1 @@
+<?php echo TAB_TITLE_INFORMATION;

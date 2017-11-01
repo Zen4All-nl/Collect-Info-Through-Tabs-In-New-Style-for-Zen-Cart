@@ -70,7 +70,16 @@ $disqountRow = sizeof($discount_name);
   <table id="qty_discount" class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
-        <td colspan="6"><?php echo TEXT_PRODUCTS_MIXED_DISCOUNT_QUANTITY; ?>&nbsp;&nbsp;<?php echo zen_draw_checkbox_field('products_mixed_discount_quantity', '', $pInfo->products_mixed_discount_quantity); ?></td>
+        <td colspan="6">
+          <?php echo zen_draw_label(TEXT_PRODUCTS_MIXED_DISCOUNT_QUANTITY, 'products_mixed_discount_quantity'); ?>
+          <div class="input-group">
+            <div class="radioBtn btn-group">
+              <a class="btn btn-info <?php echo($in_products_mixed_discount_quantity == true ? 'active' : 'notActive'); ?>" data-toggle="products_mixed_discount_quantity" data-title="1"><?php echo TEXT_YES; ?></a>
+              <a class="btn btn-info <?php echo($out_products_mixed_discount_quantity == true ? 'active' : 'notActive'); ?>" data-toggle="products_mixed_discount_quantity" data-title="0"><?php echo TEXT_NO; ?></a>
+            </div>
+            <?php echo zen_draw_hidden_field('products_mixed_discount_quantity', ($in_products_mixed_discount_quantity == true ? '1' : '0'), 'class="products_mixed_discount_quantity"'); ?>
+          </div>
+        </td>
       </tr>
       <tr>
         <td colspan="2" class="main">
@@ -142,7 +151,7 @@ $disqountRow = sizeof($discount_name);
               break;
           }
           ?>
-        <tr id="discount-row<?php echo $row['id'] ?>">
+        <tr <?php echo 'id="discount-row' . $row['id'] . '"'; ?>>
           <td><?php echo TEXT_PRODUCTS_DISCOUNT . ' ' . $row['id']; ?></td>
           <td><?php echo zen_draw_input_field('discount_qty[' . $row['id'] . ']', $row['discount_qty'], 'class="form-control"'); ?></td>
           <td>
@@ -156,7 +165,6 @@ $disqountRow = sizeof($discount_name);
             <?php
           } else {
             ?>
-            <?php zc_dump($discounted_price); ?>
             <td class="text-right"><?php echo $currencies->display_price($discounted_price, 0, 1); ?></td>
             <td class="text-right"><?php echo ' x ' . number_format($row['discount_qty']) . ' = ' . $currencies->display_price($discounted_price, 0, $row['discount_qty']); ?></td>
             <?php
@@ -177,7 +185,7 @@ $disqountRow = sizeof($discount_name);
   </table>
 </div>
 
-<script type="text/javascript">
+<script>
   var discount_row = <?php echo $disqountRow + 1; ?>;
 
   function addDiscount() {
@@ -206,11 +214,3 @@ if (DISPLAY_PRICE_WITH_TAX_ADMIN == 'true') {
       discount_row++;
   }
 </script>
-<!-- script for sliding checkbox -->
-<script type="text/javascript">
-  $("[name='products_mixed_discount_quantity']").bootstrapSwitch({
-      onText: '<?php echo TEXT_YES; ?>',
-      offText: '<?php echo TEXT_NO; ?>',
-      animate: true
-  });
-  </script>

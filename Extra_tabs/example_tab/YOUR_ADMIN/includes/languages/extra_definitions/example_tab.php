@@ -1,0 +1,1 @@
+<?php define ('TAB_TITLE_EXAMPLE', 'Example Tab Title');
