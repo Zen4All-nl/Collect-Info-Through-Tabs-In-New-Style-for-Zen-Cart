@@ -1,0 +1,1 @@
+<?php define ('TAB_TITLE_INFORMATION', 'Information');
