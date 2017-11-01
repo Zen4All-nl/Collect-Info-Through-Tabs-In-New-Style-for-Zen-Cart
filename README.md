@@ -8,20 +8,10 @@ It will be a page with tabs for different categories of information. The default
  - Data
  - Manufacturer
  - Image
- - Category
  
 This is the information that is currently available by default on the product collect info pages, with one exception, I added the meta tags to the collect page.
 
-This will be the the initial release.
-
-In future releases I plan on adding extra info, by using drop in modules. This way others can contribute by writing their own tabs, that will be included by dropping the files in a specific folder (for example: admin/includes/modules/extra_tabs).
-Extra tabs that are planned are:
- - Product Attributes
- - Discounts / specials / featured (maybe one tab or multiple)
- - Product history
- - Product reports (Views, purchases, etc.)
- 
-Also I a want to add ajax to add thing like (additional) images dynamically.
+Additionla information can be found in the documentation folder.
 
 Some screen shots:
 ![screenshot1](/docs/images/collect_info_01.png)
