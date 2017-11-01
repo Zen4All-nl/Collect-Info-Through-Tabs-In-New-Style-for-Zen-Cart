@@ -11,7 +11,7 @@ It will be a page with tabs for different categories of information. The default
  
 This is the information that is currently available by default on the product collect info pages, with one exception, I added the meta tags to the collect page.
 
-Additionla information can be found in the documentation folder.
+Additional information can be found in the documentation folder.
 
 Some screen shots:
 ![screenshot1](/docs/images/collect_info_01.png)
