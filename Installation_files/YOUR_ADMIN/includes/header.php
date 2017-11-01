@@ -199,10 +199,4 @@ if (SHOW_GV_QUEUE == true) {
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-
-<!-- <script src="includes/javascript/jquery-1.12.1.min.js"></script> -->
-<!-- <script src="includes/javascript/bootstrap.min.js"></script> -->
-<!-- <script src="includes/javascript/moment.min.js"></script> -->
-<!-- <script src="includes/javascript/bootstrap-datetimepicker.min.js</script> -->
-<!-- <script src="includes/javascript/bootstrap-datetimepicker.min.css</script> -->
 <?php /* EOF Zen4All - CITTINS - 1 of 1 */ ?>
