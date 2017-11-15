@@ -1,1 +1,1 @@
-Category
+<?php echo TAB_TITLE_CATEGORY;
