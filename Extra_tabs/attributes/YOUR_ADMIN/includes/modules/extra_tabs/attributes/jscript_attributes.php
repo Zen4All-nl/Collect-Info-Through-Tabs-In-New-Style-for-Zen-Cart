@@ -363,6 +363,7 @@
           }
       });
   }
+
   function getMessageStack() {
       $.ajax({
           url: attributesApiUrl,
@@ -380,13 +381,13 @@
               $('#attributesMessageStackText').html(resultArray.modalMessageStack);
               $('#attributesMessageStack').modal('show');
               setTimeout(function () {
-              $('#attributesMessageStack').modal('hide');
+                  $('#attributesMessageStack').modal('hide');
               }, 4000);
           },
           error: function (xhr, desc, err) {
               console.log(xhr);
               console.log("Details: " + desc + "\nError:" + err);
           }
-    });
+      });
   }
 </script>
