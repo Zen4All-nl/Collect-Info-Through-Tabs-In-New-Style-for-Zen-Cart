@@ -477,7 +477,16 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
     <div class="panel-body">
         <?php
 //  echo $type_admin_handler;
-        echo zen_draw_form('new_product', $type_admin_handler, 'cPath=' . $cPath . (isset($_GET['product_type']) ? '&product_type=' . $_GET['product_type'] : '') . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=new_product_preview', 'post', 'enctype="multipart/form-data" class="form-horizontal"');
+      ?>
+      <form name="productInfo" enctype="multipart/form-data" id="productInfo" class="form-horizontal">
+        <?php
+        echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']);
+        echo zen_draw_hidden_field('cPath', $cPath);
+        $product_type = (isset($_GET['product_type']) ? $_GET['product_type'] : '');
+        echo zen_draw_hidden_field('product_type', $product_type);
+        $productId = (isset($_GET['pID']) ? $_GET['pID'] : '');
+        echo zen_draw_hidden_field('productId', $productId);
+        echo zen_draw_hidden_field('view', 'saveProduct');
         ?>
         <?php
         $dir_info = zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES);
@@ -849,7 +858,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                       <span><?php echo NONE; ?></span>
                     <?php } ?>
                     <?php // echo zen_draw_hidden_field('products_image', $pInfo->products_image); ?>
-                      <?php // echo zen_draw_hidden_field('products_previous_image', $pInfo->products_image); ?>
+                    <?php // echo zen_draw_hidden_field('products_previous_image', $pInfo->products_image); ?>
                   </td>
                   <td class="text-left">
                       <?php echo ($pInfo->products_image != '' ? $pInfo->products_image : NONE); ?>
@@ -1012,18 +1021,18 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           echo zen_draw_hidden_field('products_date_added', (zen_not_null($pInfo->products_date_added) ? $pInfo->products_date_added : date('Y-m-d')));
           ?>
 
-      </span>
+        </span>
 
-      <div class="btn-group">
-        <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#">
-          <i class="fa fa-tv"></i> Preview
-        </a>
-        <button type="submit" class="btn btn-primary" id="btnsubmit" name="btnsubmit">
-          <i class="fa fa-save"></i> Save
-        </button>
-        <a href="<?php echo zen_href_link(FILENAME_CATEGORIES, 'cPath=' . $cPath . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ( (isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '') . ( (isset($_POST['search']) && !empty($_POST['search']) && empty($_GET['search'])) ? '&search=' . $_POST['search'] : '')); ?>" class="btn btn-warning" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
-      </div>
-      <?php echo'</form>'; ?>
+        <div class="btn-group">
+          <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#" role="button">
+            <i class="fa fa-tv"></i> <?php echo IMAGE_PREVIEW; ?>
+          </a>
+          <button id="btnsubmit" class="btn btn-primary" onclick="saveProduct()" type="submit" >
+            <i class="fa fa-save"></i> <?php echo IMAGE_SAVE; ?>
+          </button>
+          <a href="<?php echo zen_href_link(FILENAME_CATEGORIES, 'cPath=' . $cPath . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-warning" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
+        </div>
+      </form>
     </div>
   </div>
 </div>
@@ -1037,13 +1046,34 @@ if ($height > MEDIUM_IMAGE_HEIGHT) {
   $height = MEDIUM_IMAGE_HEIGHT;
 }
 ?>
+<!-- Message Stack modal-->
+<div id="collectInfoMessageStack" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <i class="fa fa-times" aria-hidden="true"></i>
+          <span class="sr-only"><?php echo TEXT_CLOSE; ?></span>
+        </button>
+      </div>
+      <div class="modal-body" id="attributesMessageStackText">
+        <!-- content is entered using AJAX -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          <i class="fa fa-close"></i> <?php echo TEXT_CLOSE; ?>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Product main image preview modal-->
 <div id="imagePreviewModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only"><?php echo TEXT_CLOSE; ?></span></button>
-        <h4 class="modal-title" id="imagePreviewModalLabel">Image preview</h4>
+        <h4 class="modal-title" id="imagePreviewModalLabel"><?php echo IMAGE_PREVIEW; ?>Image preview</h4>
       </div>
       <div class="modal-body text-center">
           <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', $width, $height) ?>
