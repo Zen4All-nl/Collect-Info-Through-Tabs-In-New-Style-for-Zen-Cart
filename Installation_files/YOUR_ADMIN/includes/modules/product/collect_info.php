@@ -12,7 +12,7 @@ if (!defined('IS_ADMIN_FLAG')) {
 
 // search directories for the needed files
 function recursiveDirList($dir, $prefix = '') {
-  $dir = rtrim($dir, DIRECTORY_SEPARATOR );
+  $dir = rtrim($dir, DIRECTORY_SEPARATOR);
   $result = [];
 
   foreach (glob($dir . DIRECTORY_SEPARATOR . '*', GLOB_MARK) as &$f) {
@@ -649,16 +649,16 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_NET, 'products_price', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_input_field('products_price', $pInfo->products_price, 'onKeyUp="updateGross()" class="form-control"'); ?>
+                <?php echo zen_draw_input_field('products_price', $pInfo->products_price, 'onkeyup="updateGross()" class="form-control"'); ?>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_GROSS, 'products_price_gross', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_input_field('products_price_gross', $pInfo->products_price, 'OnKeyUp="updateNet()" class="form-control"'); ?>
+                <?php echo zen_draw_input_field('products_price_gross', $pInfo->products_price, 'onkeyup="updateNet()" class="form-control"'); ?>
             </div>
           </div>
-          <script type="text/javascript">updateGross();</script>
+          <script>updateGross();</script>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_STATUS, 'products_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">

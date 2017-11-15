@@ -45,7 +45,7 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
     <div class="dropdown">
       <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
         <?php echo BUTTON_ADDITITONAL_ACTIONS; ?>
-        <span class="caret"></span>
+        <i class="fa fa-caret-down"></i>
       </button>
       <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
         <li role="presentation"><a role="menuitem" href="<?php echo zen_href_link(FILENAME_OPTIONS_NAME_MANAGER) ?>" target="_blank"><?php echo IMAGE_OPTION_NAMES; ?></a></li>
@@ -106,16 +106,16 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
     <table id="productAttributes" class="table table-striped">
       <thead>
         <tr>
-          <td>&nbsp;</td>
-          <td><?php echo TABLE_HEADING_OPT_NAME; ?></td>
-          <td><?php echo TABLE_HEADING_ID; ?></td>
-          <td><?php echo TABLE_HEADING_OPT_VALUE; ?></td>
-          <td class="text-right"><?php echo TABLE_HEADING_OPT_PRICE_PREFIX; ?>&nbsp;<?php echo TABLE_HEADING_OPT_PRICE; ?></td>
-          <td class="text-right"><?php echo TABLE_HEADING_OPT_WEIGHT_PREFIX; ?>&nbsp;<?php echo TABLE_HEADING_OPT_WEIGHT; ?></td>
-          <td class="text-right"><?php echo TABLE_HEADING_OPT_SORT_ORDER; ?></td>
-          <td class="text-center"><?php echo LEGEND_BOX; ?></td>
-          <td class="text-right"><?php echo TABLE_HEADING_PRICE_TOTAL; ?>&nbsp;</td>
-          <td class="text-center"><?php echo TABLE_HEADING_ACTION; ?></td>
+          <th>&nbsp;</th>
+          <th><?php echo TABLE_HEADING_OPT_NAME; ?></th>
+          <th><?php echo TABLE_HEADING_ID; ?></th>
+          <th><?php echo TABLE_HEADING_OPT_VALUE; ?></th>
+          <th class="text-right"><?php echo TABLE_HEADING_OPT_PRICE_PREFIX; ?>&nbsp;<?php echo TABLE_HEADING_OPT_PRICE; ?></th>
+          <th class="text-right"><?php echo TABLE_HEADING_OPT_WEIGHT_PREFIX; ?>&nbsp;<?php echo TABLE_HEADING_OPT_WEIGHT; ?></th>
+          <th class="text-right"><?php echo TABLE_HEADING_OPT_SORT_ORDER; ?></th>
+          <th class="text-center"><?php echo LEGEND_BOX; ?></th>
+          <th class="text-right"><?php echo TABLE_HEADING_PRICE_TOTAL; ?></th>
+          <th class="text-center"><?php echo TABLE_HEADING_ACTION; ?></th>
         </tr>
       </thead>
       <tbody>
