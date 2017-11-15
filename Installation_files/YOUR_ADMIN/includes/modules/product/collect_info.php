@@ -12,7 +12,7 @@ if (!defined('IS_ADMIN_FLAG')) {
 
 // search directories for the needed files
 function recursiveDirList($dir, $prefix = '') {
-  $dir = rtrim($dir, DIRECTORY_SEPARATOR );
+  $dir = rtrim($dir, DIRECTORY_SEPARATOR);
   $result = [];
 
   foreach (glob($dir . DIRECTORY_SEPARATOR . '*', GLOB_MARK) as &$f) {
@@ -440,8 +440,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
   }
 
   function getTaxRate() {
-      var selected_value = document.forms["new_product"].products_tax_class_id.selectedIndex;
-      var parameterVal = document.forms["new_product"].products_tax_class_id[selected_value].value;
+      var parameterVal = $('select[name="products_tax_class_id"]').val();
       if ((parameterVal > 0) && (tax_rates[parameterVal] > 0)) {
           return tax_rates[parameterVal];
       } else {
@@ -451,22 +450,22 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
 
   function updateGross() {
       var taxRate = getTaxRate();
-      var grossValue = document.forms["new_product"].products_price.value;
+      var grossValue = $('input[name="products_price"]').val();
       if (taxRate > 0) {
           grossValue = grossValue * ((taxRate / 100) + 1);
       }
 
-      document.forms["new_product"].products_price_gross.value = doRound(grossValue, 4);
+      $('input[name="products_price_gross"]').val(doRound(grossValue, 4));
   }
 
   function updateNet() {
       var taxRate = getTaxRate();
-      var netValue = document.forms["new_product"].products_price_gross.value;
+      var netValue = $('input[name="products_price_gross"]').val();
       if (taxRate > 0) {
           netValue = netValue / ((taxRate / 100) + 1);
       }
 
-      document.forms["new_product"].products_price.value = doRound(netValue, 4);
+      $('input[name="products_price"]').val(doRound(netValue, 4));
   }
 </script>
 <div class="container-fluid">
@@ -649,16 +648,16 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_NET, 'products_price', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_input_field('products_price', $pInfo->products_price, 'onKeyUp="updateGross()" class="form-control"'); ?>
+                <?php echo zen_draw_input_field('products_price', $pInfo->products_price, 'onkeyup="updateGross()" class="form-control"'); ?>
             </div>
           </div>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_GROSS, 'products_price_gross', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
-                <?php echo zen_draw_input_field('products_price_gross', $pInfo->products_price, 'OnKeyUp="updateNet()" class="form-control"'); ?>
+                <?php echo zen_draw_input_field('products_price_gross', $pInfo->products_price, 'onkeyup="updateNet()" class="form-control"'); ?>
             </div>
           </div>
-          <script type="text/javascript">updateGross();</script>
+          <script>updateGross();</script>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_STATUS, 'products_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
