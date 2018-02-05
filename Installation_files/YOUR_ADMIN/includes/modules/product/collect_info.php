@@ -15,7 +15,7 @@ function recursiveDirList($dir, $prefix = '') {
   $dir = rtrim($dir, DIRECTORY_SEPARATOR);
   $result = [];
 
-  foreach (glob($dir . DIRECTORY_SEPARATOR . '*', GLOB_MARK) as &$f) {
+  foreach (glob($dir. DIRECTORY_SEPARATOR . '*', GLOB_MARK) as &$f) {
     if (substr($f, -1) === DIRECTORY_SEPARATOR) {
       $result = array_merge($result, recursiveDirList($f, $prefix . basename($f) . DIRECTORY_SEPARATOR));
     } else {
@@ -34,24 +34,24 @@ $parameters = array(
   'products_description' => '',
   'products_url' => '',
   'products_id' => '',
-  'products_quantity' => '',
+  'products_quantity' => '0',
   'products_model' => '',
   'products_image' => '',
-  'products_price' => '',
+  'products_price' => '0.0000',
   'products_virtual' => DEFAULT_PRODUCT_PRODUCTS_VIRTUAL,
-  'products_weight' => '',
+  'products_weight' => '0',
   'products_date_added' => '',
   'products_last_modified' => '',
   'products_date_available' => '',
-  'products_status' => '',
+  'products_status' => '1',
   'products_tax_class_id' => DEFAULT_PRODUCT_TAX_CLASS_ID,
   'manufacturers_id' => '',
-  'products_quantity_order_min' => '',
-  'products_quantity_order_units' => '',
-  'products_priced_by_attribute' => '',
-  'product_is_free' => '',
-  'product_is_call' => '',
-  'products_quantity_mixed' => '',
+  'products_quantity_order_min' => '1',
+  'products_quantity_order_units' => '1',
+  'products_priced_by_attribute' => '0',
+  'product_is_free' => '0',
+  'product_is_call' => '0',
+  'products_quantity_mixed' => '1',
   'product_is_always_free_shipping' => DEFAULT_PRODUCT_PRODUCTS_IS_ALWAYS_FREE_SHIPPING,
   'products_qty_box_status' => PRODUCTS_QTY_BOX_STATUS,
   'products_quantity_order_max' => '0',
@@ -60,11 +60,11 @@ $parameters = array(
   'products_discount_type_from' => '0',
   'products_price_sorter' => '0',
   'master_categories_id' => '',
-  'metatags_title_status' => '',
-  'metatags_products_name_status' => '',
-  'metatags_model_status' => '',
-  'metatags_price_status' => '',
-  'metatags_title_tagline_status' => '',
+  'metatags_title_status' => '1',
+  'metatags_products_name_status' => '1',
+  'metatags_model_status' => '1',
+  'metatags_price_status' => '1',
+  'metatags_title_tagline_status' => '1',
   'metatags_title' => '',
   'metatags_keywords' => '',
   'metatags_description' => ''
@@ -173,257 +173,10 @@ foreach ($tax_class as $item) {
 
 $languages = zen_get_languages();
 
-if (!isset($pInfo->products_status)) {
-  $pInfo->products_status = '1';
-}
-switch ($pInfo->products_status) {
-  case '0':
-    $in_status = false;
-    $out_status = true;
-    break;
-  case '1':
-  default:
-    $in_status = true;
-    $out_status = false;
-    break;
-}
 // set to out of stock if categories_status is off and new product or existing products_status is off
-if (zen_get_categories_status($current_category_id) == '0' && $pInfo->products_status != '1') {
+if (zen_get_categories_status($current_category_id) == 0 && $pInfo->products_status != 1) {
   $pInfo->products_status = 0;
-  $in_status = false;
-  $out_status = true;
 }
-
-// Virtual Products
-if (!isset($pInfo->products_virtual)) {
-  $pInfo->products_virtual = DEFAULT_PRODUCT_PRODUCTS_VIRTUAL;
-}
-
-// Virtual Products
-if (!isset($pInfo->products_virtual)) {
-  $pInfo->products_virtual = DEFAULT_PRODUCT_PRODUCTS_VIRTUAL;
-}
-switch ($pInfo->products_virtual) {
-  case '0':
-    $is_virtual = false;
-    $not_virtual = true;
-    break;
-  case '1':
-    $is_virtual = true;
-    $not_virtual = false;
-    break;
-  default:
-    $is_virtual = false;
-    $not_virtual = true;
-}
-// Always Free Shipping
-if (!isset($pInfo->product_is_always_free_shipping)) {
-  $pInfo->product_is_always_free_shipping = DEFAULT_PRODUCT_PRODUCTS_IS_ALWAYS_FREE_SHIPPING;
-}
-switch ($pInfo->product_is_always_free_shipping) {
-  case '0':
-    $is_product_is_always_free_shipping = false;
-    $not_product_is_always_free_shipping = true;
-    $special_product_is_always_free_shipping = false;
-    break;
-  case '1':
-    $is_product_is_always_free_shipping = true;
-    $not_product_is_always_free_shipping = false;
-    $special_product_is_always_free_shipping = false;
-    break;
-  case '2':
-    $is_product_is_always_free_shipping = false;
-    $not_product_is_always_free_shipping = false;
-    $special_product_is_always_free_shipping = true;
-    break;
-  default:
-    $is_product_is_always_free_shipping = false;
-    $not_product_is_always_free_shipping = true;
-    $special_product_is_always_free_shipping = false;
-    break;
-}
-// products_qty_box_status shows
-if (!isset($pInfo->products_qty_box_status)) {
-  $pInfo->products_qty_box_status = PRODUCTS_QTY_BOX_STATUS;
-}
-switch ($pInfo->products_qty_box_status) {
-  case '0':
-    $is_products_qty_box_status = false;
-    $not_products_qty_box_status = true;
-    break;
-  case '1':
-    $is_products_qty_box_status = true;
-    $not_products_qty_box_status = false;
-    break;
-  default:
-    $is_products_qty_box_status = true;
-    $not_products_qty_box_status = false;
-}
-// Product is Priced by Attributes
-if (!isset($pInfo->products_priced_by_attribute)) {
-  $pInfo->products_priced_by_attribute = '0';
-}
-switch ($pInfo->products_priced_by_attribute) {
-  case '0':
-    $is_products_priced_by_attribute = false;
-    $not_products_priced_by_attribute = true;
-    break;
-  case '1':
-    $is_products_priced_by_attribute = true;
-    $not_products_priced_by_attribute = false;
-    break;
-  default:
-    $is_products_priced_by_attribute = false;
-    $not_products_priced_by_attribute = true;
-}
-// Product is Free
-if (!isset($pInfo->product_is_free)) {
-  $pInfo->product_is_free = '0';
-}
-switch ($pInfo->product_is_free) {
-  case '0':
-    $in_product_is_free = false;
-    $out_product_is_free = true;
-    break;
-  case '1':
-    $in_product_is_free = true;
-    $out_product_is_free = false;
-    break;
-  default:
-    $in_product_is_free = false;
-    $out_product_is_free = true;
-}
-// Product is Call for price
-if (!isset($pInfo->product_is_call)) {
-  $pInfo->product_is_call = '0';
-}
-switch ($pInfo->product_is_call) {
-  case '0':
-    $in_product_is_call = false;
-    $out_product_is_call = true;
-    break;
-  case '1':
-    $in_product_is_call = true;
-    $out_product_is_call = false;
-    break;
-  default:
-    $in_product_is_call = false;
-    $out_product_is_call = true;
-}
-// Products can be purchased with mixed attributes retail
-if (!isset($pInfo->products_quantity_mixed)) {
-  $pInfo->products_quantity_mixed = '0';
-}
-switch ($pInfo->products_quantity_mixed) {
-  case '0':
-    $in_products_quantity_mixed = false;
-    $out_products_quantity_mixed = true;
-    break;
-  case '1':
-    $in_products_quantity_mixed = true;
-    $out_products_quantity_mixed = false;
-    break;
-  default:
-    $in_products_quantity_mixed = true;
-    $out_products_quantity_mixed = false;
-}
-
-// metatags_products_name_status shows
-if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
-  $pInfo->metatags_products_name_status = zen_get_show_product_switch($_GET['pID'], 'metatags_products_name_status');
-}
-switch ($pInfo->metatags_products_name_status) {
-  case '0':
-    $is_metatags_products_name_status = false;
-    $not_metatags_products_name_status = true;
-    break;
-  case '1':
-    $is_metatags_products_name_status = true;
-    $not_metatags_products_name_status = false;
-    break;
-  default:
-    $is_metatags_products_name_status = true;
-    $not_metatags_products_name_status = false;
-}
-
-// metatags_title_status shows
-if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
-  $pInfo->metatags_title_status = zen_get_show_product_switch($_GET['pID'], 'metatags_title_status');
-}
-switch ($pInfo->metatags_title_status) {
-  case '0':
-    $is_metatags_title_status = false;
-    $not_metatags_title_status = true;
-    break;
-  case '1':
-    $is_metatags_title_status = true;
-    $not_metatags_title_status = false;
-    break;
-  default:
-    $is_metatags_title_status = true;
-    $not_metatags_title_status = false;
-}
-
-// metatags_model_status shows
-if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
-  $pInfo->metatags_model_status = zen_get_show_product_switch($_GET['pID'], 'metatags_model_status');
-}
-switch ($pInfo->metatags_model_status) {
-  case '0':
-    $is_metatags_model_status = false;
-    $not_metatags_model_status = true;
-    break;
-  case '1':
-    $is_metatags_model_status = true;
-    $not_metatags_model_status = false;
-    break;
-  default:
-    $is_metatags_model_status = true;
-    $not_metatags_model_status = false;
-}
-
-// metatags_price_status shows
-if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
-  $pInfo->metatags_price_status = zen_get_show_product_switch($_GET['pID'], 'metatags_price_status');
-}
-switch ($pInfo->metatags_price_status) {
-  case '0':
-    $is_metatags_price_status = false;
-    $not_metatags_price_status = true;
-    break;
-  case '1':
-    $is_metatags_price_status = true;
-    $not_metatags_price_status = false;
-    break;
-  default:
-    $is_metatags_price_status = true;
-    $not_metatags_price_status = false;
-}
-
-// metatags_title_tagline_status shows TITLE and TAGLINE in metatags_header.php
-if (empty($pInfo->metatags_keywords) && empty($pInfo->metatags_description)) {
-  $pInfo->metatags_title_tagline_status = zen_get_show_product_switch($_GET['pID'], 'metatags_title_tagline_status');
-}
-switch ($pInfo->metatags_title_tagline_status) {
-  case '0':
-    $is_metatags_title_tagline_status = false;
-    $not_metatags_title_tagline_status = true;
-    break;
-  case '1':
-    $is_metatags_title_tagline_status = true;
-    $not_metatags_title_tagline_status = false;
-    break;
-  default:
-    $is_metatags_title_tagline_status = true;
-    $not_metatags_title_tagline_status = false;
-}
-
-// set image overwrite
-$on_overwrite = true;
-$off_overwrite = false;
-// set image delete
-$on_image_delete = false;
-$off_image_delete = true;
 ?>
 <script>
   var tax_rates = new Array();
@@ -442,6 +195,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
   function getTaxRate() {
       var selected_value = document.forms["new_product"].products_tax_class_id.selectedIndex;
       var parameterVal = document.forms["new_product"].products_tax_class_id[selected_value].value;
+
       if ((parameterVal > 0) && (tax_rates[parameterVal] > 0)) {
           return tax_rates[parameterVal];
       } else {
@@ -452,6 +206,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
   function updateGross() {
       var taxRate = getTaxRate();
       var grossValue = document.forms["new_product"].products_price.value;
+
       if (taxRate > 0) {
           grossValue = grossValue * ((taxRate / 100) + 1);
       }
@@ -462,6 +217,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
   function updateNet() {
       var taxRate = getTaxRate();
       var netValue = document.forms["new_product"].products_price_gross.value;
+
       if (taxRate > 0) {
           netValue = netValue / ((taxRate / 100) + 1);
       }
@@ -577,10 +333,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($is_metatags_products_name_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_products_name_status" data-title="1"><?php echo TEXT_YES; ?></a>
-                  <a class="btn btn-info <?php echo($not_metatags_products_name_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_products_name_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_products_name_status == 1 ? 'active' : 'notActive'); ?>" data-toggle="metatags_products_name_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_products_name_status == 0 ? 'active' : 'notActive'); ?>" data-toggle="metatags_products_name_status" data-title="0"><?php echo TEXT_NO; ?></a>
                 </div>
-                <?php echo zen_draw_hidden_field('metatags_products_name_status', ($is_metatags_products_name_status == true ? '1' : '0'), 'class="metatags_products_name_status"'); ?>
+                <?php echo zen_draw_hidden_field('metatags_products_name_status', $pInfo->metatags_products_name_status, 'class="metatags_products_name_status"'); ?>
               </div>
             </div>
           </div>
@@ -589,10 +345,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($is_metatags_title_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_status" data-title="1"><?php echo TEXT_YES; ?></a>
-                  <a class="btn btn-info <?php echo($not_metatags_title_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_title_status == 1 ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_title_status == 0 ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_status" data-title="0"><?php echo TEXT_NO; ?></a>
                 </div>
-                <?php echo zen_draw_hidden_field('metatags_title_status', ($is_metatags_title_status == true ? '1' : '0'), 'class="metatags_title_status"'); ?>
+                <?php echo zen_draw_hidden_field('metatags_title_status', $pInfo->metatags_title_status, 'class="metatags_title_status"'); ?>
               </div>
             </div>
           </div>
@@ -601,10 +357,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($is_metatags_model_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_model_status" data-title="1"><?php echo TEXT_YES; ?></a>
-                  <a class="btn btn-info <?php echo($not_metatags_model_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_model_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_model_status == 1 ? 'active' : 'notActive'); ?>" data-toggle="metatags_model_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_model_status == 0 ? 'active' : 'notActive'); ?>" data-toggle="metatags_model_status" data-title="0"><?php echo TEXT_NO; ?></a>
                 </div>
-                <?php echo zen_draw_hidden_field('metatags_model_status', ($is_metatags_model_status == true ? '1' : '0'), 'class="metatags_model_status"'); ?>
+                <?php echo zen_draw_hidden_field('metatags_model_status', $pInfo->metatags_model_status, 'class="metatags_model_status"'); ?>
               </div>
             </div>
           </div>
@@ -613,10 +369,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($is_metatags_price_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_price_status" data-title="1"><?php echo TEXT_YES; ?></a>
-                  <a class="btn btn-info <?php echo($not_metatags_price_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_price_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_price_status == 1 ? 'active' : 'notActive'); ?>" data-toggle="metatags_price_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_price_status == 0 ? 'active' : 'notActive'); ?>" data-toggle="metatags_price_status" data-title="0"><?php echo TEXT_NO; ?></a>
                 </div>
-                <?php echo zen_draw_hidden_field('metatags_price_status', ($is_metatags_price_status == true ? '1' : '0'), 'class="metatags_price_status"'); ?>
+                <?php echo zen_draw_hidden_field('metatags_price_status', $pInfo->metatags_price_status, 'class="metatags_price_status"'); ?>
               </div>
             </div>
           </div>
@@ -625,10 +381,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($is_metatags_title_tagline_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_tagline_status" data-title="1"><?php echo TEXT_YES; ?></a>
-                  <a class="btn btn-info <?php echo($not_metatags_title_tagline_status == true ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_tagline_status" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_title_tagline_status == 1 ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_tagline_status" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->metatags_title_tagline_status == 0 ? 'active' : 'notActive'); ?>" data-toggle="metatags_title_tagline_status" data-title="0"><?php echo TEXT_NO; ?></a>
                 </div>
-                <?php echo zen_draw_hidden_field('metatags_title_tagline_status', ($is_metatags_title_tagline_status == true ? '1' : '0'), 'class="metatags_title_tagline_status"'); ?>
+                <?php echo zen_draw_hidden_field('metatags_title_tagline_status', $pInfo->metatags_title_tagline_status, 'class="metatags_title_tagline_status"'); ?>
               </div>
             </div>
           </div>
@@ -658,17 +414,19 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 <?php echo zen_draw_input_field('products_price_gross', $pInfo->products_price, 'onkeyup="updateNet()" class="form-control"'); ?>
             </div>
           </div>
-          <script>updateGross();</script>
+          <script>
+            updateGross();
+          </script>
           <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_STATUS, 'products_status', 'class="col-sm-3 control-label"'); ?>
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($in_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_status" data-title="1"><?php echo TEXT_PRODUCT_AVAILABLE; ?></a>
-                  <a class="btn btn-info <?php echo($out_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_status" data-title="0"><?php echo TEXT_PRODUCT_NOT_AVAILABLE; ?></a>
-                  <?php echo (zen_get_categories_status($current_category_id) == '0' ? TEXT_CATEGORIES_STATUS_INFO_OFF : '') . ($out_status == true ? ' ' . TEXT_PRODUCTS_STATUS_INFO_OFF : ''); ?>
+                  <a class="btn btn-info <?php echo($pInfo->products_status == 1 ? 'active' : 'notActive'); ?>" data-toggle="products_status" data-title="1"><?php echo TEXT_PRODUCT_AVAILABLE; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->products_status == 0 ? 'active' : 'notActive'); ?>" data-toggle="products_status" data-title="0"><?php echo TEXT_PRODUCT_NOT_AVAILABLE; ?></a>
+                  <?php echo (zen_get_categories_status($current_category_id) == 0 ? TEXT_CATEGORIES_STATUS_INFO_OFF : '') . ($pInfo->products_status == 0 ? ' ' . TEXT_PRODUCTS_STATUS_INFO_OFF : ''); ?>
                 </div>
-                <?php echo zen_draw_hidden_field('products_status', ($in_status == true ? '1' : '0'), 'class="products_status"'); ?>
+                <?php echo zen_draw_hidden_field('products_status', $pInfo->products_status, 'class="products_status"'); ?>
               </div>
             </div>
           </div>
@@ -691,11 +449,11 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($in_product_is_free == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_free" data-title="1"><?php echo TEXT_YES; ?></a>
-                  <a class="btn btn-info <?php echo($out_product_is_free == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_free" data-title="0"><?php echo TEXT_NO; ?></a>
-                  <?php echo ($pInfo->product_is_free == 1 ? '<span class="alert">' . TEXT_PRODUCTS_IS_FREE_EDIT . '</span>' : ''); ?>
+                  <a class="btn btn-info <?php echo($pInfo->product_is_free == 1 ? 'active' : 'notActive'); ?>" data-toggle="product_is_free" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->product_is_free == 0 ? 'active' : 'notActive'); ?>" data-toggle="product_is_free" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <?php echo ($pInfo->product_is_free == 1 ? '<span class="help-block errorText">' . TEXT_PRODUCTS_IS_FREE_EDIT . '</span>' : ''); ?>
                 </div>
-                <?php echo zen_draw_hidden_field('product_is_free', ($in_product_is_free == true ? '1' : '0'), 'class="product_is_free"'); ?>
+                <?php echo zen_draw_hidden_field('product_is_free', $pInfo->product_is_free, 'class="product_is_free"'); ?>
               </div>
             </div>
           </div>
@@ -704,11 +462,11 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($in_product_is_call == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_call" data-title="1"><?php echo TEXT_YES; ?></a>
-                  <a class="btn btn-info <?php echo($out_product_is_call == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_call" data-title="0"><?php echo TEXT_NO; ?></a>
-                  <?php echo ($pInfo->product_is_call == 1 ? '<span class="alert">' . TEXT_PRODUCTS_IS_CALL_EDIT . '</span>' : ''); ?>
+                  <a class="btn btn-info <?php echo($pInfo->product_is_call == 1 ? 'active' : 'notActive'); ?>" data-toggle="product_is_call" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->product_is_call == 0 ? 'active' : 'notActive'); ?>" data-toggle="product_is_call" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <?php echo ($pInfo->product_is_call == 1 ? '<span class="help-block errorText">' . TEXT_PRODUCTS_IS_CALL_EDIT . '</span>' : ''); ?>
                 </div>
-                <?php echo zen_draw_hidden_field('product_is_call', ($in_product_is_call == true ? '1' : '0'), 'class="product_is_call"'); ?>
+                <?php echo zen_draw_hidden_field('product_is_call', $pInfo->product_is_call, 'class="product_is_call"'); ?>
               </div>
             </div>
           </div>
@@ -717,11 +475,11 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($is_products_priced_by_attribute == true ? 'active' : 'notActive'); ?>" data-toggle="products_priced_by_attribute" data-title="1"><?php echo TEXT_PRODUCT_IS_PRICED_BY_ATTRIBUTE; ?></a>
-                  <a class="btn btn-info <?php echo($not_products_priced_by_attribute == true ? 'active' : 'notActive'); ?>" data-toggle="products_priced_by_attribute" data-title="0"><?php echo TEXT_PRODUCT_NOT_PRICED_BY_ATTRIBUTE; ?></a>
-                  <?php echo ($pInfo->products_priced_by_attribute == 1 ? '<span class="alert">' . TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES_EDIT . '</span>' : ''); ?>
+                  <a class="btn btn-info <?php echo($pInfo->products_priced_by_attribute == 1 ? 'active' : 'notActive'); ?>" data-toggle="products_priced_by_attribute" data-title="1"><?php echo TEXT_PRODUCT_IS_PRICED_BY_ATTRIBUTE; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->products_priced_by_attribute == 0 ? 'active' : 'notActive'); ?>" data-toggle="products_priced_by_attribute" data-title="0"><?php echo TEXT_PRODUCT_NOT_PRICED_BY_ATTRIBUTE; ?></a>
+                  <?php echo ($pInfo->products_priced_by_attribute == 1 ? '<span class="help-block errorText">' . TEXT_PRODUCTS_PRICED_BY_ATTRIBUTES_EDIT . '</span>' : ''); ?>
                 </div>
-                <?php echo zen_draw_hidden_field('products_priced_by_attribute', ($is_products_priced_by_attribute == true ? '1' : '0'), 'class="products_priced_by_attribute"'); ?>
+                <?php echo zen_draw_hidden_field('products_priced_by_attribute', $pInfo->products_priced_by_attribute, 'class="products_priced_by_attribute"'); ?>
               </div>
             </div>
           </div>
@@ -730,11 +488,11 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($is_virtual == true ? 'active' : 'notActive'); ?>" data-toggle="products_virtual" data-title="1"><?php echo TEXT_PRODUCT_IS_VIRTUAL; ?></a>
-                  <a class="btn btn-info <?php echo($not_virtual == true ? 'active' : 'notActive'); ?>" data-toggle="products_virtual" data-title="0"><?php echo TEXT_PRODUCT_NOT_VIRTUAL; ?></a>
-                  <?php echo ($pInfo->products_virtual == 1 ? '<span class="alert">' . TEXT_VIRTUAL_EDIT . '</span>' : ''); ?>
+                  <a class="btn btn-info <?php echo($pInfo->products_virtual == 1 ? 'active' : 'notActive'); ?>" data-toggle="products_virtual" data-title="1"><?php echo TEXT_PRODUCT_IS_VIRTUAL; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->products_virtual == 0 ? 'active' : 'notActive'); ?>" data-toggle="products_virtual" data-title="0"><?php echo TEXT_PRODUCT_NOT_VIRTUAL; ?></a>
+                  <?php echo ($pInfo->products_virtual == 1 ? '<span class="help-block errorText">' . TEXT_VIRTUAL_EDIT . '</span>' : ''); ?>
                 </div>
-                <?php echo zen_draw_hidden_field('products_virtual', ($is_virtual == true ? '1' : '0'), 'class="products_virtual"'); ?>
+                <?php echo zen_draw_hidden_field('products_virtual', $pInfo->products_virtual, 'class="products_virtual"'); ?>
               </div>
             </div>
           </div>
@@ -743,11 +501,12 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info btn-sm <?php echo($is_product_is_always_free_shipping == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="1"><?php echo TEXT_PRODUCT_IS_ALWAYS_FREE_SHIPPING; ?></a>
-                  <a class="btn btn-info btn-sm <?php echo($not_product_is_always_free_shipping == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="0"><?php echo TEXT_PRODUCT_NOT_ALWAYS_FREE_SHIPPING; ?></a>
-                  <a class="btn btn-info btn-sm <?php echo($special_product_is_always_free_shipping == true ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="2"><?php echo TEXT_PRODUCT_SPECIAL_ALWAYS_FREE_SHIPPING; ?></a>
+                  <a class="btn btn-info btn-sm <?php echo($pInfo->product_is_always_free_shipping == '1' ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="1"><?php echo TEXT_PRODUCT_IS_ALWAYS_FREE_SHIPPING; ?></a>
+                  <a class="btn btn-info btn-sm <?php echo($pInfo->product_is_always_free_shipping == '0' ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="0"><?php echo TEXT_PRODUCT_NOT_ALWAYS_FREE_SHIPPING; ?></a>
+                  <a class="btn btn-info btn-sm <?php echo($pInfo->product_is_always_free_shipping == '2' ? 'active' : 'notActive'); ?>" data-toggle="product_is_always_free_shipping" data-title="2"><?php echo TEXT_PRODUCT_SPECIAL_ALWAYS_FREE_SHIPPING; ?></a>
+                  <?php echo ($pInfo->product_is_always_free_shipping == 1 ? '<span class="help-block errorText">' . TEXT_FREE_SHIPPING_EDIT . '</span>' : ''); ?>
                 </div>
-                <?php echo zen_draw_hidden_field('product_is_always_free_shipping', ($not_product_is_always_free_shipping == true ? '1' : '0'), 'class="product_is_always_free_shipping"'); ?>
+                <?php echo zen_draw_hidden_field('product_is_always_free_shipping', $pInfo->product_is_always_free_shipping, 'class="product_is_always_free_shipping"'); ?>
               </div>
             </div>
           </div>
@@ -756,11 +515,11 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($is_products_qty_box_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_qty_box_status" data-title="1"><?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_ON; ?></a>
-                  <a class="btn btn-info <?php echo($not_products_qty_box_status == true ? 'active' : 'notActive'); ?>" data-toggle="products_qty_box_status" data-title="0"><?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_OFF; ?></a>
-                  <?php echo ($pInfo->products_qty_box_status == 0 ? '<span class="alert">' . TEXT_PRODUCTS_QTY_BOX_STATUS_EDIT . '</span>' : ''); ?>
+                  <a class="btn btn-info <?php echo($pInfo->products_qty_box_status == 1 ? 'active' : 'notActive'); ?>" data-toggle="products_qty_box_status" data-title="1"><?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_ON; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->products_qty_box_status == 0 ? 'active' : 'notActive'); ?>" data-toggle="products_qty_box_status" data-title="0"><?php echo TEXT_PRODUCTS_QTY_BOX_STATUS_OFF; ?></a>
+                  <?php echo ($pInfo->products_qty_box_status == 0 ? '<span class="help-block errorText">' . TEXT_PRODUCTS_QTY_BOX_STATUS_EDIT . '</span>' : ''); ?>
                 </div>
-                <?php echo zen_draw_hidden_field('products_qty_box_status', ($is_products_qty_box_status == true ? '1' : '0'), 'class="products_qty_box_status"'); ?>
+                <?php echo zen_draw_hidden_field('products_qty_box_status', $pInfo->products_qty_box_status, 'class="products_qty_box_status"'); ?>
               </div>
             </div>
           </div>
@@ -787,10 +546,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="radioBtn btn-group">
-                  <a class="btn btn-info <?php echo($in_products_quantity_mixed == true ? 'active' : 'notActive'); ?>" data-toggle="products_quantity_mixed" data-title="1"><?php echo TEXT_YES; ?></a>
-                  <a class="btn btn-info <?php echo($out_products_quantity_mixed == true ? 'active' : 'notActive'); ?>" data-toggle="products_quantity_mixed" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->products_quantity_mixed == 1 ? 'active' : 'notActive'); ?>" data-toggle="products_quantity_mixed" data-title="1"><?php echo TEXT_YES; ?></a>
+                  <a class="btn btn-info <?php echo($pInfo->products_quantity_mixed == 0 ? 'active' : 'notActive'); ?>" data-toggle="products_quantity_mixed" data-title="0"><?php echo TEXT_NO; ?></a>
                 </div>
-                <?php echo zen_draw_hidden_field('products_quantity_mixed', ($in_products_quantity_mixed == true ? '1' : '0'), 'class="products_quantity_mixed"'); ?>
+                <?php echo zen_draw_hidden_field('products_quantity_mixed', $pInfo->products_quantity_mixed, 'class="products_quantity_mixed"'); ?>
               </div>
             </div>
           </div>
@@ -820,7 +579,12 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <div class="form-group">
               <?php echo zen_draw_label(TEXT_PRODUCTS_URL, 'products_url[' . $languages[$i]['id'] . ']', 'class="col-sm-3 control-label"'); ?> <i class="fa fa-lg fa-question-circle" data-toggle="tooltip" data-placement="top" title="<?php echo TEXT_PRODUCTS_URL_WITHOUT_HTTP; ?>"></i>
               <div class="col-sm-9">
-                  <?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name'], '', '', 'class="img-thumbnail"') . zen_draw_input_field('products_url[' . $languages[$i]['id'] . ']', htmlspecialchars(isset($products_url[$languages[$i]['id']]) ? $products_url[$languages[$i]['id']] : zen_get_products_url($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_PRODUCTS_DESCRIPTION, 'products_url') . 'class="form-control"'); ?>
+                <div class="input-group">
+                <span class="input-group-addon">
+                  <?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']); ?>
+                  </span>
+                  <?php echo zen_draw_input_field('products_url[' . $languages[$i]['id'] . ']', htmlspecialchars(isset($products_url[$languages[$i]['id']]) ? $products_url[$languages[$i]['id']] : zen_get_products_url($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_PRODUCTS_DESCRIPTION, 'products_url') . 'class="form-control"'); ?>
+                </div>
               </div>
             </div>
             <?php
@@ -828,7 +592,6 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           ?>
         </div>
         <div id="productTabs4" class="tab-pane fade">
-          <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">
               <thead>
                 <tr>
@@ -866,13 +629,15 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                         <?php echo zen_draw_label(TEXT_IMAGES_DELETE, 'image_delete', 'class="col-sm-3 control-label"'); ?>
                       <i class="fa fa-question-circle fa-lg" data-toggle="tooltip" data-placement="top" title data-original-title="<?php echo TEXT_IMAGES_DELETE_NOTE; ?>"></i>
                       <div class="col-sm-9">
-                          <?php echo zen_draw_radio_field('image_delete', '0', $off_image_delete) . '&nbsp;' . TABLE_HEADING_NO . ' ' . zen_draw_radio_field('image_delete', '1', $on_image_delete) . '&nbsp;' . TABLE_HEADING_YES; ?>
+                        <label class="radio-inline"><?php echo zen_draw_radio_field('image_delete', '0', true) . TABLE_HEADING_NO;?></label>
+                        <label class="radio-inline"><?php echo zen_draw_radio_field('image_delete', '1', false) . TABLE_HEADING_YES; ?></label>
                       </div>
                     </div>
                     <div class="form-group">
                         <?php echo zen_draw_label(TEXT_IMAGES_OVERWRITE, 'overwrite', 'class="col-sm-3 control-label"'); ?>
                       <div class="col-sm-9">
-                          <?php echo zen_draw_radio_field('overwrite', '0', $off_overwrite) . '&nbsp;' . TABLE_HEADING_NO . ' ' . zen_draw_radio_field('overwrite', '1', $on_overwrite) . '&nbsp;' . TABLE_HEADING_YES; ?>
+                        <label class="radio-inline"><?php echo zen_draw_radio_field('overwrite', '0', false) . '&nbsp;' . TABLE_HEADING_NO; ?></label>
+                        <label class="radio-inline"><?php echo zen_draw_radio_field('overwrite', '1', true) . TABLE_HEADING_YES; ?></label>
                       </div>
                     </div>
                     <div class="form-group">
@@ -885,7 +650,6 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 </tr>
               </tbody>
             </table>
-          </div>
         </div>
         <?php
         $tabContentsNeedle = 'tab_contents_';

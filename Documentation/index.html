@@ -15,7 +15,7 @@
   </head>
   <body>
     <div class="page-header text-center">
-      <h1>Collect Info Through Tabs In New Style (CITTINS) v1.0.1</h1>
+      <h1>Collect Info Through Tabs In New Style (CITTINS) v1.0.2</h1>
     </div>
     <div class="container-fluid">
       <div class="panel panel-body">
@@ -32,7 +32,7 @@
           <div class="tab-pane fade in active" id="credits">
             <h2>Credits</h2>
             <ul>
-              <li><strong>Version:&nbsp;</strong> v1.0.1 (Released November, 2017)</li>
+              <li><strong>Version:&nbsp;</strong> v1.0.2 (Released Febuary, 2018)</li>
               <li><strong>Original Author:</strong> Zen4All (<a href="https://zen4all.nl">https://zen4all.nl</a>)</li>
               <li><strong>Designed for:</strong> Zen Cart &ge; v1.5.5 Release</li>
               <li><strong>Tabs based on:</strong> Bootstrap 3.3.7</li>
@@ -103,6 +103,7 @@
             </ul>
             <p>Although this module is designed to work with Zen Cart 1.5.5e or higher, it may also work on lower version. This has not bee n tested, and I am not planning on giving any active (free) support for that.<br>A minimum of php 5.4 is needed, because earlier php versions are lacking some needed functions.</p>
             <h2>Installation</h2>
+            <h3>New installation</h3>
             <p>All files are arranged in the correct Zen Cart v1.5.x structure.</p>
             <ol>
               <li>Rename the "YOUR_ADMIN" folder to the admin folder name you are using</li>
@@ -131,6 +132,23 @@
               <li style="color: orange">YOUR_ADMIN\includes\stylesheet.css</li>
               <li style="color: orange">YOUR_ADMIN\product.php</li>
             </ul>
+            <h3>Upgrade</h3>
+            <h4>1.0 => 1.0.1</h4>
+            <p>add/replace/delete the following files:</p>
+            <ul>
+              <li style="color: orange">YOUR_ADMIN\includes\modules\product\collect_info.php</li>
+            </ul>
+            <p>extra tabs</p>
+            <ul>
+              <li style="color: orange">YOUR_ADMIN\includes\languages\english\attributes_controller.php</li>
+              <li style="color: orange">YOUR_ADMIN\includes\modules\extra_tab\attributes\YOUR_ADMIN\includes\modules\extra_tabs\attributes\tab_contents_collect_info.php</li>
+              <li style="color: orange">YOUR_ADMIN\includes\modules\extra_tab\attributes\YOUR_ADMIN\attributeApi.php</li>
+            </ul>
+            <h4>1.0.1 => 1.0.2</h4>
+            <p>add/replace/delete the following files:</p>
+            <ul>
+              <li style="color: orange">YOUR_ADMIN\includes\modules\product\collect_info.php</li>
+            </ul>
             <h3>Un-install CITINS</h3>
             <p>To un-install this module undo all the file-changes you made above.</p>
           </div>
@@ -145,16 +163,27 @@
           <!--end sc5-->
           <div class="tab-pane fade" id="history">
             <h2>History</h2>
-            <p>November 2017 - v1.0.1 (Bug Fix) - Zen4All</p>
+            <p>5 February 2018 - v1.0.2 - Zen4All</p>
             <ul>
-              <li>Fixed data sanitizing</li>
+              <li>Bug fix: fixing error with wrong value for free shipping radio button</li>
+              <li>remove "old" OsC code (will most likely be core in Zen Cart 1.5.6)</li>
+              <li>made some minor UI changes</li>
+              <li>Changed files:
+                <ul>
+                  <li>Installation_files\YOUR_ADMIN\includes\modules\product\collect_info.php</li>
+                </ul>
+              </li>
+            </ul>
+            <p>15 November 2017 - v1.0.1 - Zen4All</p>
+            <ul>
+              <li>Bug fix: fixing data sanitizing</li>
               <li>Changed some html for better viewing</li>
               <li>Changed files:
                 <ul>
                   <li>Extra_tabs\attributes\YOUR_ADMIN\attributeApi.php</li>
                   <li>Extra_tabs\attributes\YOUR_ADMIN\includes\languages\english\attributes_controller.php</li>
                   <li>Extra_tabs\attributes\YOUR_ADMIN\includes\modules\extra_tabs\attributas\jscript_attribute.php</li>
-                  <li>Extra_tabs\attributes\YOUR_ADMIN\includes\modules\extra_tabs\attributes\tab_contents_collect_nfo.php</li>
+                  <li>Extra_tabs\attributes\YOUR_ADMIN\includes\modules\extra_tabs\attributes\tab_contents_collect_info.php</li>
                   <li>Extra_tabs\category\YOUR_ADMIN\includes\modules\extra_tabs\category\tab_title_collect_info.php</li>
                   <li>Installation_files\YOUR_ADMIN\includes\functions\extra_functions\functionsCollectProductInfoExtra.php</li>
                   <li>Installation_files\YOUR_ADMIN\includes\modules\product\collect_info.php</li>
@@ -162,7 +191,7 @@
                   
               </li>
             </ul>
-            <p>October 2017 - v1.0 (Release) - Zen4All</p>
+            <p>October 2017 - v1.0.0 (Release) - Zen4All</p>
             <ul>
               <li>Initial release for Zen 1.5.5</li>
             </ul>
