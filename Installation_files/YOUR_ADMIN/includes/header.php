@@ -196,10 +196,10 @@ if (SHOW_GV_QUEUE == true) {
 <?php require(DIR_WS_INCLUDES . 'header_navigation.php'); ?>
 
 <?php /* BOF Zen4All - CITTINS - 1 of 1 */ ?>
-<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="includes/javascript/bootstrap-switch.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
-<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 
 <!-- <script src="includes/javascript/jquery-1.12.1.min.js"></script> -->
 <!-- <script src="includes/javascript/bootstrap.min.js"></script> -->

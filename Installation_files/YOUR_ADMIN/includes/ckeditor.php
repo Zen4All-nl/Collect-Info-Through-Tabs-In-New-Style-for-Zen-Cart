@@ -29,7 +29,7 @@ $(document).ready(function() {
       CKEDITOR.replace($(this).attr('name'),
         {
           coreStyles_underline : { element : 'u' },
-          width : 760,
+          width : '100%',
           language: lang[index]
         });
     }

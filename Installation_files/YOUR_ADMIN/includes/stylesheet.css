@@ -14,6 +14,7 @@
 /* @import url("css/font-awesome.min.css");*/
 @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 
+@import url("https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css");
 a {
     color: #0000ff;
     text-decoration: none;

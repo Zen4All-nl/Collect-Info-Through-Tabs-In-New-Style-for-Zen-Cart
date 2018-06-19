@@ -6,7 +6,7 @@
  */
 ?>
 <script>
-  var attributesApiUrl = 'attributeApi.php';
+  var attributesApiUrl = 'z4a_attributeApi.php';
   var productId = '<?php echo $productsId; ?>';
 
   function updateAttributeValueDropDown(optionId) {

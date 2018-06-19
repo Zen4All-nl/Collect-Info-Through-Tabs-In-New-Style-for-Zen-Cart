@@ -1,12 +1,12 @@
 <?php
 
-require('includes/application_top.php');
+require 'includes/application_top.php';
 
 $returnData = array();
 $data = new objectInfo($_POST);
 $newImage = (isset($_FILES) ? $_FILES : '');
 $returnData['newImage'] = $newImage;
-// $returnData['dataToApi'] is used for debugging, to see which data is send to api
+/* $returnData['dataToApi'] -> is used for debugging, to see which data is send to api */
 $returnData['dataToApi'] = $data;
 switch ($data->view) {
   case 'setImage' : {
@@ -16,24 +16,19 @@ switch ($data->view) {
         $products_image_name = $products_image_name_manual;
         }
         $new_products_image_name = $products_image_name; */
-      $products_image = new upload($products_image_name);
+      $products_image = new upload('products_image');
       $returnData['this'] = $products_image;
       $products_image->set_extensions(array('jpg', 'jpeg', 'gif', 'png', 'webp', 'flv', 'webm', 'ogg'));
       $products_image->set_destination(DIR_FS_CATALOG_IMAGES . $data->img_dir);
-      $returnData['image3'] = $products_image;
       if ($products_image->parse() && $products_image->save($data->overwrite == '1')) {
         $products_image_name = $data->img_dir . $products_image->filename;
-        $returnData['image'] = '1';
       } else {
         $products_image_name = (isset($data->products_previous_image) ? $data->products_previous_image : '');
-        $returnData['image'] = '2';
       }
       // $returnData['products_image'] = $products_image;
       $returnData['products_image_name'] = $products_image_name;
+      $returnData['image_dir'] = $data->img_dir;
       break;
-    }
-  case 'setImage1' : {
-      move_uploaded_file($_FILES['products_image']['tmp_name'], DIR_FS_CATALOG_IMAGES . $data->img_dir . $_FILES['products_image']['name']);
     }
   case 'saveProduct' : {
 
@@ -74,20 +69,19 @@ switch ($data->view) {
           'products_discount_type_from' => (int)$data->products_discount_type_from,
           'products_price_sorter' => convertToFloat($data->products_price_sorter),
         );
-$returnData['sql_data_array'] = $sql_data_array;
         // when set to none remove from database
         // is out dated for browsers use radio only
-        /*  $sql_data_array['products_image'] = zen_db_prepare_input($data->products_image);
+        $sql_data_array['products_image'] = zen_db_prepare_input($data->products_image);
           $new_image = 'true';
 
           if ($data->image_delete == 1) {
           $sql_data_array['products_image'] = '';
           $new_image = 'false';
           }
-         */
+
         if ($action == 'insert_product') {
           $sql_data_array['products_date_added'] = 'now()';
-          $sql_data_array['master_categories_id'] = (int)$current_category_id;
+          $sql_data_array['master_categories_id'] = (int)$data->current_category_id;
 
           zen_db_perform(TABLE_PRODUCTS, $sql_data_array);
           $products_id = zen_db_insert_id();
@@ -96,10 +90,10 @@ $returnData['sql_data_array'] = $sql_data_array;
           zen_update_products_price_sorter($products_id);
 
           $db->Execute("INSERT INTO " . TABLE_PRODUCTS_TO_CATEGORIES . " (products_id, categories_id)
-                        VALUE ('" . (int)$products_id . "', '" . (int)$current_category_id . "')");
+                        VALUE ('" . (int)$products_id . "', '" . (int)$data->current_category_id . "')");
 
           zen_record_admin_activity('New product ' . (int)$products_id . ' added via admin console.', 'info');
-
+          $messageStack->add_session('New product ' . (int)$products_id, 'success');
           ///////////////////////////////////////////////////////
           //// INSERT PRODUCT-TYPE-SPECIFIC *INSERTS* HERE //////
           ////    *END OF PRODUCT-TYPE-SPECIFIC INSERTS* ////////
@@ -111,7 +105,7 @@ $returnData['sql_data_array'] = $sql_data_array;
           zen_db_perform(TABLE_PRODUCTS, $sql_data_array, 'update', "products_id = " . (int)$products_id);
 
           zen_record_admin_activity('Updated product ' . (int)$products_id . ' via admin console.', 'info');
-
+          $messageStack->add_session('Updated product ' . (int)$products_id, 'success');
           // reset products_price_sorter for searches etc.
           zen_update_products_price_sorter((int)$products_id);
 
@@ -144,7 +138,7 @@ $returnData['sql_data_array'] = $sql_data_array;
 
         // add meta tags
 
-        $sql_data_array = array(
+        $meta_status_array = array(
           'metatags_title_status' => (int)$data->metatags_title_status,
           'metatags_products_name_status' => (int)$data->metatags_products_name_status,
           'metatags_model_status' => (int)$data->metatags_model_status,
@@ -153,13 +147,13 @@ $returnData['sql_data_array'] = $sql_data_array;
         );
 
         if ($action == 'insert_product') {
-          zen_db_perform(TABLE_PRODUCTS, $sql_data_array, 'update', "products_id = '" . (int)$products_id . "'");
+          zen_db_perform(TABLE_PRODUCTS, $meta_status_array, 'update', "products_id = " . (int)$products_id);
         } elseif ($action == 'update_product') {
           $update_sql_data = array('products_last_modified' => 'now()');
 
-          $sql_data_array = array_merge($sql_data_array, $update_sql_data);
+          $meta_update_data_array = array_merge($meta_status_array, $update_sql_data);
 //die('UPDATE PRODUCTS ID:' . (int)$products_id . ' - ' . sizeof($sql_data_array));
-          zen_db_perform(TABLE_PRODUCTS, $sql_data_array, 'update', "products_id = '" . (int)$products_id . "'");
+          zen_db_perform(TABLE_PRODUCTS, $meta_update_data_array, 'update', "products_id = " . (int)$products_id);
         }
 
 // check if new meta tags or existing
@@ -206,7 +200,7 @@ $returnData['sql_data_array'] = $sql_data_array;
             include($tabUpdate);
           }
         }
-        $messageStack->add_session(PRODUCT_DATA_SAVED, 'succes');
+
       } else {
         $messageStack->add_session(ERROR_NO_DATA_TO_SAVE, 'error');
       }
@@ -244,4 +238,4 @@ $returnData['sql_data_array'] = $sql_data_array;
 }
 
 echo json_encode($returnData);
-require(DIR_WS_INCLUDES . 'application_bottom.php');
+require DIR_WS_INCLUDES . 'application_bottom.php';
