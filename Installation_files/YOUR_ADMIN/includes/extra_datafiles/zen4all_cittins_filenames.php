@@ -6,10 +6,10 @@
  * and open the template in the editor.
  */
 
-define('FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR', 'z4a_productLayoutEditor');
-define('FILENAME_Z4A_CATEGORIES_PRODUCT_LISTING', 'z4a_categories_product_listing');
-define('FILENAME_Z4A_CATEGORIES', 'z4a_categories');
-define('FILENAME_Z4A_PRODUCT', 'z4a_product');
+define('FILENAME_ZEN4ALL_CATEGORIES', 'zen4all_categories');
+define('FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING', 'zen4all_categories_product_listing');
+define('FILENAME_ZEN4ALL_PRODUCT', 'zen4all_product');
+define('FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR', 'zen4all_productLayoutEditor');
 // reserved for future use
 
 // define('FILENAME_PRODUCT_FIELDS', 'product_fields');
