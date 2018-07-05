@@ -33,8 +33,8 @@ if (zen_not_null($cascaded_prod_id_for_delete) && zen_not_null($cascaded_prod_ca
 
 if ($do_delete_flag) {
   //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__BELOW_HERE--------------------------------------------------------
-  if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_delete_product_confirm.php')) {
-    require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_delete_product_confirm.php');
+  if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product_confirm.php')) {
+    require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product_confirm.php');
   }
   //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__ABOVE__HERE--------------------------------------------------------
   // now do regular non-type-specific delete:

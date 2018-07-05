@@ -179,9 +179,7 @@ if (zen_not_null($action)) {
 
             if ($do_delete_flag) {
               //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__BELOW_HERE--------------------------------------------------------
-              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_delete_product_confirm.php')) {
-                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_delete_product_confirm.php');
-              }
+                require(DIR_WS_MODULES . '/zen4all_delete_product_confirm.php');
               //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__ABOVE__HERE--------------------------------------------------------
               // now do regular non-type-specific delete:
               // remove product from all its categories:
@@ -263,25 +261,13 @@ if (zen_not_null($action)) {
       } else {
         $delete_linked = 'true';
       }
-      if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_delete_product_confirm.php')) {
-        require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/delete_product_confirm.php');
-      } else {
-        require(DIR_WS_MODULES . 'z4a_delete_product_confirm.php');
-      }
+      require(DIR_WS_MODULES . 'zen4all_delete_product_confirm.php');
       break;
     case 'move_product_confirm':
-      if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_move_product_confirm.php')) {
-        require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/move_product_confirm.php');
-      } else {
-        require(DIR_WS_MODULES . 'z4a_move_product_confirm.php');
-      }
+      require(DIR_WS_MODULES . 'zen4all_move_product_confirm.php');
       break;
     case 'copy_product_confirm':
-      if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_copy_product_confirm.php')) {
-        require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/copy_product_confirm.php');
-      } else {
-        require(DIR_WS_MODULES . 'z4a_copy_product_confirm.php');
-      }
+      require(DIR_WS_MODULES . 'zen4all_copy_product_confirm.php');
       break;
     case 'delete_attributes':
       zen_delete_products_attributes($_GET['products_id']);
@@ -1054,24 +1040,24 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
               $contents[] = array('align' => 'center', 'text' => '<button type="submit" class="btn btn-primary">' . IMAGE_MOVE . '</button> <a href="' . zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&cID=' . $cInfo->categories_id) . '" class="btn btn-default" role="button">' . IMAGE_CANCEL . '</a>');
               break;
             case 'delete_product':
-              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_delete_product.php')) {
-                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_delete_product.php');
+              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product.php')) {
+                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product.php');
               } else {
-                require(DIR_WS_MODULES . 'z4a_delete_product.php');
+                require(DIR_WS_MODULES . 'zen4all_delete_product.php');
               }
               break;
             case 'move_product':
-              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_move_product.php')) {
-                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_move_product.php');
+              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_move_product.php')) {
+                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_move_product.php');
               } else {
-                require(DIR_WS_MODULES . 'z4a_move_product.php');
+                require(DIR_WS_MODULES . 'zen4all_move_product.php');
               }
               break;
             case 'copy_product':
-              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_copy_product.php')) {
-                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_copy_product.php');
+              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_copy_product.php')) {
+                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_copy_product.php');
               } else {
-                require(DIR_WS_MODULES . 'z4a_copy_product.php');
+                require(DIR_WS_MODULES . 'zen4all_copy_product.php');
               }
               break;
             // attribute features
