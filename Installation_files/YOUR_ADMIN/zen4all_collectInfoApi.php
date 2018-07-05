@@ -4,7 +4,6 @@ require 'includes/application_top.php';
 
 $returnData = array();
 $data = new objectInfo($_POST);
-$newImage = (isset($_FILES) ? $_FILES : '');
 /* $returnData['dataToApi'] -> is used for debugging, to see which data is send to api */
 //$returnData['dataToApi'] = $data;
 switch ($data->view) {
