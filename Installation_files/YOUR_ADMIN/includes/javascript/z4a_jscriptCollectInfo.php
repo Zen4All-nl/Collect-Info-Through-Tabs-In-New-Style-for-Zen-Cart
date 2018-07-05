@@ -7,7 +7,7 @@
 ?>
 
 <script>
-  var collectInfoApiUrl = 'z4a_collectInfoApi.php';
+  var collectInfoApiUrl = 'zen4all_collectInfoApi.php';
 
   function saveMainImage() {
       $("#mainImageSelect").off('submit').on('submit', (function (e) {
@@ -29,10 +29,9 @@
                       var resultArray = JSON.parse(result);
                       console.log(resultArray);
                       $('#mainImageEditModal').modal('hide');
-                      var mainImageHtml = '';
-                      mainImageHtml = mainImageHtml + '<img src="<?php echo DIR_WS_CATALOG_IMAGES; ?>' + resultArray['products_image_name'] + '" border="0" alt="" width="<?php echo SMALL_IMAGE_WIDTH; ?>" height="<?php echo SMALL_IMAGE_HEIGHT; ?>" class="img-thumbnail" id="mainImage">';
-                      mainImageHtml = mainImageHtml + '<br/>';
-                      mainImageHtml = mainImageHtml + '<?php echo TEXT_CLICK_TO_ENLARGE; ?>';
+                      mainImageHtml = '<img src="<?php echo DIR_WS_CATALOG_IMAGES; ?>' + resultArray['products_image_name'] + '" border="0" alt="" width="<?php echo SMALL_IMAGE_WIDTH; ?>" height="<?php echo SMALL_IMAGE_HEIGHT; ?>" class="img-thumbnail" id="mainImage">';
+                      mainImageHtml += '<br/>';
+                      mainImageHtml += '<?php echo TEXT_CLICK_TO_ENLARGE; ?>';
                       $('#mainImageThumb').html(mainImageHtml);
                       $('#mainProductImage').val(resultArray['products_image_name']);
                       $('#mainImagePath').html(resultArray['products_image_name']);

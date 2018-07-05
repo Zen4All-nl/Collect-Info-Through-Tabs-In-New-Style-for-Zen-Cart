@@ -5,9 +5,8 @@ require 'includes/application_top.php';
 $returnData = array();
 $data = new objectInfo($_POST);
 $newImage = (isset($_FILES) ? $_FILES : '');
-$returnData['newImage'] = $newImage;
 /* $returnData['dataToApi'] -> is used for debugging, to see which data is send to api */
-$returnData['dataToApi'] = $data;
+//$returnData['dataToApi'] = $data;
 switch ($data->view) {
   case 'setImage' : {
       $products_image_name = $newImage['products_image']['name'];
@@ -25,7 +24,6 @@ switch ($data->view) {
       } else {
         $products_image_name = (isset($data->products_previous_image) ? $data->products_previous_image : '');
       }
-      // $returnData['products_image'] = $products_image;
       $returnData['products_image_name'] = $products_image_name;
       $returnData['image_dir'] = $data->img_dir;
       break;

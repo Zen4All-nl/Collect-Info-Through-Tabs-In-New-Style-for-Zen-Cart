@@ -48,7 +48,7 @@ if (zen_has_product_discounts($pInfo->products_id) == 'true') {
   $contents[] = array('text' => zen_image(DIR_WS_IMAGES . 'pixel_black.gif', '', '100%', '3'));
 }
 
-$contents[] = array('align' => 'center', 'text' => '<button type="submit" class="btn btn-primary">' . IMAGE_COPY . '</button> <a href="' . zen_href_link(FILENAME_Z4A_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $pInfo->products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')) . '" class="btn btn-default" role="button">' . IMAGE_CANCEL . '</a>');
+$contents[] = array('align' => 'center', 'text' => '<button type="submit" class="btn btn-primary">' . IMAGE_COPY . '</button> <a href="' . zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $pInfo->products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')) . '" class="btn btn-default" role="button">' . IMAGE_CANCEL . '</a>');
 $contents[] = array('text' => '</form>');
 
 $contents[] = array('text' => zen_image(DIR_WS_IMAGES . 'pixel_black.gif', '', '100%', '3'));
