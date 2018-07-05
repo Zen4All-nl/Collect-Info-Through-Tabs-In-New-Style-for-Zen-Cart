@@ -26,3 +26,7 @@ define('ERROR_CANNOT_ADD_PRODUCT_TYPE','The specified product type cannot be add
 define('TEXT_EDIT_CATEGORIES_META_TAGS_TITLE', 'Title:');
 define('TEXT_EDIT_CATEGORIES_META_TAGS_KEYWORDS', 'Keywords:');
 define('TEXT_EDIT_CATEGORIES_META_TAGS_DESCRIPTION', 'Description:');
+
+define('TEXT_EDIT_CATEGORIES_IMAGE','Category Image:');
+define('TEXT_CATEGORIES_IMAGE_DIR','Upload to directory:');
+define('TEXT_CATEGORIES_IMAGE_MANUAL','Or, select an existing image file from server, filename:');
