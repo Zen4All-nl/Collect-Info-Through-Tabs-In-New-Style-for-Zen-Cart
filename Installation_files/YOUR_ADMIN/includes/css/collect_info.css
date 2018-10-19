@@ -55,6 +55,7 @@
 .fa-folder {
     text-shadow: 1px 1px 1px rgba(1,1,1,0.5);
 }
+/*
 #datepicker i {
     position: absolute;
     bottom: 10px;
@@ -62,6 +63,7 @@
     top: auto;
     cursor: pointer;
 }
+*/
 /*
   label.btn span {
         font-size: 1.5em;

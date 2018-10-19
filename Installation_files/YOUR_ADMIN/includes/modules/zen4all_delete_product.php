@@ -14,7 +14,7 @@ if (!defined('IS_ADMIN_FLAG')) {
 
 $heading[] = array('text' => '<h4>' . TEXT_INFO_HEADING_DELETE_PRODUCT . '</h4>');
 
-$contents = array('form' => zen_draw_form('products', FILENAME_Z4A_CATEGORIES_PRODUCT_LISTING, 'action=delete_product_confirm&product_type=' . $product_type . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'post', 'class="form-horizontal"') . zen_draw_hidden_field('products_id', $pInfo->products_id));
+$contents = array('form' => zen_draw_form('products', FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'action=delete_product_confirm&product_type=' . $product_type . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'post', 'class="form-horizontal"') . zen_draw_hidden_field('products_id', $pInfo->products_id));
 $contents[] = array('text' => TEXT_DELETE_PRODUCT_INTRO);
 $contents[] = array('text' => '<strong>' . $pInfo->products_name . ' ID#' . $pInfo->products_id . '</srong>');
 
@@ -43,4 +43,4 @@ for ($i = 0, $n = sizeof($product_categories); $i < $n; $i++) {
 $product_categories_string = substr($product_categories_string, 0, -4);
 
 $contents[] = array('text' => $product_categories_string);
-$contents[] = array('align' => 'center', 'text' => '<button type="submit" class="btn btn-danger">' . IMAGE_DELETE . '</button> <a href="' . zen_href_link(FILENAME_Z4A_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $pInfo->products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')) . '" class="btn btn-default" role="button">' . IMAGE_CANCEL . '</a>');
+$contents[] = array('align' => 'center', 'text' => '<button type="submit" class="btn btn-danger">' . IMAGE_DELETE . '</button> <a href="' . zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $pInfo->products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')) . '" class="btn btn-default" role="button">' . IMAGE_CANCEL . '</a>');

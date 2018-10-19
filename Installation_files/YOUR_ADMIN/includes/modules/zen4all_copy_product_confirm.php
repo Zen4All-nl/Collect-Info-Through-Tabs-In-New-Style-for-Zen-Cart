@@ -109,6 +109,10 @@ if (isset($_POST['products_id']) && isset($_POST['categories_id'])) {
                   VALUES ('" . (int)$dup_products_id . "', '" . (int)$categories_id . "')");
     $products_id = $dup_products_id;
 
+  if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_copy_product_confirm.php')) {
+    require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_copy_product_confirm.php');
+  }
+
 // FIX HERE
 /////////////////////////////////////////////////////////////////////////////////////////////
 // Copy attributes to duplicate product
@@ -143,11 +147,7 @@ if (isset($_POST['products_id']) && isset($_POST['categories_id'])) {
     zen_record_admin_activity('Product ' . (int)$old_products_id . ' duplicated as product ' . (int)$dup_products_id . ' via admin console.', 'info');
   }
 
-  if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_copy_product_confirm.php')) {
-    require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_copy_product_confirm.php');
-  }
-
   // reset products_price_sorter for searches etc.
   zen_update_products_price_sorter($products_id);
 }
-zen_redirect(zen_href_link(FILENAME_Z4A_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $categories_id . '&pID=' . $products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
+zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $categories_id . '&pID=' . $products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
