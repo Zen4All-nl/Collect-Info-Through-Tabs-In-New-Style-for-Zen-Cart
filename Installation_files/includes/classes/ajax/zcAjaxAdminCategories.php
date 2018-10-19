@@ -1,16 +1,9 @@
 <?php
+class zcAjaxAdminCategories extends base {
 
-require('includes/application_top.php');
-$languages = zen_get_languages();
-
-$returnData = [];
-$data = new objectInfo($_POST);
-$newImage = (isset($_FILES) ? $_FILES : '');
-$returnData['newImage'] = $newImage;
-// $returnData['dataToApi'] is used for debugging, to see which data is send to api
-$returnData['dataToApi'] = $data;
-switch ($data->view) {
-  case 'add_type':
+public function add_type() {
+  global $db;
+  $data = new objectInfo($_POST);
     // check if it is already restricted
     $sql = "SELECT *
             FROM " . TABLE_PRODUCT_TYPES_TO_CATEGORY . "
@@ -49,8 +42,12 @@ switch ($data->view) {
           'type_id' => $restrictType['product_type_id']];
       }
     }
-    break;
-  case 'remove_type':
+    return (['restrictTypes' => $returnData['restrictTypes']]);
+}
+public function remove_type() {
+  global $db;
+
+  $data = new objectInfo($_POST);
     $sql = "DELETE FROM " . TABLE_PRODUCT_TYPES_TO_CATEGORY . "
             WHERE category_id = " . (int)zen_db_prepare_input($data->categoryId) . "
             AND product_type_id = " . (int)zen_db_prepare_input($data->restrictType);
@@ -75,8 +72,13 @@ switch ($data->view) {
           'type_id' => $restrictType['product_type_id']];
       }
     }
-    break;
-  case 'save_category':
+    return (['restrictTypes' => $returnData['restrictTypes']]);
+  }
+  public function save_category() {
+    global $db, $messageStack;
+    $languages = new language();
+    $data = new objectInfo($_POST);
+
     if (isset($data->categories_id)) {
       $categories_id = zen_db_prepare_input($data->categories_id);
     }
@@ -100,10 +102,10 @@ switch ($data->view) {
               WHERE categories_id = " . (int)$categories_id;
 
       $parentCat = $db->Execute($parentCatQuery);
-      if ($parent_cat->fields['parent_id'] != '0') {
+      if ($parentCat->fields['parent_id'] != '0') {
         $hasTypequery = "SELECT *
                 FROM " . TABLE_PRODUCT_TYPES_TO_CATEGORY . "
-                WHERE category_id = '" . $parent_cat->fields['parent_id'] . "'";
+                WHERE category_id = '" . $parentCat->fields['parent_id'] . "'";
         $hasType = $db->Execute($hasTypequery);
         if ($hasType->RecordCount() > 0) {
           foreach ($hasType as $item) {
@@ -122,27 +124,24 @@ switch ($data->view) {
       zen_db_perform(TABLE_CATEGORIES, $sql_data_array, 'update', "categories_id = " . (int)$categories_id);
     }
 
-    $returnData['categoryId'] = (int)$categories_id;
-
     $categories_name_array = $data->categories_name;
     $categories_description_array = $data->categories_description;
-    for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
-      $language_id = $languages[$i]['id'];
+    foreach ($languages->catalog_languages as $language) {
 
       // clean $categories_description when blank or just <p /> left behind
       $sql_data_array = [
-        'categories_name' => zen_db_prepare_input($categories_name_array[$language_id]),
-        'categories_description' => ($categories_description_array[$language_id] == '<p />' ? '' : zen_db_prepare_input($categories_description_array[$language_id]))];
+        'categories_name' => zen_db_prepare_input($categories_name_array[$language['id']]),
+        'categories_description' => ($categories_description_array[$language['id']] == '<p />' ? '' : zen_db_prepare_input($categories_description_array[$language['id']]))];
       if ($data->action == 'insert_category') {
         $insert_sql_data = [
           'categories_id' => (int)$categories_id,
-          'language_id' => (int)$languages[$i]['id']];
+          'language_id' => (int)$language['id']];
         $sql_data_array = array_merge($sql_data_array, $insert_sql_data);
 
         zen_db_perform(TABLE_CATEGORIES_DESCRIPTION, $sql_data_array);
         $messageStack->add_session(SUCCESS_CATEGORY_INSERTED . $categories_id . ' ' . $data->categories_name[$_SESSION['languages_id']], 'success');
       } elseif ($data->action == 'update_category') {
-        zen_db_perform(TABLE_CATEGORIES_DESCRIPTION, $sql_data_array, 'update', "categories_id = " . (int)$categories_id . " and language_id = " . (int)$languages[$i]['id']);
+        zen_db_perform(TABLE_CATEGORIES_DESCRIPTION, $sql_data_array, 'update', "categories_id = " . (int)$categories_id . " and language_id = " . (int)$language['id']);
         $messageStack->add_session(SUCCESS_CATEGORY_UPDATED . $categories_id . ' ' . $data->categories_name[$_SESSION['languages_id']], 'success');
       }
     }
@@ -177,51 +176,48 @@ switch ($data->view) {
     }
     // add or update meta tags
     $action = '';
-    for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
-      $language_id = $languages[$i]['id'];
+    foreach ($languages->catalog_languages as $language) {
       $check = $db->Execute("SELECT *
                              FROM " . TABLE_METATAGS_CATEGORIES_DESCRIPTION . "
                              WHERE categories_id = " . (int)$categories_id . "
-                             AND language_id = " . (int)$language_id);
+                             AND language_id = " . (int)$language['id']);
       if ($check->RecordCount() > 0) {
         $action = 'update_category_meta_tags';
       } else {
         $action = 'insert_categories_meta_tags';
       }
-      if (empty($data->metatags_title[$language_id]) && empty($data->metatags_keywords[$language_id]) && empty($data->metatags_description[$language_id])) {
+      if (empty($data->metatags_title[$language['id']]) && empty($data->metatags_keywords[$language['id']]) && empty($data->metatags_description[$language['id']])) {
         $action = 'delete_category_meta_tags';
       }
 
       $sql_data_array = array(
-        'metatags_title' => zen_db_prepare_input($data->metatags_title[$language_id]),
-        'metatags_keywords' => zen_db_prepare_input($data->metatags_keywords[$language_id]),
-        'metatags_description' => zen_db_prepare_input($data->metatags_description[$language_id]));
+        'metatags_title' => zen_db_prepare_input($data->metatags_title[$language['id']]),
+        'metatags_keywords' => zen_db_prepare_input($data->metatags_keywords[$language['id']]),
+        'metatags_description' => zen_db_prepare_input($data->metatags_description[$language['id']]));
 
       if ($action == 'insert_categories_meta_tags') {
         $insert_sql_data = array(
           'categories_id' => (int)$categories_id,
-          'language_id' => (int)$language_id);
+          'language_id' => (int)$language['id']);
         $sql_data_array = array_merge($sql_data_array, $insert_sql_data);
 
         zen_db_perform(TABLE_METATAGS_CATEGORIES_DESCRIPTION, $sql_data_array);
       } elseif ($action == 'update_category_meta_tags') {
-        zen_db_perform(TABLE_METATAGS_CATEGORIES_DESCRIPTION, $sql_data_array, 'update', "categories_id = " . (int)$categories_id . " and language_id = " . (int)$language_id);
+        zen_db_perform(TABLE_METATAGS_CATEGORIES_DESCRIPTION, $sql_data_array, 'update', "categories_id = " . (int)$categories_id . " and language_id = " . (int)$language['id']);
       } elseif ($action == 'delete_category_meta_tags') {
         $remove_categories_metatag = "DELETE FROM " . TABLE_METATAGS_CATEGORIES_DESCRIPTION . "
                                       WHERE categories_id = " . (int)$categories_id . "
-                                      AND language_id = " . (int)$language_id;
+                                      AND language_id = " . (int)$language['id'];
         $db->Execute($remove_categories_metatag);
       }
     }
-    unset($action);
-    break;
-  case 'messageStack': {
-      if ($messageStack->size > 0) {
-        $returnData['modalMessageStack'] = $messageStack->output();
+    return (['categoryId' => (int)$categories_id]);
+  }
+  public function messageStack() {
+    global $messageStack;
+    if ($messageStack->size > 0) {
+        $modalMessageStack = $messageStack->output();
       }
-      break;
+      return (['modalMessageStack' => $modalMessageStack]);
     }
 }
-
-echo json_encode($returnData);
-require(DIR_WS_INCLUDES . 'application_bottom.php');

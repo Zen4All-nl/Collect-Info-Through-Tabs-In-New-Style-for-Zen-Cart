@@ -6,9 +6,11 @@
  * and open the template in the editor.
  */
 
-define('BOX_Z4A_CATALOG_PRODUCT_LAYOUT', 'Z4A Product Layout Editor');
-define('BOX_Z4A_PRODUCT', 'Product');
-define('BOX_Z4A_CATEGORIES_PRODUCT_LISTING', 'Z4A Categories/Products');
+define('BOX_CONFIGURATION_ZEN4ALL_CITTINS', "Zen4All Cittins Configuration");
+define('BOX_CATALOG_ZEN4ALL_PRODUCT_LAYOUT', 'Zen4All Product Layout Editor');
+define('BOX_CATALOG_ZEN4ALL_PRODUCTS', 'Zen4All Product');
+define('BOX_CATALOG_ZEN4ALL_CATEGORIES', 'Zen4All Categories');
+define('BOX_CATALOG_ZEN4ALL_CATEGORIES_PRODUCT_LISTING', 'Zen4All Categories/Products');
 
 define('_SUNDAY_SHORT', 'Su');
 define('_MONDAY_SHORT', 'Mo');
@@ -23,4 +25,5 @@ define('TAB_DATA', 'Data');
 define('TAB_MANUFACTURER', 'Manufacturer');
 define('TAB_IMAGES', 'Images');
 define('TAB_CATEGORY', 'Category');
+define('TAB_META_TAGS', 'Meta Tags');
 define('TAB_TITLE_CATEGORY', 'Category');

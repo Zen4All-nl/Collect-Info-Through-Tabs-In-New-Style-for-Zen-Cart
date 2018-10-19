@@ -5,6 +5,8 @@
  * and open the template in the editor.
  */
 require('includes/application_top.php');
+// temp language file loading
+include DIR_WS_LANGUAGES . $_SESSION['language'] . '/product_types.php';
 $action = (isset($_GET['action']) ? $_GET['action'] : '');
 
 if (zen_not_null($action)) {
@@ -28,7 +30,7 @@ if (zen_not_null($action)) {
           $sortOrder++;
         }
       }
-      zen_redirect(zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (int)$data->product_type_id));
+      zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (int)$data->product_type_id));
       break;
     case 'insert_field' :
     case 'save_field' :
@@ -47,7 +49,7 @@ if (zen_not_null($action)) {
       if ($checkField->RecordCount > 0) {
         // return with error
         $messageStack;
-        zen_redirect(zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? 'set_product_type=' . $selectedProductTypeId : '')));
+        zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? 'set_product_type=' . $selectedProductTypeId : '')));
       } else {
         $sqlDataArray = [
           'description' => $data->description,
@@ -82,7 +84,7 @@ if (zen_not_null($action)) {
         }
       }
       $action = '';
-      zen_redirect(zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? 'set_product_type=' . $selectedProductTypeId : '')));
+      zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? 'set_product_type=' . $selectedProductTypeId : '')));
       break;
     case 'delete_field_confirm' :
 
@@ -95,7 +97,7 @@ if (zen_not_null($action)) {
                     WHERE id = " . (int)$data->field_id);
 
       $db->Execute("ALTER TABLE " . TABLE_PRODUCTS_EXTRA . " DROP " . $fieldName->fields['name']);
-      zen_redirect(zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? 'set_product_type=' . $selectedProductTypeId : '')));
+      zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? 'set_product_type=' . $selectedProductTypeId : '')));
       break;
     case'insert_tab':
       $data = new objectInfo($_POST);
@@ -106,13 +108,13 @@ if (zen_not_null($action)) {
       if ($checkDefine->RecordCount() > 0) {
         ?>
         <?php
-        zen_redirect(zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'tab-define=' . $data->define));
+        zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'tab-define=' . $data->define));
       } else {
         $db->Execute("INSERT INTO " . TABLE_PRODUCT_TABS . " (define, sort_order)
                       VALUES('" . $data->define . "',
                              '" . $data->sort_order . "')");
         $action = '';
-        zen_redirect(zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR));
+        zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR));
       }
       break;
     case'save_tab':
@@ -269,18 +271,18 @@ foreach ($fieldTypes as $type) {
         <div class="panel-body">
           <div id="actionPanel" class="panel col-sm-2">
             <h4><?php echo NAV_TITLE_FIELDS; ?></h4>
-            <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=add_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_ADD_FIELD; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=edit_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_EDIT_FIELD; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=delete_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_DELETE_FIELD; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=add_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_ADD_FIELD; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_EDIT_FIELD; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_DELETE_FIELD; ?></a>
             <hr>
             <h4><?php echo NAV_TITLE_TABS; ?></h4>
-            <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=add_tab') ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_ADD_TAB; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=edit_tab') ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_EDIT_TAB; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=delete_tab') ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_DELETE_TAB; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=add_tab') ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_ADD_TAB; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_tab') ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_EDIT_TAB; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_tab') ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_DELETE_TAB; ?></a>
             <hr>
             <h4><?php echo NAV_TITLE_PRODUCT_TYPES; ?></h4>
             <a href="#" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_ADD_PRODUCT_TYPE; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=edit_product_type' . '&type_id=' . $selectedProductTypeId) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_EDIT_PRODUCT_TYPE; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_product_type' . '&type_id=' . $selectedProductTypeId) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_EDIT_PRODUCT_TYPE; ?></a>
             <a href="#" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_DELETE_PRODUCT_TYPE; ?></a>
           </div>
           <?php
@@ -355,7 +357,7 @@ foreach ($fieldTypes as $type) {
               </script>
               <div class="col-sm-10">
                 <div class="row">
-                    <?php echo zen_draw_form('add_field', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] . '&' : '') . 'action=insert_field', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('add_field', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] . '&' : '') . 'action=insert_field', 'post', 'class="form-horizontal"'); ?>
                   <div id="field_name" class="form-group">
                       <?php echo zen_draw_label(TEXT_FIELD_NAME, 'name', 'class="col-sm-3 control-label"'); ?>
                     <i class="fa fa-lg fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?php echo TEXT_INFO_FIELD_NAME; ?>"></i>
@@ -435,7 +437,7 @@ foreach ($fieldTypes as $type) {
                   </div>
                   <div class="form-group text-right">
                       <?php echo zen_draw_hidden_field('core', '0'); ?>
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_INSERT; ?></button> <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] : '')); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
+                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_INSERT; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] : '')); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
                   </div>
                   <?php echo '</form>'; ?>
                 </div>
@@ -455,7 +457,7 @@ foreach ($fieldTypes as $type) {
                         'text' => (!empty($availableField['description']) ? $availableField['description'] : $availableField['name'])];
                     }
                     ?>
-                    <?php echo zen_draw_form('set_product_field_form', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=edit_field&set_product_type=' . $selectedProductTypeId, 'get', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('set_product_field_form', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_field&set_product_type=' . $selectedProductTypeId, 'get', 'class="form-horizontal"'); ?>
                   <div class="form-group">
                       <?php echo zen_draw_label(TEXT_SELECT_FIELD, 'set_field', 'class="col-sm-3 control-label"'); ?>
                     <div class="col-sm-9">
@@ -474,7 +476,7 @@ foreach ($fieldTypes as $type) {
                 $selectedField = $db->Execute($selectedFieldQuery);
                 ?>
                 <div class="row">
-                    <?php echo zen_draw_form('edit_field', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] . '&' : '') . 'action=save_field', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('edit_field', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] . '&' : '') . 'action=save_field', 'post', 'class="form-horizontal"'); ?>
                   <div id="field_name" class="form-group">
                       <?php echo zen_draw_label(TEXT_FIELD_NAME, 'name', 'class="col-sm-3 control-label"'); ?>
                     <div class="col-sm-9">
@@ -529,7 +531,7 @@ foreach ($fieldTypes as $type) {
                   </div>
                   <div class="form-group text-right">
                       <?php echo zen_draw_hidden_field('id', $selectedFieldId); ?>
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] : '')); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
+                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] : '')); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
                   </div>
                   <?php echo '</form>'; ?>
                 </div>
@@ -549,7 +551,7 @@ foreach ($fieldTypes as $type) {
                         'text' => (!empty($availableField['description']) ? $availableField['description'] : $availableField['name'])];
                     }
                     ?>
-                    <?php echo zen_draw_form('set_product_field_form', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=edit_field&set_product_type=' . $selectedProductTypeId, 'get', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('set_product_field_form', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_field&set_product_type=' . $selectedProductTypeId, 'get', 'class="form-horizontal"'); ?>
                   <div class="form-group">
                       <?php echo zen_draw_label(TEXT_SELECT_FIELD, 'set_field', 'class="col-sm-3 control-label"'); ?>
                     <div class="col-sm-9">
@@ -561,13 +563,13 @@ foreach ($fieldTypes as $type) {
                   </div>
                   <?php echo '</form>'; ?>
                   <?php if ($selectedFieldId != '') { ?>
-                    <?php echo zen_draw_form('delete_field', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=delete_field_confirm', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('delete_field', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_field_confirm', 'post', 'class="form-horizontal"'); ?>
                     <div class="row">
                       <div class="text-center alert alert-danger"><?php echo TEXT_DELETE_FIELD; ?></div>
                     </div>
                     <div class="form-group text-right">
                         <?php echo zen_draw_hidden_field('field_id', $selectedFieldId); ?>
-                      <button type="submit" class="btn btn-primary"><?php echo IMAGE_DELETE; ?></button> <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] : '')); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
+                      <button type="submit" class="btn btn-primary"><?php echo IMAGE_DELETE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] : '')); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
                     </div>
                     <?php echo '</form>'; ?>
                   <?php } ?>
@@ -579,7 +581,7 @@ foreach ($fieldTypes as $type) {
               ?>
               <div class="col-sm-10">
                 <div class="row">
-                    <?php echo zen_draw_form('add_tab', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=insert_tab', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('add_tab', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=insert_tab', 'post', 'class="form-horizontal"'); ?>
                   <div class="form-group">
                       <?php echo zen_draw_label(TEXT_TAB_DEFINE, 'define', 'class="col-sm-3 control-label"'); ?>
                     <div class="col-sm-9">
@@ -593,7 +595,7 @@ foreach ($fieldTypes as $type) {
                     </div>
                   </div>
                   <div class="form-group text-right">
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_INSERT; ?></button> <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
+                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_INSERT; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
                   </div>
                   <?php echo '</form>'; ?>
                 </div>
@@ -604,7 +606,7 @@ foreach ($fieldTypes as $type) {
               ?>
               <div class="col-sm-10">
                 <div class="row">
-                    <?php echo zen_draw_form('edit_tab', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=save_tab', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('edit_tab', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=save_tab', 'post', 'class="form-horizontal"'); ?>
                   <div class="col-sm-3">
                     <div id="tabs" class="connectedSortable">
                         <?php
@@ -621,7 +623,7 @@ foreach ($fieldTypes as $type) {
                     </div>
                   </div>
                   <div class="row text-right">
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
+                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
                   </div>
                   <?php echo '</form>'; ?>
                 </div>
@@ -632,9 +634,9 @@ foreach ($fieldTypes as $type) {
               ?>
               <div class="col-sm-10">
                 <div class="row">
-                    <?php echo zen_draw_form('delete_tab', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=delete_tab_confirm', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('delete_tab', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_tab_confirm', 'post', 'class="form-horizontal"'); ?>
                   <div class="row text-right">
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
+                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
                   </div>
                   <?php echo '</form>'; ?>
                 </div>
@@ -645,7 +647,7 @@ foreach ($fieldTypes as $type) {
               ?>
               <div class="col-sm-10">
                 <div class="row">
-                    <?php echo zen_draw_form('add_product_type', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=insert_product_type', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('add_product_type', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=insert_product_type', 'post', 'class="form-horizontal"'); ?>
                     <?php echo '</form>'; ?>
                 </div>
               </div>
@@ -658,7 +660,7 @@ foreach ($fieldTypes as $type) {
                 <h4><?php echo TEXT_HEADING_EDIT_PRODUCT_TYPE; ?> :: <?php echo $productTypeInfoArray->type_name; ?></h4>
                 <div class="row"><?php echo TEXT_EDIT_INTRO; ?></div>
                 <div class="row">
-                    <?php echo zen_draw_form('edit_product_type', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=save_product_type', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('edit_product_type', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=save_product_type', 'post', 'class="form-horizontal"'); ?>
                   <div class="form-group">
                       <?php echo zen_draw_label(TEXT_PRODUCT_TYPES_NAME, 'type_name', 'class="control-label col-sm-3"'); ?>
                     <div class="col-sm-9 col-md-6">
@@ -703,7 +705,7 @@ foreach ($fieldTypes as $type) {
                     </div>
                   </div>
                   <div class="form-group text-right">
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . $productTypeInfoArray->type_id); ?>" class="btn btn-default" role="button"><?php echo IMAGE_CANCEL; ?></a>
+                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . $productTypeInfoArray->type_id); ?>" class="btn btn-default" role="button"><?php echo IMAGE_CANCEL; ?></a>
                   </div>
                   <?php echo '</form>'; ?>
                 </div>
@@ -714,7 +716,7 @@ foreach ($fieldTypes as $type) {
               ?>
               <div class="col-sm-10">
                 <div class="row">
-                    <?php echo zen_draw_form('delete_product_type', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, 'action=delete_product_type_confirm', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('delete_product_type', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_product_type_confirm', 'post', 'class="form-horizontal"'); ?>
                     <?php echo '</form>'; ?>
                 </div>
               </div>
@@ -725,7 +727,7 @@ foreach ($fieldTypes as $type) {
               ?>
               <div class="col-sm-10">
                 <div class="row">
-                    <?php echo zen_draw_form('set_product_type_form', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, '', 'get', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('set_product_type_form', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, '', 'get', 'class="form-horizontal"'); ?>
                   <div class="form-group">
                       <?php echo zen_draw_label(TEXT_SELECT_PRODUCT_TYPE, 'set_product_type', 'class="col-sm-3 control-label"'); ?>
                     <div class="col-sm-9">
@@ -782,7 +784,7 @@ foreach ($fieldTypes as $type) {
                   </div>
                   <div>
                     <h4><?php echo TEXT_AVAILABLE_TABS; ?></h4>
-                    <?php echo zen_draw_form('fields', FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, '&action=layout_save', 'post', 'class="form-horizontal"'); ?>
+                    <?php echo zen_draw_form('fields', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, '&action=layout_save', 'post', 'class="form-horizontal"'); ?>
                     <?php
                     $availableTabsArray = getTabs();
                     for ($i = 0, $n = sizeof($availableTabsArray); $i < $n; $i++) {
@@ -813,7 +815,7 @@ foreach ($fieldTypes as $type) {
                   </div>
                   <div class="col-sm-12 text-right">
                       <?php echo zen_draw_hidden_field('product_type_id', $selectedProductTypeId); ?>
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_Z4A_PRODUCT_LAYOUT_EDITOR, '', $request_type); ?>" class="btn btn-default" role="button">Reset</a>
+                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, '', $request_type); ?>" class="btn btn-default" role="button">Reset</a>
                   </div>
                   <?php echo '</form>'; ?>
                   <!-- body_eof //-->

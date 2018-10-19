@@ -1,11 +1,11 @@
 <?php
 /**
  * @package admin
- * @copyright (c) 2008-2017, Zen4All
- * @copyright Copyright 2003-2016 Zen Cart Development Team
+ * @copyright (c) 2008-2018, Zen4All
+ * @copyright Copyright 2003-2018 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Author: Zen4All
+ * @version $Id: Author: Zen4All  Aug 2018  Modified in v1.5.6 $
  */
 require('includes/application_top.php');
 $languages = zen_get_languages();
@@ -67,7 +67,7 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
                            WHERE p.products_id = " . (int)$_GET['pID']);
   $pInfo->updateObjectInfo($product->fields);
 
-  $productExtra = $db->Execute("SELECT pd.*, pde.*, mtpd.*
+  $productLanguage = $db->Execute("SELECT pd.*, pde.*, mtpd.*
                                 FROM " . TABLE_PRODUCTS_DESCRIPTION . " pd
                                 LEFT JOIN " . TABLE_PRODUCTS_DESCRIPTION_EXTRA . " pde ON pd.products_id = pde.products_id
                                   AND pde.language_id = pd.language_id
@@ -75,11 +75,11 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
                                   AND mtpd.language_id = pd.language_id
                                 WHERE pd.products_id = " . (int)$_GET['pID']);
 
-  $productExtraArray = [];
-  foreach ($productExtra as $item) {
-    $productExtraArray[] = $item;
+  $productLanguageArray = [];
+  foreach ($productLanguage as $item) {
+    $productLanguageArray[$item['language_id']] = $item;
   }
-  $pInfoExtra = new objectInfo($productExtraArray);
+  $pInfoLanguage = new objectInfo($productLanguageArray);
 }
 $category_lookup = $db->Execute("SELECT c.categories_image, cd.categories_name
                                  FROM " . TABLE_CATEGORIES . " c,
@@ -93,7 +93,6 @@ if (!$category_lookup->EOF) {
   $cInfo = new objectInfo(array());
 }
 
-$manufacturers_array = [];
 $manufacturers_array[] = [
   'id' => '',
   'text' => TEXT_NONE];
@@ -107,7 +106,6 @@ foreach ($manufacturers as $manufacturer) {
   ];
 }
 
-$tax_class_array = [];
 $tax_class_array[] = [
   'id' => '0',
   'text' => TEXT_NONE];
@@ -274,7 +272,6 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
               $productId = (isset($_GET['pID']) ? $_GET['pID'] : '');
               echo zen_draw_hidden_field('productId', $productId);
               echo zen_draw_hidden_field('current_category_id', $current_category_id);
-              echo zen_draw_hidden_field('view', 'saveProduct');
 
               $dir_info = zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES);
               $default_directory = substr($pInfo->products_image, 0, strpos($pInfo->products_image, DIRECTORY_SEPARATOR) + 1);
@@ -331,31 +328,31 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                       <div class="form-group">
                           <?php echo zen_draw_label(TEXT_PRODUCTS_NAME, 'products_name[' . $languages[$i]['id'] . ']', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
-                            <?php echo zen_draw_input_field('products_name[' . $languages[$i]['id'] . ']', htmlspecialchars(zen_get_products_name($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_PRODUCTS_DESCRIPTION, 'products_name') . ' class="form-control"'); ?>
+                            <?php echo zen_draw_input_field('products_name[' . $languages[$i]['id'] . ']', htmlspecialchars($pInfoLanguage->{$languages[$i]['id']}['products_name'], ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_PRODUCTS_DESCRIPTION, 'products_name') . ' class="form-control"'); ?>
                         </div>
                       </div>
                       <div class="form-group">
                           <?php echo zen_draw_label(TEXT_PRODUCTS_DESCRIPTION, 'products_description[' . $languages[$i]['id'] . ']', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
-                            <?php echo zen_draw_textarea_field('products_description[' . $languages[$i]['id'] . ']', 'soft', '100%', '30', htmlspecialchars((isset($products_description[$languages[$i]['id']])) ? stripslashes($products_description[$languages[$i]['id']]) : zen_get_products_description($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="editorHook form-control"'); ?>
+                    <?php echo zen_draw_textarea_field('products_description[' . $languages[$i]['id'] . ']', 'soft', '100%', '30', htmlspecialchars($pInfoLanguage->{$languages[$i]['id']}['products_description'], ENT_COMPAT, CHARSET, TRUE), 'class="editorHook form-control"'); ?>
                         </div>
                       </div>
                       <div class="form-group">
                           <?php echo zen_draw_label(TEXT_META_TAGS_TITLE, 'metatags_title[' . $languages[$i]['id'] . ']', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
-                            <?php echo zen_draw_input_field('metatags_title[' . $languages[$i]['id'] . ']', htmlspecialchars(isset($metatags_title[$languages[$i]['id']]) ? stripslashes($metatags_title[$languages[$i]['id']]) : zen_get_metatags_title($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_META_TAGS_PRODUCTS_DESCRIPTION, 'metatags_title', '150', false) . 'class="form-control"'); ?>
+                    <?php echo zen_draw_input_field('metatags_title[' . $languages[$i]['id'] . ']', htmlspecialchars($pInfoLanguage->{$languages[$i]['id']}['metatags_title'], ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_META_TAGS_PRODUCTS_DESCRIPTION, 'metatags_title', '150', false) . 'class="form-control"'); ?>
                         </div>
                       </div>
                       <div class="form-group">
                           <?php echo zen_draw_label(TEXT_META_TAGS_KEYWORDS, 'metatags_keywords', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
-                            <?php echo zen_draw_textarea_field('metatags_keywords[' . $languages[$i]['id'] . ']', 'soft', '100%', '10', htmlspecialchars((isset($metatags_keywords[$languages[$i]['id']])) ? stripslashes($metatags_keywords[$languages[$i]['id']]) : zen_get_metatags_keywords($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="noEditor form-control"'); ?>
+                            <?php echo zen_draw_textarea_field('metatags_keywords[' . $languages[$i]['id'] . ']', 'soft', '100%', '10', htmlspecialchars($pInfoLanguage->{$languages[$i]['id']}['metatags_keywords'], ENT_COMPAT, CHARSET, TRUE), 'class="noEditor form-control"'); ?>
                         </div>
                       </div>
                       <div class="form-group">
                           <?php echo zen_draw_label(TEXT_META_TAGS_DESCRIPTION, 'metatags_description', 'class="col-sm-3 control-label"'); ?>
                         <div class="col-sm-9 col-md-6">
-                            <?php echo zen_draw_textarea_field('metatags_description[' . $languages[$i]['id'] . ']', 'soft', '100%', '10', htmlspecialchars((isset($metatags_description[$languages[$i]['id']])) ? stripslashes($metatags_description[$languages[$i]['id']]) : zen_get_metatags_description($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), 'class="noEditor form-control"'); ?>
+                            <?php echo zen_draw_textarea_field('metatags_description[' . $languages[$i]['id'] . ']', 'soft', '100%', '10', htmlspecialchars($pInfoLanguage->{$languages[$i]['id']}['metatags_description'], ENT_COMPAT, CHARSET, TRUE), 'class="noEditor form-control"'); ?>
                         </div>
                       </div>
                     </div>
@@ -478,7 +475,12 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                     <?php echo zen_draw_label(TEXT_PRODUCTS_DATE_AVAILABLE, 'products_date_available', 'class="col-sm-3 control-label"'); ?>
                   <div class="col-sm-3">
                     <div class="date" id="datepicker">
-                      <?php echo zen_draw_input_field('products_date_available', $pInfo->products_date_available, 'class="form-control"'); ?><i class="fa fa-calendar fa-lg"></i>
+                      <div class="input-group">
+                        <?php echo zen_draw_input_field('products_date_available', $pInfo->products_date_available, 'class="form-control"'); ?>
+                        <span class="input-group-addon">
+                          <i class="fa fa-calendar fa-lg"></i>
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -629,7 +631,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                       <div class="form-group">
                         <?php echo zen_draw_label(TEXT_PRODUCTS_URL, 'products_url[' . $languages[$i]['id'] . ']', 'class="col-sm-3 control-label"'); ?> <i class="fa fa-lg fa-question-circle" data-toggle="tooltip" data-placement="top" title="<?php echo TEXT_PRODUCTS_URL_WITHOUT_HTTP; ?>"></i>
                         <div class="col-sm-9 col-md-6">
-                            <?php echo zen_draw_input_field('products_url[' . $languages[$i]['id'] . ']', htmlspecialchars(isset($products_url[$languages[$i]['id']]) ? $products_url[$languages[$i]['id']] : zen_get_products_url($pInfo->products_id, $languages[$i]['id']), ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_PRODUCTS_DESCRIPTION, 'products_url') . 'class="form-control"'); ?>
+                            <?php echo zen_draw_input_field('products_url[' . $languages[$i]['id'] . ']', htmlspecialchars($pInfoLanguage->{$languages[$i]['id']}['products_url'], ENT_COMPAT, CHARSET, TRUE), zen_set_field_length(TABLE_PRODUCTS_DESCRIPTION, 'products_url') . 'class="form-control"'); ?>
                         </div>
                       </div>
                     </div>
@@ -768,7 +770,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                   <i class="fa fa-save"></i> <?php echo IMAGE_INSERT; ?>
                 </button>
               <?php } ?>
-              <a href="<?php echo zen_href_link(FILENAME_Z4A_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-warning" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
+              <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-warning" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
             </div>
           </form>
         </div>
@@ -890,7 +892,8 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             </div>
             <div class="modal-footer">
                 <?php echo zen_draw_hidden_field('products_previous_image', $pInfo->products_image); ?>
-                <?php echo zen_draw_hidden_field('view', 'setImage'); ?>
+                <?php echo zen_draw_hidden_field('productId', $productId); ?>
+                <?php echo zen_draw_hidden_field('current_category_id', $current_category_id); ?>
               <button type="submit" class="btn btn-primary" onclick="saveMainImage();"><i class="fa fa-save"></i></button>
               <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php echo TEXT_CLOSE; ?></button>
             </div>
