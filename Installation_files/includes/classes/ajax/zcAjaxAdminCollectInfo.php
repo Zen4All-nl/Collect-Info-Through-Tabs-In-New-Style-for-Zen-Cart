@@ -198,9 +198,11 @@ class zcAjaxAdminCollectInfo extends base {
 
         return (float)$val;
       }
+    }
+    $updateInsertButton = 'save';
+    return (['updateInsertButton' => $updateInsertButton]);
 
     }
-  }
 
   public function messageStack() {
     global $messageStack;

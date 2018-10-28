@@ -124,6 +124,9 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .align-middle{
     vertical-align: middle !important;
 }
+.flagNotActive {
+    opacity:0.50;
+}
 @media (min-width: 768px) {
     .row-eq-height {
         display: -webkit-box;

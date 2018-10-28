@@ -688,7 +688,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                       <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=move_category'); ?>" style="text-decoration: none">
                         <div class="fa-stack fa-lg move">
                           <i class="fa fa-circle fa-stack-2x base"></i>
-                          <i class="fa fa-stack-1x overlay" aria-hidden="true"><strong>M</strong></i>
+                          <i class="fa fa-arrows fa-stack-1x overlay" aria-hidden="true"></i>
                         </div>
                       </a>
                       <?php
@@ -888,13 +888,13 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                       <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=move_product'); ?>" style="text-decoration: none">
                         <div class="fa-stack fa-lg move">
                           <i class="fa fa-circle fa-stack-2x base"></i>
-                          <i class="fa fa-stack-1x overlay" aria-hidden="true"><strong>M</strong></i>
+                          <i class="fa fa-arrows fa-stack-1x overlay" aria-hidden="true"></i>
                         </div>
                       </a>
                       <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=copy_product'); ?>" style="text-decoration: none">
                         <div class="fa-stack fa-lg copy">
                           <i class="fa fa-circle fa-stack-2x base"></i>
-                          <i class="fa fa-stack-1x overlay" aria-hidden="true"><strong>C</strong></i>
+                          <i class="fa fa-clone fa-stack-1x overlay" aria-hidden="true"></i>
                         </div>
                       </a>
 
@@ -917,7 +917,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                         <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $product['products_id'] . '&action=attribute_features' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" style="text-decoration: none">
                           <div class="fa-stack fa-lg attributes-on">
                             <i class="fa fa-circle fa-stack-2x base"></i>
-                            <i class="fa fa-stack-1x overlay" aria-hidden="true"><strong>A</strong></i>
+                            <i class="fa fa-list fa-stack-1x overlay" aria-hidden="true"></i>
                           </div>
                         </a>
                         <?php
@@ -926,7 +926,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                         <a href="<?php echo zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'products_filter=' . $product['products_id'] . '&current_category_id=' . $current_category_id); ?>" style="text-decoration: none">
                           <div class="fa-stack fa-lg attributes-off">
                             <i class="fa fa-circle fa-stack-2x base"></i>
-                            <i class="fa fa-stack-1x overlay" aria-hidden="true"><strong>A</strong></i>
+                            <i class="fa fa-list fa-stack-1x overlay" aria-hidden="true"></i>
                           </div>
                         </a>
                         <?php

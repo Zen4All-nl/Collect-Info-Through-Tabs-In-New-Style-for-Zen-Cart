@@ -299,8 +299,7 @@ $off_attributes_required = ($on_attributes_required == 1 ? false : true);
           ?>
         </div>
         <div class="modal-footer">
-          <?php echo zen_draw_hidden_field('view', 'insertAttribute'); ?>
-          <?php echo zen_draw_hidden_field('products_id'); ?>
+          <?php echo zen_draw_hidden_field('products_id', $productsId); ?>
           <button type="submit" class="btn btn-primary" onclick="insertAttribute()"><i class="fa fa-save"></i></button>
           <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-close"></i> <?php echo TEXT_CLOSE; ?></button>
         </div>

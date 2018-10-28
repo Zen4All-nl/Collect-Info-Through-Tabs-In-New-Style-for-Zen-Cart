@@ -762,11 +762,11 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 <i class="fa fa-tv"></i> <?php echo IMAGE_PREVIEW; ?>
               </a>
               <?php if (isset($_GET['pID']) && $_GET['pID'] != '') { ?>
-                <button id="btnsubmit" class="btn btn-primary" onclick="saveProduct()" type="submit" >
+                <button name="insertButton" id="btnsubmit" class="btn btn-primary" onclick="saveProduct()" type="submit" >
                   <i class="fa fa-save"></i> <?php echo IMAGE_SAVE; ?>
                 </button>
               <?php } else { ?>
-                <button id="btnsubmit" class="btn btn-primary" onclick="saveProduct()" type="submit" >
+                <button name="updateButton" id="btnsubmit" class="btn btn-primary" onclick="saveProduct()" type="submit" >
                   <i class="fa fa-save"></i> <?php echo IMAGE_INSERT; ?>
                 </button>
               <?php } ?>
@@ -774,13 +774,22 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             </div>
           </form>
         </div>
+        <div class="panel-footer text-center">
+          <strong>Cittins is developed by <a href="https:zen4all.nl" title="Zen4All">Zen4All</a>.</strong> - Version: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2171"><?php echo MODULE_ZEN4ALL_CITTINS_VERSION; ?></a> - <a href="https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style/releases/latest"><i class="fa fa-github fa-lg"></i> Github</a>
+        </div>
       </div>
+      <!-- footer //-->
+      <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+      <!-- footer_eof //-->
     </div>
     <!-- Creates the bootstrap modal where the image will appear -->
     <?php
-    list($width, $height) = getimagesize(DIR_FS_CATALOG_IMAGES . $pInfo->products_image);
-    if ($width > MEDIUM_IMAGE_WIDTH) {
-      $width = MEDIUM_IMAGE_WIDTH;
+    list($imageWidth, $imageHeight) = getimagesize(DIR_FS_CATALOG_IMAGES . $pInfo->products_image);
+    $mediumWith = (int)MEDIUM_IMAGE_WIDTH;
+    if ($imageWidth > $mediumWith) {
+      $width = $mediumWith;
+    } else {
+      $width = $imageWidth;
     }
     if ($height > MEDIUM_IMAGE_HEIGHT) {
       $height = MEDIUM_IMAGE_HEIGHT;
@@ -816,7 +825,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
             <h4 class="modal-title" id="imagePreviewModalLabel"><?php echo IMAGE_PREVIEW; ?></h4>
           </div>
           <div class="modal-body text-center" id="mainImageLarger">
-              <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', $width, $height) ?>
+              <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', $width) ?>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo TEXT_CLOSE; ?></button>
@@ -873,16 +882,16 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
                 </div>
               </div>
               <?php if ($pInfo->products_image != '') { ?>
-              <div class="form-group">
-                  <?php echo zen_draw_label(TEXT_RENAME_ADDITIONAL_IMAGES, 'rename', 'class="control-label"'); ?>
-                <div class="input-group">
-                  <div class="radioBtn btn-group">
-                    <a class="btn btn-info notActive" data-toggle="rename" data-title="0"><?php echo TABLE_HEADING_NO; ?></a>
-                    <a class="btn btn-info active" data-toggle="rename" data-title="1"><?php echo TABLE_HEADING_YES; ?></a>
+                <div class="form-group">
+                    <?php echo zen_draw_label(TEXT_RENAME_ADDITIONAL_IMAGES, 'rename', 'class="control-label"'); ?>
+                  <div class="input-group">
+                    <div class="radioBtn btn-group">
+                      <a class="btn btn-info notActive" data-toggle="rename" data-title="0"><?php echo TABLE_HEADING_NO; ?></a>
+                      <a class="btn btn-info active" data-toggle="rename" data-title="1"><?php echo TABLE_HEADING_YES; ?></a>
+                    </div>
+                    <?php echo zen_draw_hidden_field('rename', '1', 'class="rename"'); ?>
                   </div>
-                  <?php echo zen_draw_hidden_field('rename', '1', 'class="rename"'); ?>
                 </div>
-              </div>
               <?php } ?>
               <hr style="border-top: 1px solid #8c8b8b">
               <div class="form-group">
@@ -897,7 +906,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
               <button type="submit" class="btn btn-primary" onclick="saveMainImage();"><i class="fa fa-save"></i></button>
               <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php echo TEXT_CLOSE; ?></button>
             </div>
-          </form>'
+          </form>
         </div>
       </div>
     </div>
@@ -954,9 +963,10 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           $('[data-toggle="tooltip"]').tooltip();
       });
       // script for preview popup
-      $('#previewPopUp').on('click', function () {
+      $('#previewPopUp').on('click', (function (e) {
+          e.preventDefault();
           $('#previewmodal').modal('show');
-      });
+      }));
       // script for sliding checkbox
       $('.container-fluid').on('click', '.radioBtn a', function () {
           var sel = $(this).data('title');
@@ -985,3 +995,8 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
         }
       }
     }
+    ?>
+  </body>
+</html>
+<?php
+require(DIR_WS_INCLUDES . 'application_bottom.php');

@@ -34,7 +34,6 @@ $products_exclude_array[] = (int)$_GET['pID'];
           <?php echo zen_draw_products_pull_down('products_update_id', 'size="15" class="form-control"', $products_exclude_array, true, '', true); ?>
         </div>
         <?php echo zen_draw_hidden_field('products_id', $_GET['pID']); ?>
-        <?php echo zen_draw_hidden_field('view', 'productCopyToProduct'); ?>
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-primary" onclick="copyAttributesToProduct();"><i class="fa fa-copy"></i> <?php echo IMAGE_COPY; ?></button>

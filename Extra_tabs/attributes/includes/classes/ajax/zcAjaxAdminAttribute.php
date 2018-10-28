@@ -27,7 +27,7 @@ class zcAjaxAdminAttribute extends base {
     $valuesDropDownArray = '';
     foreach ($optionValues as $optionValue) {
       $text = $optionValue['products_options_values_name'] . ($optionValue['products_options_values_id'] == 0 ? '/UPLOAD FILE' : '') . ' [ #' . $optionValue['products_options_values_id'] . ' ] ';
-      $valuesDropDownArray .= '<option value="' . zen_output_string($optionValue['products_options_values_id']) . '">' . zen_output_string($text, array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
+      $valuesDropDownArray .= '<option value="' . zen_output_string($optionValue['products_options_values_id']) . '">' . zen_output_string($text, array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>' . PHP_EOL;
     }
     return([
       'valuesDropDownArray' => $valuesDropDownArray]);
@@ -154,52 +154,52 @@ class zcAjaxAdminAttribute extends base {
         $attr_default_directory = 'attributes/';
       }
       $attributeImage = '';
-      $attributeImage .= '<div class="row">' . "\n";
-      $attributeImage .= '<div class="col-sm-2">' . "\n";
-      $attributeImage .= ($attributeValuesArray['attributes_image'] != '' ? zen_image(DIR_WS_CATALOG_IMAGES . $attributeValuesArray['attributes_image'], $attributeValuesArray['attributes_image'], '', '', 'class="img-thumbnail"') : 'No image selected') . "\n";
-      $attributeImage .= $attributeValuesArray['attributes_image'] . "\n";
-      $attributeImage .= '</div>' . "\n";
-      $attributeImage .= '<div class="col-sm-10">' . "\n";
-      $attributeImage .= zen_draw_file_field('attributes_image', '', 'class="form-control"') . zen_draw_hidden_field('attributes_previous_image', $attributeValuesArray['attributes_image']) . "\n";
-      $attributeImage .= '</div>' . "\n";
-      $attributeImage .= '</div>' . "\n";
-      $attributeImage .= '<div class="row">' . "\n";
-      $attributeImage .= '<div class="col-sm-6">' . zen_draw_label(TEXT_ATTRIBUTES_IMAGE_DIR, 'img_dir', 'class="control-label"') . zen_draw_pull_down_menu('img_dir', $attr_dir_info, $attr_default_directory, 'class="form-control"') . '</div>' . "\n";
-      $attributeImage .= '<div class="col-xs-6 col-sm-3">' . "\n";
-      $attributeImage .= zen_draw_label(TEXT_IMAGES_OVERWRITE, 'attributes_overwrite', 'çlass="control-label"') . "\n";
-      $attributeImage .= '<div class="btn-group" data-toggle="buttons">' . "\n";
-      $attributeImage .= '<label class="btn ' . ($attr_off_overwrite == true ? 'active' : '') . '">' . "\n";
-      $attributeImage .= zen_draw_radio_field('attributes_overwrite', '0', $attr_off_overwrite) . "\n";
-      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . "\n";
-      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . "\n";
-      $attributeImage .= '<span>' . TABLE_HEADING_NO . '</span>' . "\n";
-      $attributeImage .= '</label>' . "\n";
-      $attributeImage .= '<label class="btn ' . ($attr_on_overwrite == true ? 'active' : '') . '">' . "\n";
-      $attributeImage .= zen_draw_radio_field('attributes_overwrite', '1', $attr_on_overwrite) . "\n";
-      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . "\n";
-      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . "\n";
-      $attributeImage .= '<span>' . TABLE_HEADING_YES . '</span>' . "\n";
-      $attributeImage .= '</label>' . "\n";
-      $attributeImage .= '</div>' . "\n";
-      $attributeImage .= '</div>' . "\n";
-      $attributeImage .= '<div class="col-xs-6 col-sm-3">' . "\n";
-      $attributeImage .= zen_draw_label(TEXT_IMAGES_DELETE, 'attributes_image_delete', 'çlass="control-label"') . "\n";
-      $attributeImage .= '<div class="btn-group" data-toggle="buttons">' . "\n";
-      $attributeImage .= '<label class="btn ' . ($attr_off_image_delete == true ? 'active' : '') . '">' . "\n";
-      $attributeImage .= zen_draw_radio_field('attributes_image_delete', '0', $attr_off_image_delete) . "\n";
-      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . "\n";
-      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . "\n";
-      $attributeImage .= '<span>' . TABLE_HEADING_NO . '</span>' . "\n";
-      $attributeImage .= '</label>' . "\n";
-      $attributeImage .= '<label class="btn ' . ($attr_on_image_delete == true ? 'active' : '') . '">' . "\n";
-      $attributeImage .= zen_draw_radio_field('attributes_image_delete', '1', $attr_on_image_delete) . "\n";
-      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . "\n";
-      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . "\n";
-      $attributeImage .= '<span>' . TABLE_HEADING_YES . '</span>' . "\n";
-      $attributeImage .= '</label>' . "\n";
-      $attributeImage .= '</div>' . "\n";
-      $attributeImage .= '</div>' . "\n";
-      $attributeImage .= '</div>' . "\n";
+      $attributeImage .= '<div class="row">' . PHP_EOL;
+      $attributeImage .= '<div class="col-sm-2">' . PHP_EOL;
+      $attributeImage .= ($attributeValuesArray['attributes_image'] != '' ? zen_image(DIR_WS_CATALOG_IMAGES . $attributeValuesArray['attributes_image'], $attributeValuesArray['attributes_image'], '', '', 'class="img-thumbnail"') : 'No image selected') . PHP_EOL;
+      $attributeImage .= $attributeValuesArray['attributes_image'] . PHP_EOL;
+      $attributeImage .= '</div>' . PHP_EOL;
+      $attributeImage .= '<div class="col-sm-10">' . PHP_EOL;
+      $attributeImage .= zen_draw_file_field('attributes_image', '', 'class="form-control"') . zen_draw_hidden_field('attributes_previous_image', $attributeValuesArray['attributes_image']) . PHP_EOL;
+      $attributeImage .= '</div>' . PHP_EOL;
+      $attributeImage .= '</div>' . PHP_EOL;
+      $attributeImage .= '<div class="row">' . PHP_EOL;
+      $attributeImage .= '<div class="col-sm-6">' . zen_draw_label(TEXT_ATTRIBUTES_IMAGE_DIR, 'img_dir', 'class="control-label"') . zen_draw_pull_down_menu('img_dir', $attr_dir_info, $attr_default_directory, 'class="form-control"') . '</div>' . PHP_EOL;
+      $attributeImage .= '<div class="col-xs-6 col-sm-3">' . PHP_EOL;
+      $attributeImage .= zen_draw_label(TEXT_IMAGES_OVERWRITE, 'attributes_overwrite', 'çlass="control-label"') . PHP_EOL;
+      $attributeImage .= '<div class="btn-group" data-toggle="buttons">' . PHP_EOL;
+      $attributeImage .= '<label class="btn ' . ($attr_off_overwrite == true ? 'active' : '') . '">' . PHP_EOL;
+      $attributeImage .= zen_draw_radio_field('attributes_overwrite', '0', $attr_off_overwrite) . PHP_EOL;
+      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . PHP_EOL;
+      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . PHP_EOL;
+      $attributeImage .= '<span>' . TABLE_HEADING_NO . '</span>' . PHP_EOL;
+      $attributeImage .= '</label>' . PHP_EOL;
+      $attributeImage .= '<label class="btn ' . ($attr_on_overwrite == true ? 'active' : '') . '">' . PHP_EOL;
+      $attributeImage .= zen_draw_radio_field('attributes_overwrite', '1', $attr_on_overwrite) . PHP_EOL;
+      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . PHP_EOL;
+      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . PHP_EOL;
+      $attributeImage .= '<span>' . TABLE_HEADING_YES . '</span>' . PHP_EOL;
+      $attributeImage .= '</label>' . PHP_EOL;
+      $attributeImage .= '</div>' . PHP_EOL;
+      $attributeImage .= '</div>' . PHP_EOL;
+      $attributeImage .= '<div class="col-xs-6 col-sm-3">' . PHP_EOL;
+      $attributeImage .= zen_draw_label(TEXT_IMAGES_DELETE, 'attributes_image_delete', 'çlass="control-label"') . PHP_EOL;
+      $attributeImage .= '<div class="btn-group" data-toggle="buttons">' . PHP_EOL;
+      $attributeImage .= '<label class="btn ' . ($attr_off_image_delete == true ? 'active' : '') . '">' . PHP_EOL;
+      $attributeImage .= zen_draw_radio_field('attributes_image_delete', '0', $attr_off_image_delete) . PHP_EOL;
+      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . PHP_EOL;
+      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . PHP_EOL;
+      $attributeImage .= '<span>' . TABLE_HEADING_NO . '</span>' . PHP_EOL;
+      $attributeImage .= '</label>' . PHP_EOL;
+      $attributeImage .= '<label class="btn ' . ($attr_on_image_delete == true ? 'active' : '') . '">' . PHP_EOL;
+      $attributeImage .= zen_draw_radio_field('attributes_image_delete', '1', $attr_on_image_delete) . PHP_EOL;
+      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . PHP_EOL;
+      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . PHP_EOL;
+      $attributeImage .= '<span>' . TABLE_HEADING_YES . '</span>' . PHP_EOL;
+      $attributeImage .= '</label>' . PHP_EOL;
+      $attributeImage .= '</div>' . PHP_EOL;
+      $attributeImage .= '</div>' . PHP_EOL;
+      $attributeImage .= '</div>' . PHP_EOL;
     }
     $optionValues = $db->Execute("SELECT pov.products_options_values_id, pov.products_options_values_name
                                   FROM " . TABLE_PRODUCTS_OPTIONS_VALUES . " pov
@@ -219,60 +219,60 @@ class zcAjaxAdminAttribute extends base {
     // set flag radio's
 
     $attributeFlags = '';
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #ff0;padding-bottom: 10px;">' . "\n";
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_DISPLAY_ONLY, 'attributes_display_only', 'class="control-label"') . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('attributes_display_only', '0', ($attributeValuesArray['attributes_display_only'] ? false : true)) . TABLE_HEADING_NO . "\n";
-    $attributeFlags .= '</label>' . "\n";
+    $attributeFlags .= '<div class="col-sm-2" style="background-color: #ff0;padding-bottom: 10px;">' . PHP_EOL;
+    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_DISPLAY_ONLY, 'attributes_display_only', 'class="control-label"') . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('attributes_display_only', '0', ($attributeValuesArray['attributes_display_only'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
     $attributeFlags .= '<label class="radio-inline">';
-    $attributeFlags .= zen_draw_radio_field('attributes_display_only', '1', ($attributeValuesArray['attributes_display_only'] ? true : false)) . TABLE_HEADING_YES . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '</div>' . "\n";
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #2c54f5;padding-bottom: 10px;">' . "\n";
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_IS_FREE, 'product_attribute_is_free', 'class="control-label"') . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('product_attribute_is_free', '0', ($attributeValuesArray['product_attribute_is_free'] ? false : true)) . TABLE_HEADING_NO . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('product_attribute_is_free', '1', ($attributeValuesArray['product_attribute_is_free'] ? true : false)) . TABLE_HEADING_YES . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '</div>' . "\n";
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #ffa346;padding-bottom: 10px;">' . "\n";
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_DEFAULT, 'product_attribute_is_free', 'class="control-label"') . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('attributes_default', '0', ($attributeValuesArray['attributes_default'] ? false : true)) . TABLE_HEADING_NO . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('attributes_default', '1', ($attributeValuesArray['attributes_default'] ? true : false)) . TABLE_HEADING_YES . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '</div>' . "\n";
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #f0f;padding-bottom: 10px;">' . "\n";
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTE_IS_DISCOUNTED, 'attributes_discounted', 'class="control-label"') . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('attributes_discounted', '0', ($attributeValuesArray['attributes_discounted'] ? false : true)) . TABLE_HEADING_NO . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('attributes_discounted', '1', ($attributeValuesArray['attributes_discounted'] ? true : false)) . TABLE_HEADING_YES . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '</div>' . "\n";
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #d200f0;padding-bottom: 10px;">' . "\n";
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTE_PRICE_BASE_INCLUDED, 'attributes_price_base_included', 'class="control-label"') . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('attributes_price_base_included', '0', ($attributeValuesArray['attributes_price_base_included'] ? false : true)) . TABLE_HEADING_NO . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('attributes_price_base_included', '1', ($attributeValuesArray['attributes_price_base_included'] ? true : false)) . TABLE_HEADING_YES . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '</div>' . "\n";
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #FF0606;padding-bottom: 10px;">' . "\n";
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_REQUIRED, 'attributes_required', 'class="control-label"') . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('attributes_required', '0', ($attributeValuesArray['attributes_required'] ? false : true)) . TABLE_HEADING_NO . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '<label class="radio-inline">' . "\n";
-    $attributeFlags .= zen_draw_radio_field('attributes_required', '1', ($attributeValuesArray['attributes_required'] ? true : false)) . TABLE_HEADING_YES . "\n";
-    $attributeFlags .= '</label>' . "\n";
-    $attributeFlags .= '</div>' . "\n";
+    $attributeFlags .= zen_draw_radio_field('attributes_display_only', '1', ($attributeValuesArray['attributes_display_only'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '</div>' . PHP_EOL;
+    $attributeFlags .= '<div class="col-sm-2" style="background-color: #2c54f5;padding-bottom: 10px;">' . PHP_EOL;
+    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_IS_FREE, 'product_attribute_is_free', 'class="control-label"') . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('product_attribute_is_free', '0', ($attributeValuesArray['product_attribute_is_free'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('product_attribute_is_free', '1', ($attributeValuesArray['product_attribute_is_free'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '</div>' . PHP_EOL;
+    $attributeFlags .= '<div class="col-sm-2" style="background-color: #ffa346;padding-bottom: 10px;">' . PHP_EOL;
+    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_DEFAULT, 'product_attribute_is_free', 'class="control-label"') . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('attributes_default', '0', ($attributeValuesArray['attributes_default'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('attributes_default', '1', ($attributeValuesArray['attributes_default'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '</div>' . PHP_EOL;
+    $attributeFlags .= '<div class="col-sm-2" style="background-color: #f0f;padding-bottom: 10px;">' . PHP_EOL;
+    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTE_IS_DISCOUNTED, 'attributes_discounted', 'class="control-label"') . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('attributes_discounted', '0', ($attributeValuesArray['attributes_discounted'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('attributes_discounted', '1', ($attributeValuesArray['attributes_discounted'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '</div>' . PHP_EOL;
+    $attributeFlags .= '<div class="col-sm-2" style="background-color: #d200f0;padding-bottom: 10px;">' . PHP_EOL;
+    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTE_PRICE_BASE_INCLUDED, 'attributes_price_base_included', 'class="control-label"') . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('attributes_price_base_included', '0', ($attributeValuesArray['attributes_price_base_included'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('attributes_price_base_included', '1', ($attributeValuesArray['attributes_price_base_included'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '</div>' . PHP_EOL;
+    $attributeFlags .= '<div class="col-sm-2" style="background-color: #FF0606;padding-bottom: 10px;">' . PHP_EOL;
+    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_REQUIRED, 'attributes_required', 'class="control-label"') . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('attributes_required', '0', ($attributeValuesArray['attributes_required'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
+    $attributeFlags .= zen_draw_radio_field('attributes_required', '1', ($attributeValuesArray['attributes_required'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
+    $attributeFlags .= '</label>' . PHP_EOL;
+    $attributeFlags .= '</div>' . PHP_EOL;
 
     return([
       'attributeImage' => $attributeImage,
@@ -377,20 +377,20 @@ class zcAjaxAdminAttribute extends base {
         }
 
         $db->Execute("INSERT INTO " . TABLE_PRODUCTS_ATTRIBUTES . " (products_id, options_id, options_values_id, options_values_price, price_prefix, products_options_sort_order, product_attribute_is_free, products_attributes_weight, products_attributes_weight_prefix, attributes_display_only, attributes_default, attributes_discounted, attributes_image, attributes_price_base_included, attributes_price_onetime, attributes_price_factor, attributes_price_factor_offset, attributes_price_factor_onetime, attributes_price_factor_onetime_offset, attributes_qty_prices, attributes_qty_prices_onetime, attributes_price_words, attributes_price_words_free, attributes_price_letters, attributes_price_letters_free, attributes_required)
-                      VALUES ('" . (int)$products_id . "',
-                              '" . (int)$options_id . "',
-                              '" . (int)$values_id . "',
+                      VALUES (" . (int)$products_id . ",
+                              " . (int)$options_id . ",
+                              " . (int)$values_id . ",
                               '" . (float)zen_db_input($value_price) . "',
                               '" . zen_db_input($price_prefix) . "',
-                              '" . (int)zen_db_input($products_options_sort_order) . "',
-                              '" . (int)zen_db_input($product_attribute_is_free) . "',
+                              " . (int)zen_db_input($products_options_sort_order) . ",
+                              " . (int)zen_db_input($product_attribute_is_free) . ",
                               '" . (float)zen_db_input($products_attributes_weight) . "',
                               '" . zen_db_input($products_attributes_weight_prefix) . "',
-                              '" . (int)zen_db_input($attributes_display_only) . "',
-                              '" . (int)zen_db_input($attributes_default) . "',
-                              '" . (int)zen_db_input($attributes_discounted) . "',
+                              " . (int)zen_db_input($attributes_display_only) . ",
+                              " . (int)zen_db_input($attributes_default) . ",
+                              " . (int)zen_db_input($attributes_discounted) . ",
                               '" . zen_db_input($attributes_image_name) . "',
-                              '" . (int)zen_db_input($attributes_price_base_included) . "',
+                              " . (int)zen_db_input($attributes_price_base_included) . ",
                               '" . (float)zen_db_input($attributes_price_onetime) . "',
                               '" . (float)zen_db_input($attributes_price_factor) . "',
                               '" . (float)zen_db_input($attributes_price_factor_offset) . "',
@@ -399,10 +399,10 @@ class zcAjaxAdminAttribute extends base {
                               '" . zen_db_input($attributes_qty_prices) . "',
                               '" . zen_db_input($attributes_qty_prices_onetime) . "',
                               '" . (float)zen_db_input($attributes_price_words) . "',
-                              '" . (int)zen_db_input($attributes_price_words_free) . "',
+                              " . (int)zen_db_input($attributes_price_words_free) . ",
                               '" . (float)zen_db_input($attributes_price_letters) . "',
-                              '" . (int)zen_db_input($attributes_price_letters_free) . "',
-                              '" . (int)zen_db_input($attributes_required) . "')");
+                              " . (int)zen_db_input($attributes_price_letters_free) . ",
+                              " . (int)zen_db_input($attributes_required) . ")");
 
         if (DOWNLOAD_ENABLED == 'true') {
           $products_attributes_id = $db->Insert_ID();
@@ -419,40 +419,40 @@ class zcAjaxAdminAttribute extends base {
                                  '" . zen_db_input($products_attributes_maxcount) . "')");
           }
         }
-        $newOptionValues[$products_options_sort_order] = '<tr id="option-value-row-' . $products_attributes_id . '" class="option-id-' . $options_id . '">' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-a" class="align-middle">&nbsp;</td>' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-b" class="align-middle">&nbsp;</td>' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-c" class="align-middle">' . $products_attributes_id . '</td>' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-d" class="align-middle">&nbsp;&nbsp;' . zen_values_name($values_id) . '</td>' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-e" class="text-right align-middle">' . $price_prefix . '&nbsp;' . $value_price . '</td>' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-f" class="text-right align-middle">' . $products_attributes_weight_prefix . '&nbsp;' . $products_attributes_weight . '</td>' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-g" class="text-right align-middle">' . $products_options_sort_order . '</td>' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-h" class="text-center align-middle">' . "\n" .
-            '    <span class="attributes_display_only">' . "\n" .
-            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_display_only" class="btn btn-xs btn-default" style="opacity:0.50;" onclick="switchFlag(\'1\', \'' . $products_attributes_id . '\', \'attributes_display_only\');" title="Display Only"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>' . "\n" .
-            '    </span>' . "\n" .
-            '    <span class="product_attribute_is_free">' . "\n" .
-            '      <button type="button" id="flag-' . $products_attributes_id . '-product_attribute_is_free" class="btn btn-xs btn-default" onclick="switchFlag(\'0\', \'' . $products_attributes_id . '\', \'product_attribute_is_free\');" title="Free"><i class="fa fa-check" aria-hidden="true"></i></button>' . "\n" .
-            '    </span>' . "\n" .
-            '    <span class="attributes_default">' . "\n" .
-            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_default" class="btn btn-xs btn-default" style="opacity:0.50;" onclick="switchFlag(\'1\', \'' . $products_attributes_id . '\', \'attributes_default\');" title="Default"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>' . "\n" .
-            '    </span>' . "\n" .
-            '    <span class="attributes_discounted">' . "\n" .
-            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_discounted" class="btn btn-xs btn-default" onclick="switchFlag(\'0\', \'' . $products_attributes_id . '\', \'attributes_discounted\');" title="Discounted"><i class="fa fa-check" aria-hidden="true"></i></button>' . "\n" .
-            '    </span>' . "\n" .
-            '    <span class="attributes_price_base_included">' . "\n" .
-            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_price_base_included" class="btn btn-xs btn-default" onclick="switchFlag(\'0\', \'' . $products_attributes_id . '\', \'attributes_price_base_included\');" title="Base Price"><i class="fa fa-check" aria-hidden="true"></i></button>' . "\n" .
-            '    </span>' . "\n" .
-            '    <span class="attributes_required">' . "\n" .
-            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_required" class="btn btn-xs btn-default" style="opacity:0.50;" onclick="switchFlag(\'1\', \'' . $products_attributes_id . '\', \'attributes_required\');" title="Required"><i class="fa fa-times" aria-hidden="true"></i></button>' . "\n" .
-            '    </span>' . "\n" .
-            '  </td>' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-i" class="text-right align-middle">$0.00 $0.00</td>' . "\n" .
-            '  <td id="option-value-row-' . $products_attributes_id . '-j" class="text-center align-middle">' . "\n" .
-            '    <button type="button" id="button-edit-attribute-value-' . $products_attributes_id . '" class="btn btn-sm btn-primary" data-toggle="modal" title="Edit Attribute Value" data-original-title="Edit Attribute Value" data-target="#editAttributeValueModal" onclick="editAttribute(\'' . $products_attributes_id . '\')"><i class="fa fa-edit"></i></button>' . "\n" .
-            '    <button type="button" id="button-delete-attribute-value-' . $products_attributes_id . '" class="btn btn-sm btn-danger" data-toggle="modal" title="Remove Attribute Value" data-original-title="Remove Attribute Value" data-target="#deleteOptionValueModal" onclick="deleteOptionValueConfirm(\'' . $products_attributes_id . '\');"><i class="fa fa-minus-circle"></i></button>' . "\n" .
-            '  </td>' . "\n" .
-            '</tr>' . "\n";
+        $newOptionValues[$products_options_sort_order] = '<tr id="option-value-row-' . $products_attributes_id . '" class="option-id-' . $options_id . '">' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-a" class="align-middle">&nbsp;</td>' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-b" class="align-middle">&nbsp;</td>' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-c" class="align-middle">' . $products_attributes_id . '</td>' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-d" class="align-middle">&nbsp;&nbsp;' . zen_values_name($values_id) . '</td>' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-e" class="text-right align-middle">' . $price_prefix . '&nbsp;' . $value_price . '</td>' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-f" class="text-right align-middle">' . $products_attributes_weight_prefix . '&nbsp;' . $products_attributes_weight . '</td>' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-g" class="text-right align-middle">' . $products_options_sort_order . '</td>' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-h" class="text-center align-middle">' . PHP_EOL .
+            '    <span class="attributes_display_only">' . PHP_EOL .
+            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_display_only" class="btn btn-xs btn-default" style="opacity:0.50;" onclick="switchFlag(\'1\', \'' . $products_attributes_id . '\', \'attributes_display_only\');" title="Display Only"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>' . PHP_EOL .
+            '    </span>' . PHP_EOL .
+            '    <span class="product_attribute_is_free">' . PHP_EOL .
+            '      <button type="button" id="flag-' . $products_attributes_id . '-product_attribute_is_free" class="btn btn-xs btn-default" onclick="switchFlag(\'0\', \'' . $products_attributes_id . '\', \'product_attribute_is_free\');" title="Free"><i class="fa fa-check" aria-hidden="true"></i></button>' . PHP_EOL .
+            '    </span>' . PHP_EOL .
+            '    <span class="attributes_default">' . PHP_EOL .
+            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_default" class="btn btn-xs btn-default" style="opacity:0.50;" onclick="switchFlag(\'1\', \'' . $products_attributes_id . '\', \'attributes_default\');" title="Default"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>' . PHP_EOL .
+            '    </span>' . PHP_EOL .
+            '    <span class="attributes_discounted">' . PHP_EOL .
+            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_discounted" class="btn btn-xs btn-default" onclick="switchFlag(\'0\', \'' . $products_attributes_id . '\', \'attributes_discounted\');" title="Discounted"><i class="fa fa-check" aria-hidden="true"></i></button>' . PHP_EOL .
+            '    </span>' . PHP_EOL .
+            '    <span class="attributes_price_base_included">' . PHP_EOL .
+            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_price_base_included" class="btn btn-xs btn-default" onclick="switchFlag(\'0\', \'' . $products_attributes_id . '\', \'attributes_price_base_included\');" title="Base Price"><i class="fa fa-check" aria-hidden="true"></i></button>' . PHP_EOL .
+            '    </span>' . PHP_EOL .
+            '    <span class="attributes_required">' . PHP_EOL .
+            '      <button type="button" id="flag-' . $products_attributes_id . '-attributes_required" class="btn btn-xs btn-default" style="opacity:0.50;" onclick="switchFlag(\'1\', \'' . $products_attributes_id . '\', \'attributes_required\');" title="Required"><i class="fa fa-times" aria-hidden="true"></i></button>' . PHP_EOL .
+            '    </span>' . PHP_EOL .
+            '  </td>' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-i" class="text-right align-middle">$0.00 $0.00</td>' . PHP_EOL .
+            '  <td id="option-value-row-' . $products_attributes_id . '-j" class="text-center align-middle">' . PHP_EOL .
+            '    <button type="button" id="button-edit-attribute-value-' . $products_attributes_id . '" class="btn btn-sm btn-primary" data-toggle="modal" title="Edit Attribute Value" data-original-title="Edit Attribute Value" data-target="#editAttributeValueModal" onclick="editAttribute(\'' . $products_attributes_id . '\')"><i class="fa fa-edit"></i></button>' . PHP_EOL .
+            '    <button type="button" id="button-delete-attribute-value-' . $products_attributes_id . '" class="btn btn-sm btn-danger" data-toggle="modal" title="Remove Attribute Value" data-original-title="Remove Attribute Value" data-target="#deleteOptionValueModal" onclick="deleteOptionValueConfirm(\'' . $products_attributes_id . '\');"><i class="fa fa-minus-circle"></i></button>' . PHP_EOL .
+            '  </td>' . PHP_EOL .
+            '</tr>' . PHP_EOL;
       }
     }
     ksort($newOptionValues);
@@ -462,15 +462,15 @@ class zcAjaxAdminAttribute extends base {
 
     // return new values to interface
     $newOption = '';
-    $newOption .= '<tr id="option-row-' . (int)$options_id . '">' . "\n";
-    $newOption .= '<td>' . "\n";
-    $newOption .= '<button type="button" id="deleteOptionButton' . (int)$options_id . '" class="btn btn-sm btn-danger" data-toggle="modal" title="Remove Attribute Value" data-original-title="Remove Attribute Value" data-target="#deleteOptionModal" onclick="deleteOptionConfirm(' . (int)$options_id . ')">' . "\n";
-    $newOption .= '<i class="fa fa-trash"></i>' . "\n";
-    $newOption .= '</button>' . "\n";
-    $newOption .= '</td>' . "\n";
-    $newOption .= '<td><span style="font-weight: bold;">' . zen_options_name((int)$options_id) . '</span></td>' . "\n";
-    $newOption .= '<td colspan="8"></td>' . "\n";
-    $newOption .= '</tr>' . "\n";
+    $newOption .= '<tr id="option-row-' . (int)$options_id . '">' . PHP_EOL;
+    $newOption .= '<td>' . PHP_EOL;
+    $newOption .= '<button type="button" id="deleteOptionButton' . (int)$options_id . '" class="btn btn-sm btn-danger" data-toggle="modal" title="Remove Attribute Value" data-original-title="Remove Attribute Value" data-target="#deleteOptionModal" onclick="deleteOptionConfirm(' . (int)$options_id . ')">' . PHP_EOL;
+    $newOption .= '<i class="fa fa-trash"></i>' . PHP_EOL;
+    $newOption .= '</button>' . PHP_EOL;
+    $newOption .= '</td>' . PHP_EOL;
+    $newOption .= '<td><span style="font-weight: bold;">' . zen_options_name((int)$options_id) . '</span></td>' . PHP_EOL;
+    $newOption .= '<td colspan="8"></td>' . PHP_EOL;
+    $newOption .= '</tr>' . PHP_EOL;
 
     $insertSortOrderId = '';
     if ($productOptionsSortOrder->RecordCount() > 0) {
@@ -491,6 +491,8 @@ class zcAjaxAdminAttribute extends base {
 
   public function saveAttribute() {
     global $db, $messageStack;
+    $data = new objectInfo($_POST);
+
     require(DIR_WS_CLASSES . 'currencies.php');
     $currencies = new currencies();
     $check_duplicate = $db->Execute("SELECT * FROM " . TABLE_PRODUCTS_ATTRIBUTES . "
@@ -713,6 +715,8 @@ class zcAjaxAdminAttribute extends base {
   }
 
   public function deleteOptionConfirm() {
+    $data = new objectInfo($_POST);
+
     $modalContent = '';
     $modalContent .= '<p class="danger">' . TEXT_DELETE_ATTRIBUTES_OPTION_NAME_VALUES . '</p>';
     $modalContent .= '<div class="form-group">';
@@ -728,10 +732,12 @@ class zcAjaxAdminAttribute extends base {
 
   public function deleteOption() {
     global $db, $messageStack;
+    $data = new objectInfo($_POST);
+
     $getAttributesOptionsId = $db->Execute("SELECT products_attributes_id
-                                                    FROM " . TABLE_PRODUCTS_ATTRIBUTES . "
-                                                    WHERE products_id = " . (int)$data->products_id . "
-                                                    AND options_id = " . (int)$data->options_id);
+                                            FROM " . TABLE_PRODUCTS_ATTRIBUTES . "
+                                            WHERE products_id = " . (int)$data->products_id . "
+                                            AND options_id = " . (int)$data->options_id);
     foreach ($getAttributesOptionsId as $attributesOptionsId) {
 // remove any attached downloads
       $db->Execute("DELETE FROM " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . "
@@ -752,6 +758,8 @@ class zcAjaxAdminAttribute extends base {
 
   public function deleteOptionValueConfirm() {
     global $db;
+    $data = new objectInfo($_POST);
+
     $attribute = $db->Execute("SELECT options_id,options_values_id
                                FROM " . TABLE_PRODUCTS_ATTRIBUTES . "
                                WHERE products_attributes_id = " . (int)$data->attributes_id);
@@ -769,15 +777,17 @@ class zcAjaxAdminAttribute extends base {
 
   public function deleteOptionValue() {
     global $db, $zco_notifier;
+    $data = new objectInfo($_POST);
+
     $attribute_id = zen_db_prepare_input((int)$data->attributes_id);
 
     $zco_notifier->notify('NOTIFY_ATTRIBUTE_CONTROLLER_DELETE_ATTRIBUTE', array('attribute_id' => $attribute_id), $attribute_id);
 
     $db->Execute("DELETE FROM " . TABLE_PRODUCTS_ATTRIBUTES . "
-                    WHERE products_attributes_id = " . (int)$attribute_id);
+                  WHERE products_attributes_id = " . (int)$attribute_id);
 
     $db->Execute("DELETE FROM " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . "
-                    WHERE products_attributes_id = " . (int)$attribute_id);
+                  WHERE products_attributes_id = " . (int)$attribute_id);
 
     // reset products_price_sorter for searches etc.
     zen_update_products_price_sorter($data->products_id);
@@ -787,22 +797,23 @@ class zcAjaxAdminAttribute extends base {
 
   public function switchFlag() {
     global $db;
+    $data = new objectInfo($_POST);
     if ($data->flag == '1') {
       $db->Execute("UPDATE " . TABLE_PRODUCTS_ATTRIBUTES . "
-                      SET " . $data->flag_name . " = '1'
-                      WHERE products_id = " . (int)$data->products_id . "
-                      AND products_attributes_id = " . (int)$data->attributes_id);
+                    SET " . $data->flag_name . " = 1
+                    WHERE products_id = " . (int)$data->products_id . "
+                    AND products_attributes_id = " . (int)$data->attributes_id);
 
-      $button = '<button type="button" id="flag-' . $data->attributes_id . '-' . $data->flag_name . '" class="btn btn-xs btn-default" onClick="switchFlag(\'0\', \'' . $data->attributes_id . '\', \'' . $data->flag_name . '\');return false;" title="' . LEGEND_ATTRIBUTES_DISPLAY_ONLY . '"><i class="fa fa-check" aria-hidden="true"></i></button>';
+      $flagValue = 0;
     } else {
       $db->Execute("UPDATE " . TABLE_PRODUCTS_ATTRIBUTES . "
-                      SET " . $data->flag_name . " = '0'
-                      WHERE products_id = " . (int)$data->products_id . "
-                      AND products_attributes_id = " . (int)$data->attributes_id);
+                    SET " . $data->flag_name . " = 0
+                    WHERE products_id = " . (int)$data->products_id . "
+                    AND products_attributes_id = " . (int)$data->attributes_id);
 
-      $button = '<button type="button" id="flag-' . $data->attributes_id . '-' .$data->flag_name . '" class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag(\'1\', \'' . $data->attributes_id . '\', \'' . $data->flag_name . '\')" title="' . LEGEND_ATTRIBUTES_DISPLAY_ONLY . '"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>';
+      $flagValue = 1;
     }
-    return(['button' => $button]);
+    return(['flagValue' => $flagValue]);
   }
 
   public function messageStack() {
