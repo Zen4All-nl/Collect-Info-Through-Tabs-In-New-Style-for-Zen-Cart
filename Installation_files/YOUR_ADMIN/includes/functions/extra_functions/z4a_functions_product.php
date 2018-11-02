@@ -160,7 +160,7 @@ function dirListProductFields($directory) {
     $result['search_dir'] = $search_directory;
     $images_array[] = array('filepath' => HTTPS_CATALOG_SERVER . DIR_WS_HTTPS_CATALOG . $products_image_directory . $products_image_base . $products_image_extension);
     $result['files'] = $files;
-    if (is_array($files) && count($files > 0)) {
+    if (is_array($files) && !empty($files)) {
       foreach ($files as $file) {
         $image_count++;
         $image_suffix_number = str_replace($search_directory . $products_image_base . '_', '', $file);

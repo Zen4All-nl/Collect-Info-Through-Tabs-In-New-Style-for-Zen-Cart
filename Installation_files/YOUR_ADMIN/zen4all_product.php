@@ -968,7 +968,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
           $('#previewmodal').modal('show');
       }));
       // script for sliding checkbox
-      $('.container-fluid').on('click', '.radioBtn a', function () {
+      $('body').on('click', '.radioBtn a', function () {
           var sel = $(this).data('title');
           var tog = $(this).data('toggle');
           $(this).parent().next('.' + tog).prop('value', sel);

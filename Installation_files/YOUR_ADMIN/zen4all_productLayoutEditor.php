@@ -737,33 +737,15 @@ foreach ($fieldTypes as $type) {
                   </div>
                   <?php echo '</form>'; ?>
                 </div>
-                <div class="row">
-                  <table class="table table-condensed">
-                    <thead>
-                      <tr>
-                        <th><?php echo TEXT_PRODUCT_TYPES_NAME; ?></th>
-                        <th><?php echo TEXT_PRODUCT_TYPES_IMAGE; ?></th>
-                        <th><?php echo TEXT_PRODUCT_TYPES_HANDLER; ?></th>
-                        <th><?php echo TEXT_PRODUCT_TYPES_ALLOW_ADD_CART; ?></th>
-                        <th><?php echo TEXT_MASTER_TYPE; ?></th>
-                        <th><?php echo TEXT_DATE_ADDED; ?></th>
-                        <th><?php echo TEXT_LAST_MODIFIED; ?></th>
-                        <th><?php echo TEXT_PRODUCTS; ?></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><?php echo $productTypeInfoArray->type_name; ?></td>
-                        <td><?php echo $productTypeInfoArray->default_image; ?></td>
-                        <td><?php echo $productTypeInfoArray->type_handler; ?></td>
-                        <td><?php echo ($productTypeInfoArray->allow_add_to_cart == 'Y' ? TEXT_YES : TEXT_NO); ?></td>
-                        <td><?php echo zen_get_handler_from_type($productTypeInfoArray->type_master_type); ?></td>
-                        <td><?php echo $productTypeInfoArray->date_added; ?></td>
-                        <td><?php echo $productTypeInfoArray->last_modified; ?></td>
-                        <td><?php echo $productTypeInfoArray->products_count; ?></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="form-group">
+                  <div class="col-sm-6"><label class="col-sm-6"><?php echo TEXT_PRODUCT_TYPES_NAME; ?></label><div class="col-sm-6"><?php echo $productTypeInfoArray->type_name; ?></div></div>
+                  <div class="col-sm-6"><label class="col-sm-6"><?php echo TEXT_PRODUCT_TYPES_IMAGE; ?></label><div class="col-sm-6"><?php echo $productTypeInfoArray->default_image; ?></div></div>
+                  <div class="col-sm-6"><label class="col-sm-6"><?php echo TEXT_PRODUCT_TYPES_HANDLER; ?></label><div class="col-sm-6"><?php echo $productTypeInfoArray->type_handler; ?></div></div>
+                  <div class="col-sm-6"><label class="col-sm-6"><?php echo TEXT_PRODUCT_TYPES_ALLOW_ADD_CART; ?></label><div class="col-sm-6"><?php echo ($productTypeInfoArray->allow_add_to_cart == 'Y' ? TEXT_YES : TEXT_NO); ?></div></div>
+                  <div class="col-sm-6"><label class="col-sm-6"><?php echo TEXT_MASTER_TYPE; ?></label><div class="col-sm-6"><?php echo zen_get_handler_from_type($productTypeInfoArray->type_master_type); ?></div></div>
+                  <div class="col-sm-6"><label class="col-sm-6"><?php echo TEXT_DATE_ADDED; ?></label><div class="col-sm-6"><?php echo $productTypeInfoArray->date_added; ?></div></div>
+                  <div class="col-sm-6"><label class="col-sm-6"><?php echo TEXT_LAST_MODIFIED; ?></label><div class="col-sm-6"><?php echo $productTypeInfoArray->last_modified; ?></div></div>
+                  <div class="col-sm-6"><label class="col-sm-6"><?php echo TEXT_PRODUCTS; ?></label><div class="col-sm-6"><?php echo $productTypeInfoArray->products_count; ?></div></div>
                 </div>
                 <div class="row"><?php echo zen_draw_separator('pixel_black.gif', '100%', '1') ?></div>
                 <div class="alert alert-info"><?php echo TEXT_INTRO_PRODUCT_TYPES; ?></div>

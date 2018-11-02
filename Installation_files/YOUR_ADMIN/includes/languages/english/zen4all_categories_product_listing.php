@@ -208,3 +208,12 @@ define('WARNING_PRODUCTS_IN_TOP_INFO', 'WARNING: You have Products in the Top Le
   define('TEXT_COPY_DISCOUNTS','Copy Product Quantity Discounts to Duplicate?');
   define('TEXT_COPY_DISCOUNTS_YES','Yes');
   define('TEXT_COPY_DISCOUNTS_NO','No');
+
+  define('TEXT_LISTING_EDIT', 'Edit');
+  define('TEXT_LISTING_DELETE', 'Delete');
+  define('TEXT_LISTING_MOVE', 'Move');
+  define('TEXT_LISTING_EDIT_META_TAGS', 'Edit Meta Tags');
+  define('TEXT_LISTING_COPY', 'Copy');
+  define('TEXT_LISTING_IMAGE_HANDLER', 'Imge Handler');
+  define('TEXT_LISTING_ATTRIBUTES', 'Attributes');
+  define('TEXT_LISTING_PRICE_MANAGER', 'Price Manager');
