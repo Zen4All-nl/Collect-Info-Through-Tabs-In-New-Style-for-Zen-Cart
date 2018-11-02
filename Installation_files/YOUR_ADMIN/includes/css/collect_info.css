@@ -55,6 +55,7 @@
 .fa-folder {
     text-shadow: 1px 1px 1px rgba(1,1,1,0.5);
 }
+/*
 #datepicker i {
     position: absolute;
     bottom: 10px;
@@ -62,6 +63,7 @@
     top: auto;
     cursor: pointer;
 }
+*/
 /*
   label.btn span {
         font-size: 1.5em;
@@ -121,6 +123,9 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 }
 .align-middle{
     vertical-align: middle !important;
+}
+.flagNotActive {
+    opacity:0.50;
 }
 @media (min-width: 768px) {
     .row-eq-height {

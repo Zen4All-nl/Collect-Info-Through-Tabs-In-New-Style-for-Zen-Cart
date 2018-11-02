@@ -1,3 +1,12 @@
+<?php
+// attributes images
+$attributeDirInfo = zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES);
+if ($attributeValuesArray['attributes_image'] != '') {
+  $attributeDefaultDirectory = substr($attributeValuesArray['attributes_image'], 0, strpos($attributeValuesArray['attributes_image'], '/') + 1);
+} else {
+  $attributeDefaultDirectory = 'attributes/';
+}
+?>
 <!-- Edit Attribute modal-->
 <div id="editAttributeValueModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <form name="edit_attribute" method="post" enctype="multipart/form-data" id="attributeEditForm">
@@ -126,11 +135,104 @@
           <!-- eof: Edit Prices -->
           <h5><?php echo TEXT_ATTRIBUTES_FLAGS; ?></h5>
           <div class="row row-eq-height" id="attributeFlags">
-            <!-- Content is placed with AJAX -->
+            <div class="col-sm-2 pt-5 pb-5" style="background-color: #ff0;">
+                <?php echo zen_draw_label(TEXT_ATTRIBUTES_DISPLAY_ONLY, 'attributes_display_only', 'class="control-label"'); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_display_only" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_display_only" data-title="1"><?php echo TEXT_YES; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('attributes_display_only', '', 'class="attributes_display_only"'); ?>
+              </div>
+            </div>
+            <div class="col-sm-2 pt-5 pb-5" style="background-color: #2c54f5;">
+                <?php echo zen_draw_label(TEXT_ATTRIBUTES_IS_FREE, 'product_attribute_is_free', 'class="control-label"'); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-xs btn-info" data-toggle="product_attribute_is_free" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-xs btn-info" data-toggle="product_attribute_is_free" data-title="1"><?php echo TEXT_YES; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('product_attribute_is_free', '', 'class="product_attribute_is_free"'); ?>
+              </div>
+            </div>
+            <div class="col-sm-2 pt-5 pb-5" style="background-color: #ffa346;">
+                <?php echo zen_draw_label(TEXT_ATTRIBUTES_DEFAULT, 'attributes_default', 'class="control-label"'); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_default" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_default" data-title="1"><?php echo TEXT_YES; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('attributes_default', '', 'class="attributes_default"'); ?>
+              </div>
+            </div>
+            <div class="col-sm-2 pt-5 pb-5" style="background-color: #f0f;">
+                <?php echo zen_draw_label(TEXT_ATTRIBUTE_IS_DISCOUNTED, 'attributes_discounted', 'class="control-label"'); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_discounted" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_discounted" data-title="1"><?php echo TEXT_YES; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('attributes_discounted', '', 'class="attributes_discounted"'); ?>
+              </div>
+            </div>
+            <div class="col-sm-2 pt-5 pb-5" style="background-color: #d200f0;">
+                <?php echo zen_draw_label(TEXT_ATTRIBUTE_PRICE_BASE_INCLUDED, 'attributes_price_base_included', 'class="control-label"'); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_price_base_included" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_price_base_included" data-title="1"><?php echo TEXT_YES; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('attributes_price_base_included', '', 'class="attributes_price_base_included"'); ?>
+              </div>
+            </div>
+            <div class="col-sm-2 pt-5 pb-5" style="background-color: #FF0606;">
+                <?php echo zen_draw_label(TEXT_ATTRIBUTES_REQUIRED, 'attributes_required', 'class="control-label"'); ?>
+              <div class="input-group">
+                <div class="radioBtn btn-group">
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_required" data-title="0"><?php echo TEXT_NO; ?></a>
+                  <a class="btn btn-xs btn-info" data-toggle="attributes_required" data-title="1"><?php echo TEXT_YES; ?></a>
+                </div>
+                <?php echo zen_draw_hidden_field('attributes_required', '', 'class="attributes_required"'); ?>
+              </div>
+            </div>
           </div>
           <?php if (ATTRIBUTES_ENABLED_IMAGES == 'true') { ?>
             <h5><?php echo TEXT_ATTRIBUTES_IMAGE; ?></h5>
             <div id="attributeImage">
+              <div class="row">
+                <div class="col-sm-2 attributeImage">
+                  <!-- Content is placed with AJAX -->
+                  <label class="attributeImageName"></label>
+                </div>
+                <div class="col-sm-10">
+                    <?php echo zen_draw_file_field('attributes_image', '', 'class="form-control"'); ?>
+                    <?php echo zen_draw_hidden_field('attributes_previous_image'); ?>
+                </div>
+              </div>
+              <div class="row">&nbsp;</div>
+              <div class="row">
+                <div class="col-sm-6"><?php echo zen_draw_label(TEXT_ATTRIBUTES_IMAGE_DIR, 'img_dir', 'class="control-label"'); ?><?php echo zen_draw_pull_down_menu('img_dir', $attributeDirInfo, $attributeDefaultDirectory, 'class="form-control"'); ?></div>
+                <div class="col-xs-6 col-sm-3">
+                    <?php echo zen_draw_label(TEXT_IMAGES_OVERWRITE, 'attributes_overwrite', 'class="control-label"'); ?>
+                  <div class="input-group">
+                    <div class="radioBtn btn-group">
+                      <a class="btn btn-info active" data-toggle="attributes_overwrite" data-title="0"><?php echo TEXT_NO; ?></a>
+                      <a class="btn btn-info notActive" data-toggle="attributes_overwrite" data-title="1"><?php echo TEXT_YES; ?></a>
+                    </div>
+                    <?php echo zen_draw_hidden_field('attributes_overwrite', '0', 'class="attributes_overwrite"'); ?>
+                  </div>
+                </div>
+                <div class="col-xs-6 col-sm-3">
+                    <?php echo zen_draw_label(TEXT_IMAGES_DELETE, 'attributes_image_delete', 'class="control-label"'); ?>
+                  <div class="input-group">
+                    <div class="radioBtn btn-group">
+                      <a class="btn btn-info notActive" data-toggle="attributes_image_delete" data-title="0"><?php echo TABLE_HEADING_NO; ?></a>
+                      <a class="btn btn-info active" data-toggle="attributes_image_delete" data-title="1"><?php echo TABLE_HEADING_YES; ?></a>
+                    </div>
+                    <?php echo zen_draw_hidden_field('attributes_image_delete', '1', 'class="attributes_image_delete"'); ?>
+                  </div>
+                </div>
+              </div>
               <!-- Content is placed with AJAX -->
             </div>
             <hr style="border: 1px solid #ccc; margin: 10px 0;">

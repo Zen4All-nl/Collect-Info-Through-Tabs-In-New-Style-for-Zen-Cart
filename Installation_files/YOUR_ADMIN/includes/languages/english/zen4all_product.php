@@ -73,8 +73,8 @@ define('TEXT_PRODUCTS_VIRTUAL', 'Product is Virtual:');
 define('TEXT_PRODUCTS_IS_ALWAYS_FREE_SHIPPING', 'Always Free Shipping:');
 define('TEXT_PRODUCTS_QTY_BOX_STATUS', 'Products Quantity Box Shows:');
 define('TEXT_PRODUCTS_DATE_AVAILABLE', 'Date Available:');
-define('TEXT_PRODUCT_AVAILABLE', 'In Stock');
-define('TEXT_PRODUCT_NOT_AVAILABLE', 'Out of Stock');
+define('TEXT_PRODUCT_AVAILABLE', 'Enabled');
+define('TEXT_PRODUCT_NOT_AVAILABLE', 'Disabled');
 define('TEXT_PRODUCT_IS_VIRTUAL', 'Yes, Skip Shipping Address');
 define('TEXT_PRODUCT_NOT_VIRTUAL', 'No, Shipping Address Required');
 define('TEXT_PRODUCT_IS_ALWAYS_FREE_SHIPPING', 'Yes, Always Free Shipping');
@@ -113,8 +113,8 @@ define('TEXT_COPY_AS_DUPLICATE', 'Duplicate product');
   define('TEXT_COPY_ATTRIBUTES_NO','No');
 
 // Products and Discount Copy Options
-  define('TEXT_COPY_DISCOUNTS_ONLY','Only used for Duplicate Products with Discounts ...');
-  define('TEXT_COPY_DISCOUNTS','Copy Product Discounts to Duplicate?');
+  define('TEXT_COPY_DISCOUNTS_ONLY','Only used for Duplicate Products with Quantity Discounts ...');
+  define('TEXT_COPY_DISCOUNTS','Copy Product Quantity Discounts to Duplicate?');
   define('TEXT_COPY_DISCOUNTS_YES','Yes');
   define('TEXT_COPY_DISCOUNTS_NO','No');
 
@@ -190,4 +190,9 @@ define('TEXT_COPY_AS_DUPLICATE', 'Duplicate product');
   define('TEXT_ACTION', 'Action');
   define('TEXT_CLICK_TO_ENLARGE', 'larger image');
   define('TEXT_IMAGES_DELETE_NOTE', '');
+  define('IMAGE_PREVIEW', 'Image preview');
+  define('TEXT_CHANGE_IMAGE', 'Change image');
+  define('TEXT_ADD_IMAGE', 'Add image');
+  define('TEXT_RENAME_ADDITIONAL_IMAGES', 'Rename additional images');
+  define('TEXT_ADDITIONAL_IMAGES', 'Additional images');
   /* EOF Zen4All - CITTINS - 2 of 2 */

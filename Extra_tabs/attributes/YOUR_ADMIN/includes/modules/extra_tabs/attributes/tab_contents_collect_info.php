@@ -39,6 +39,10 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
     .attributes_required button{
         background-color:#FF0606;
     }
+    .pt-5{padding-top: 5px;}
+    .pb-5{padding-bottom: 5px;}
+    .pl-5{padding-left: 5px;}
+    .pr-5{padding-right: 5px;}
   </style>
   <div class="row">
   <div class="col-sm-2">
@@ -86,6 +90,10 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
           <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
           <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
         </td>
+        <td class="text-center attributes_discounted">
+          <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
+          <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
+        </td>
         <td class="text-center attributes_price_base_included">
           <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
           <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
@@ -94,7 +102,6 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
           <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true"></i></button>
           <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
         </td>
-        <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_red_off.gif') . zen_image(DIR_WS_IMAGES . 'icon_red_on.gif'); ?></td>
         <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_status_yellow.gif'); ?></td>
         <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_status_green.gif') . '&nbsp;' . zen_image(DIR_WS_IMAGES . 'icon_status_red.gif'); ?></td>
       </tr>
@@ -180,7 +187,7 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
               <td <?php echo 'id="option-value-row-' . $attribute['products_attributes_id'] . '-h"'; ?> class="text-center align-middle">
                 <span class="attributes_display_only">
                     <?php if ($attribute['attributes_display_only'] == '0') { ?>
-                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_display_only"'; ?> class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_display_only');" title="<?php echo LEGEND_ATTRIBUTES_DISPLAY_ONLY; ?>"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i>
+                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_display_only"'; ?> class="btn btn-xs btn-default flagNotActive" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_display_only');" title="<?php echo LEGEND_ATTRIBUTES_DISPLAY_ONLY; ?>"><i class="fa fa-times" aria-hidden="true"></i>
                     </button>
                   <?php } else { ?>
                     <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_display_only"'; ?> class="btn btn-xs btn-default" onClick="switchFlag('0', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_display_only');" title="<?php echo LEGEND_ATTRIBUTES_DISPLAY_ONLY; ?>"><i class="fa fa-check" aria-hidden="true"></i>
@@ -189,8 +196,8 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
                 </span>
                 <span class="product_attribute_is_free">
                     <?php if ($attribute['product_attribute_is_free'] == '0') { ?>
-                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-product_attribute_is_free"'; ?> class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'product_attribute_is_free');" title="<?php echo LEGEND_ATTRIBUTES_IS_FREE; ?>">
-                      <i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i>
+                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-product_attribute_is_free"'; ?> class="btn btn-xs btn-default flagNotActive" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'product_attribute_is_free');" title="<?php echo LEGEND_ATTRIBUTES_IS_FREE; ?>">
+                      <i class="fa fa-times" aria-hidden="true"></i>
                     </button>
                   <?php } else { ?>
                     <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-product_attribute_is_free"'; ?> class="btn btn-xs btn-default" onClick="switchFlag('0', '<?php echo $attribute['products_attributes_id']; ?>', 'product_attribute_is_free');" title="<?php echo LEGEND_ATTRIBUTES_IS_FREE; ?>">
@@ -200,8 +207,8 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
                 </span>
                 <span class="attributes_default">
                     <?php if ($attribute['attributes_default'] == '0') { ?>
-                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_default"'; ?> class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_default');" title="<?php echo LEGEND_ATTRIBUTES_DEFAULT; ?>">
-                      <i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i>
+                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_default"'; ?> class="btn btn-xs btn-default flagNotActive" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_default');" title="<?php echo LEGEND_ATTRIBUTES_DEFAULT; ?>">
+                      <i class="fa fa-times" aria-hidden="true"></i>
                     </button>
                   <?php } else { ?>
                     <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_default"'; ?> class="btn btn-xs btn-default" onClick="switchFlag('0', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_default');" title="<?php echo LEGEND_ATTRIBUTES_DEFAULT; ?>">
@@ -211,8 +218,8 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
                 </span>
                 <span class="attributes_discounted">
                     <?php if ($attribute['attributes_discounted'] == '0') { ?>
-                    <button type="button" <?php echo 'id="flag-'. $attribute['products_attributes_id'] . '-attributes_discounted"'; ?> class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_discounted');" title="<?php echo LEGEND_ATTRIBUTE_IS_DISCOUNTED; ?>">
-                      <i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i>
+                    <button type="button" <?php echo 'id="flag-'. $attribute['products_attributes_id'] . '-attributes_discounted"'; ?> class="btn btn-xs btn-default flagNotActive" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_discounted');" title="<?php echo LEGEND_ATTRIBUTE_IS_DISCOUNTED; ?>">
+                      <i class="fa fa-times" aria-hidden="true"></i>
                     </button>
                   <?php } else { ?>
                     <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_discounted"'; ?> class="btn btn-xs btn-default" onClick="switchFlag('0', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_discounted');" title="<?php echo LEGEND_ATTRIBUTE_IS_DISCOUNTED; ?>">
@@ -222,8 +229,8 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
                 </span>
                 <span class="attributes_price_base_included">
                     <?php if ($attribute['attributes_price_base_included'] == '0') { ?>
-                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_price_base_included"'; ?> class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_price_base_included');" title="<?php echo LEGEND_ATTRIBUTE_PRICE_BASE_INCLUDED; ?>">
-                      <i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i>
+                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_price_base_included"'; ?> class="btn btn-xs btn-default flagNotActive" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_price_base_included');" title="<?php echo LEGEND_ATTRIBUTE_PRICE_BASE_INCLUDED; ?>">
+                      <i class="fa fa-times" aria-hidden="true"></i>
                     </button>
                   <?php } else { ?>
                     <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_price_base_included"'; ?> class="btn btn-xs btn-default" onClick="switchFlag('0', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_price_base_included');" title="<?php echo LEGEND_ATTRIBUTE_PRICE_BASE_INCLUDED; ?>">
@@ -233,7 +240,7 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
                 </span>
                 <span class="attributes_required">
                     <?php if ($attribute['attributes_required'] == '0') { ?>
-                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_required"'; ?> class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_required');" title="<?php echo LEGEND_ATTRIBUTES_REQUIRED; ?>">
+                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_required"'; ?> class="btn btn-xs btn-default flagNotActive" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_required');" title="<?php echo LEGEND_ATTRIBUTES_REQUIRED; ?>">
                       <i class="fa fa-times" aria-hidden="true"></i>
                     </button>
                   <?php } else { ?>
