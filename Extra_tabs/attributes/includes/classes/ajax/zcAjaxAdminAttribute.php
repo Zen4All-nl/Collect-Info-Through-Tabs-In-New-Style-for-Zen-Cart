@@ -6,7 +6,6 @@
  * and open the template in the editor.
  */
 
-
 class zcAjaxAdminAttribute extends base {
 
   public function updateValueDropDown() {
@@ -139,67 +138,8 @@ class zcAjaxAdminAttribute extends base {
     }
 
     if (ATTRIBUTES_ENABLED_IMAGES == 'true') {
-// set image overwrite
-      $attr_on_overwrite = true;
-      $attr_off_overwrite = false;
-// set image delete
-      $attr_on_image_delete = false;
-      $attr_off_image_delete = true;
 
-// attributes images
-      $attr_dir_info = zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES);
-      if ($attributeValuesArray['attributes_image'] != '') {
-        $attr_default_directory = substr($attributeValuesArray['attributes_image'], 0, strpos($attributeValuesArray['attributes_image'], '/') + 1);
-      } else {
-        $attr_default_directory = 'attributes/';
-      }
-      $attributeImage = '';
-      $attributeImage .= '<div class="row">' . PHP_EOL;
-      $attributeImage .= '<div class="col-sm-2">' . PHP_EOL;
-      $attributeImage .= ($attributeValuesArray['attributes_image'] != '' ? zen_image(DIR_WS_CATALOG_IMAGES . $attributeValuesArray['attributes_image'], $attributeValuesArray['attributes_image'], '', '', 'class="img-thumbnail"') : 'No image selected') . PHP_EOL;
-      $attributeImage .= $attributeValuesArray['attributes_image'] . PHP_EOL;
-      $attributeImage .= '</div>' . PHP_EOL;
-      $attributeImage .= '<div class="col-sm-10">' . PHP_EOL;
-      $attributeImage .= zen_draw_file_field('attributes_image', '', 'class="form-control"') . zen_draw_hidden_field('attributes_previous_image', $attributeValuesArray['attributes_image']) . PHP_EOL;
-      $attributeImage .= '</div>' . PHP_EOL;
-      $attributeImage .= '</div>' . PHP_EOL;
-      $attributeImage .= '<div class="row">' . PHP_EOL;
-      $attributeImage .= '<div class="col-sm-6">' . zen_draw_label(TEXT_ATTRIBUTES_IMAGE_DIR, 'img_dir', 'class="control-label"') . zen_draw_pull_down_menu('img_dir', $attr_dir_info, $attr_default_directory, 'class="form-control"') . '</div>' . PHP_EOL;
-      $attributeImage .= '<div class="col-xs-6 col-sm-3">' . PHP_EOL;
-      $attributeImage .= zen_draw_label(TEXT_IMAGES_OVERWRITE, 'attributes_overwrite', 'çlass="control-label"') . PHP_EOL;
-      $attributeImage .= '<div class="btn-group" data-toggle="buttons">' . PHP_EOL;
-      $attributeImage .= '<label class="btn ' . ($attr_off_overwrite == true ? 'active' : '') . '">' . PHP_EOL;
-      $attributeImage .= zen_draw_radio_field('attributes_overwrite', '0', $attr_off_overwrite) . PHP_EOL;
-      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . PHP_EOL;
-      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . PHP_EOL;
-      $attributeImage .= '<span>' . TABLE_HEADING_NO . '</span>' . PHP_EOL;
-      $attributeImage .= '</label>' . PHP_EOL;
-      $attributeImage .= '<label class="btn ' . ($attr_on_overwrite == true ? 'active' : '') . '">' . PHP_EOL;
-      $attributeImage .= zen_draw_radio_field('attributes_overwrite', '1', $attr_on_overwrite) . PHP_EOL;
-      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . PHP_EOL;
-      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . PHP_EOL;
-      $attributeImage .= '<span>' . TABLE_HEADING_YES . '</span>' . PHP_EOL;
-      $attributeImage .= '</label>' . PHP_EOL;
-      $attributeImage .= '</div>' . PHP_EOL;
-      $attributeImage .= '</div>' . PHP_EOL;
-      $attributeImage .= '<div class="col-xs-6 col-sm-3">' . PHP_EOL;
-      $attributeImage .= zen_draw_label(TEXT_IMAGES_DELETE, 'attributes_image_delete', 'çlass="control-label"') . PHP_EOL;
-      $attributeImage .= '<div class="btn-group" data-toggle="buttons">' . PHP_EOL;
-      $attributeImage .= '<label class="btn ' . ($attr_off_image_delete == true ? 'active' : '') . '">' . PHP_EOL;
-      $attributeImage .= zen_draw_radio_field('attributes_image_delete', '0', $attr_off_image_delete) . PHP_EOL;
-      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . PHP_EOL;
-      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . PHP_EOL;
-      $attributeImage .= '<span>' . TABLE_HEADING_NO . '</span>' . PHP_EOL;
-      $attributeImage .= '</label>' . PHP_EOL;
-      $attributeImage .= '<label class="btn ' . ($attr_on_image_delete == true ? 'active' : '') . '">' . PHP_EOL;
-      $attributeImage .= zen_draw_radio_field('attributes_image_delete', '1', $attr_on_image_delete) . PHP_EOL;
-      $attributeImage .= '<i class="fa fa-circle-o fa-lg"></i>' . PHP_EOL;
-      $attributeImage .= '<i class="fa fa-dot-circle-o fa-lg"></i>' . PHP_EOL;
-      $attributeImage .= '<span>' . TABLE_HEADING_YES . '</span>' . PHP_EOL;
-      $attributeImage .= '</label>' . PHP_EOL;
-      $attributeImage .= '</div>' . PHP_EOL;
-      $attributeImage .= '</div>' . PHP_EOL;
-      $attributeImage .= '</div>' . PHP_EOL;
+      $attributeImage = ($attributeValuesArray['attributes_image'] != '' ? zen_image(DIR_WS_CATALOG_IMAGES . $attributeValuesArray['attributes_image'], $attributeValuesArray['attributes_image'], '', '', 'class="img-thumbnail"') : '');
     }
     $optionValues = $db->Execute("SELECT pov.products_options_values_id, pov.products_options_values_name
                                   FROM " . TABLE_PRODUCTS_OPTIONS_VALUES . " pov
@@ -218,66 +158,9 @@ class zcAjaxAdminAttribute extends base {
     $optionValuesPullDown = zen_draw_pull_down_menu('values_id', $optionValuesArray, $attributeValuesArray['options_values_id'], 'size="10" class="form-control"');
     // set flag radio's
 
-    $attributeFlags = '';
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #ff0;padding-bottom: 10px;">' . PHP_EOL;
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_DISPLAY_ONLY, 'attributes_display_only', 'class="control-label"') . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('attributes_display_only', '0', ($attributeValuesArray['attributes_display_only'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">';
-    $attributeFlags .= zen_draw_radio_field('attributes_display_only', '1', ($attributeValuesArray['attributes_display_only'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '</div>' . PHP_EOL;
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #2c54f5;padding-bottom: 10px;">' . PHP_EOL;
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_IS_FREE, 'product_attribute_is_free', 'class="control-label"') . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('product_attribute_is_free', '0', ($attributeValuesArray['product_attribute_is_free'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('product_attribute_is_free', '1', ($attributeValuesArray['product_attribute_is_free'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '</div>' . PHP_EOL;
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #ffa346;padding-bottom: 10px;">' . PHP_EOL;
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_DEFAULT, 'product_attribute_is_free', 'class="control-label"') . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('attributes_default', '0', ($attributeValuesArray['attributes_default'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('attributes_default', '1', ($attributeValuesArray['attributes_default'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '</div>' . PHP_EOL;
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #f0f;padding-bottom: 10px;">' . PHP_EOL;
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTE_IS_DISCOUNTED, 'attributes_discounted', 'class="control-label"') . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('attributes_discounted', '0', ($attributeValuesArray['attributes_discounted'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('attributes_discounted', '1', ($attributeValuesArray['attributes_discounted'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '</div>' . PHP_EOL;
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #d200f0;padding-bottom: 10px;">' . PHP_EOL;
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTE_PRICE_BASE_INCLUDED, 'attributes_price_base_included', 'class="control-label"') . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('attributes_price_base_included', '0', ($attributeValuesArray['attributes_price_base_included'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('attributes_price_base_included', '1', ($attributeValuesArray['attributes_price_base_included'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '</div>' . PHP_EOL;
-    $attributeFlags .= '<div class="col-sm-2" style="background-color: #FF0606;padding-bottom: 10px;">' . PHP_EOL;
-    $attributeFlags .= zen_draw_label(TEXT_ATTRIBUTES_REQUIRED, 'attributes_required', 'class="control-label"') . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('attributes_required', '0', ($attributeValuesArray['attributes_required'] ? false : true)) . TABLE_HEADING_NO . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '<label class="radio-inline">' . PHP_EOL;
-    $attributeFlags .= zen_draw_radio_field('attributes_required', '1', ($attributeValuesArray['attributes_required'] ? true : false)) . TABLE_HEADING_YES . PHP_EOL;
-    $attributeFlags .= '</label>' . PHP_EOL;
-    $attributeFlags .= '</div>' . PHP_EOL;
-
     return([
       'attributeImage' => $attributeImage,
       'attributeValuesArray' => $attributeValuesArray,
-      'attributeFlags' => $attributeFlags,
       'optionValuesPullDown' => $optionValuesPullDown]);
   }
 
@@ -673,38 +556,13 @@ class zcAjaxAdminAttribute extends base {
     $optionValuesRow['e'] = $price_prefix . '&nbsp;' . $value_price;
     $optionValuesRow['f'] = $products_attributes_weight_prefix . '&nbsp;' . $products_attributes_weight;
     $optionValuesRow['g'] = $products_options_sort_order;
-    if ($attributes_display_only == '0') {
-      $optionValuesRow['h']['attributes_display_only'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_display_only" class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag(\'1\', \'' . (int)$attribute_id . '\', \'attributes_display_only\');" title="' . LEGEND_ATTRIBUTES_DISPLAY_ONLY . '"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>';
-    } else {
-      $optionValuesRow['h']['attributes_display_only'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_display_only" class="btn btn-xs btn-default" onClick="switchFlag(\'0\', \'' . (int)$attribute_id . '\', \'attributes_display_only\');" title="' . LEGEND_ATTRIBUTES_DISPLAY_ONLY . '"><i class="fa fa-check" aria-hidden="true"></i></button>';
-    }
-    if ($product_attribute_is_free == '0') {
-      $optionValuesRow['h']['product_attribute_is_free'] = '<button type="button" id="flag-' . (int)$attribute_id . '-product_attribute_is_free" class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag(\'1\', \'' . (int)$attribute_id . '\', \'product_attribute_is_free\');" title="' . LEGEND_ATTRIBUTES_IS_FREE . '"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>';
-    } else {
-      $optionValuesRow['h']['product_attribute_is_free'] = '<button type="button" id="flag-' . (int)$attribute_id . '-product_attribute_is_free" class="btn btn-xs btn-default" onClick="switchFlag(\'0\', \'' . (int)$attribute_id . '\', \'product_attribute_is_free\');" title="' . LEGEND_ATTRIBUTES_IS_FREE . '"><i class="fa fa-check" aria-hidden="true"></i></button>';
-    }
-    if ($attributes_default == '0') {
-      $optionValuesRow['h']['attributes_default'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_default" class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag(\'1\', \'' . (int)$attribute_id . '\', \'attributes_default\');" title="' . LEGEND_ATTRIBUTES_DEFAULT . '"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>';
-    } else {
-      $optionValuesRow['h']['attributes_default'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_default" class="btn btn-xs btn-default" onClick="switchFlag(\'0\', \'' . (int)$attribute_id . '\', \'attributes_default\');" title="' . LEGEND_ATTRIBUTES_DEFAULT . '"><i class="fa fa-check" aria-hidden="true"></i></button>';
-    }
-    if ($attributes_discounted == '0') {
-      $optionValuesRow['h']['attributes_discounted'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_discounted" class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag(\'1\', \'' . (int)$attribute_id . '\', \'attributes_discounted\');" title="' . LEGEND_ATTRIBUTE_IS_DISCOUNTED . '"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>';
-    } else {
-      $optionValuesRow['h']['attributes_discounted'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_discounted" class="btn btn-xs btn-default" onClick="switchFlag(\'0\', \'' . (int)$attribute_id . '\', \'attributes_discounted\');" title="' . LEGEND_ATTRIBUTE_IS_DISCOUNTED . '"><i class="fa fa-check" aria-hidden="true"></i></button>';
-    }
-    if ($attributes_price_base_included == '0') {
-      $optionValuesRow['h']['attributes_price_base_included'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_price_base_included" class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag(\'1\', \'' . (int)$attribute_id . '\', \'attributes_price_base_included\');" title="' . LEGEND_ATTRIBUTE_PRICE_BASE_INCLUDED . '"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>';
-    } else {
-      $optionValuesRow['h']['attributes_price_base_included'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_price_base_included" class="btn btn-xs btn-default" onClick="switchFlag(\'0\', \'' . (int)$attribute_id . '\', \'attributes_price_base_included\');" title="' . LEGEND_ATTRIBUTE_PRICE_BASE_INCLUDED . '"><i class="fa fa-check" aria-hidden="true"></i></button>';
-    }
-    if ($attributes_required == '0') {
-      $optionValuesRow['h']['attributes_required'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_required" class="btn btn-xs btn-default" style="opacity:0.50;" onClick="switchFlag(\'1\', \'' . (int)$attribute_id . '\', \'attributes_required\');" title="' . LEGEND_ATTRIBUTES_REQUIRED . '"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>';
-    } else {
-      $optionValuesRow['h']['attributes_required'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_required" class="btn btn-xs btn-default" onClick="switchFlag(\'0\', \'' . (int)$attribute_id . '\', \'attributes_required\');" title="' . LEGEND_ATTRIBUTES_REQUIRED . '"><i class="fa fa-check" aria-hidden="true"></i></button>';
-    }
+    $optionValuesRow['h']['attributes_display_only'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_display_only" class="btn btn-xs btn-default ' . ($attributes_display_only == '0' ? 'flagNotActive' : '') . '" onClick="switchFlag(\'' . ($attributes_display_only == '0' ? '1' : '0') . '\', \'' . (int)$attribute_id . '\', \'attributes_display_only\');" title="' . LEGEND_ATTRIBUTES_DISPLAY_ONLY . '"><i class="fa ' . ($attributes_display_only == '0' ? 'fa-times' : 'fa-check') . '" aria-hidden="true"></i></button>';
+    $optionValuesRow['h']['product_attribute_is_free'] = '<button type="button" id="flag-' . (int)$attribute_id . '-product_attribute_is_free" class="btn btn-xs btn-default ' . ($product_attribute_is_free == '0' ? 'flagNotActive' : '') . '" onClick="switchFlag(\'' . ($product_attribute_is_free == '0' ? '1' : '0') . '\', \'' . (int)$attribute_id . '\', \'product_attribute_is_free\');" title="' . LEGEND_ATTRIBUTES_IS_FREE . '"><i class="fa ' . ($product_attribute_is_free == '0' ? 'fa-times' : 'fa-check') . '" aria-hidden="true"></i></button>';
+    $optionValuesRow['h']['attributes_default'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_default" class="btn btn-xs btn-default ' . ($attributes_default == '0' ? 'flagNotActive' : '') . '" onClick="switchFlag(\'' . ($attributes_default == '0' ? '1' : '0') . '\', \'' . (int)$attribute_id . '\', \'attributes_default\');" title="' . LEGEND_ATTRIBUTES_DEFAULT . '"><i class="fa ' . ($attributes_default == '0' ? 'fa-times' : 'fa-check') . '" aria-hidden="true"></i></button>';
+    $optionValuesRow['h']['attributes_discounted'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_discounted" class="btn btn-xs btn-default ' . ($attributes_discounted == '0' ? 'flagNotActive' : '') . '" onClick="switchFlag(\'' . ($attributes_discounted == '0' ? '1' : '0') . '\', \'' . (int)$attribute_id . '\', \'attributes_discounted\');" title="' . LEGEND_ATTRIBUTE_IS_DISCOUNTED . '"><i class="fa ' . ($attributes_discounted == '0' ? 'fa-times' : 'fa-check') . '" aria-hidden="true"></i></button>';
+    $optionValuesRow['h']['attributes_price_base_included'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_price_base_included" class="btn btn-xs btn-default ' . ($attributes_price_base_included == '0' ? 'flagNotActive' : '') . '" onClick="switchFlag(\'' . ($attributes_price_base_included == '0' ? '1' : '0') . '\', \'' . (int)$attribute_id . '\', \'attributes_price_base_included\');" title="' . LEGEND_ATTRIBUTE_PRICE_BASE_INCLUDED . '"><i class="fa ' . ($attributes_price_base_included == '0' ? 'fa-times' : 'fa-check') . '" aria-hidden="true"></i></button>';
+    $optionValuesRow['h']['attributes_required'] = '<button type="button" id="flag-' . (int)$attribute_id . '-attributes_required" class="btn btn-xs btn-default ' . ($attributes_required == '0' ? 'flagNotActive' : '') . '" onClick="switchFlag(\'' . ($attributes_required == '0' ? '1' : '0') . '\', \'' . (int)$attribute_id . '\', \'attributes_required\');" title="' . LEGEND_ATTRIBUTES_REQUIRED . '"><i class="fa ' . ($attributes_required == '0' ? 'fa-times' : 'fa-check') . '" aria-hidden="true></i></button>';
     $optionValuesRow['i'] = $attributes_price_final . $new_attributes_price . ' ' . $attributes_price_final_onetime;
-    $optionValuesRow['j'] = '';
 
     return([
       'optionValuesRow' => $optionValuesRow,
@@ -717,17 +575,11 @@ class zcAjaxAdminAttribute extends base {
   public function deleteOptionConfirm() {
     $data = new objectInfo($_POST);
 
-    $modalContent = '';
-    $modalContent .= '<p class="danger">' . TEXT_DELETE_ATTRIBUTES_OPTION_NAME_VALUES . '</p>';
-    $modalContent .= '<div class="form-group">';
-    $modalContent .= '<p class="form-control">' . TEXT_INFO_PRODUCT_NAME . zen_get_products_name($data->products_id, $_SESSION['languages_id']) . '</p>';
-    $modalContent .= '<p class="form-control">' . TEXT_INFO_PRODUCTS_OPTION_NAME . zen_options_name($data->options_id) . '</p>';
-    $modalContent .= '<p class="form-control">' . TEXT_INFO_PRODUCTS_OPTION_ID . $data->options_id . '</p>';
-    $modalContent .= '</div>';
-    $modalContent .= zen_draw_hidden_field('products_id', $data->products_id);
-    $modalContent .= zen_draw_hidden_field('options_id', $data->options_id);
+    $optionsName =  zen_options_name($data->options_id);
+    $optionId = $data->options_id;
     return([
-      'modalContent' => $modalContent]);
+      'optionsName' => $optionsName,
+      'optionId' => $optionId]);
   }
 
   public function deleteOption() {
@@ -763,16 +615,13 @@ class zcAjaxAdminAttribute extends base {
     $attribute = $db->Execute("SELECT options_id,options_values_id
                                FROM " . TABLE_PRODUCTS_ATTRIBUTES . "
                                WHERE products_attributes_id = " . (int)$data->attributes_id);
-    $modalContent = '';
-    $modalContent .= '<p class="danger">' . TEXT_DELETE_ATTRIBUTES_VALUE . '</p>';
-    $modalContent .= '<div class="form-group">';
-    $modalContent .= '<p class="form-control">' . TEXT_INFO_PRODUCT_NAME . zen_get_products_name($data->products_id, $_SESSION['languages_id']) . '</p>';
-    $modalContent .= '<p class="form-control">' . TEXT_INFO_PRODUCTS_VALUE_NAME . zen_options_name($attribute->fields['options_id']) . ' => ' . zen_values_name($attribute->fields['options_values_id']) . '</p>';
-    $modalContent .= '</div>';
-    $modalContent .= zen_draw_hidden_field('attributes_id', $data->attributes_id);
-    $modalContent .= zen_draw_hidden_field('view', 'deleteOptionValue');
 
-    return(['modalContent' => $modalContent]);
+    $deleteOptionValueName = zen_options_name($attribute->fields['options_id']) . ' => ' . zen_values_name($attribute->fields['options_values_id']);
+    $attributesId = $data->attributes_id;
+
+    return([
+      'deleteOptionValueName' => $deleteOptionValueName,
+      'attributesId' => $attributesId]);
   }
 
   public function deleteOptionValue() {

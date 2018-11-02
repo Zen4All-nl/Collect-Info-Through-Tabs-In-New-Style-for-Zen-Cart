@@ -39,6 +39,10 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
     .attributes_required button{
         background-color:#FF0606;
     }
+    .pt-5{padding-top: 5px;}
+    .pb-5{padding-bottom: 5px;}
+    .pl-5{padding-left: 5px;}
+    .pr-5{padding-right: 5px;}
   </style>
   <div class="row">
   <div class="col-sm-2">
@@ -86,6 +90,10 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
           <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
           <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
         </td>
+        <td class="text-center attributes_discounted">
+          <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
+          <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
+        </td>
         <td class="text-center attributes_price_base_included">
           <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
           <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
@@ -94,7 +102,6 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
           <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true"></i></button>
           <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
         </td>
-        <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_red_off.gif') . zen_image(DIR_WS_IMAGES . 'icon_red_on.gif'); ?></td>
         <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_status_yellow.gif'); ?></td>
         <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_status_green.gif') . '&nbsp;' . zen_image(DIR_WS_IMAGES . 'icon_status_red.gif'); ?></td>
       </tr>

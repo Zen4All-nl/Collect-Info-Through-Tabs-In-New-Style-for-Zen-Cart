@@ -673,19 +673,19 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                     ?>
                     <td class="text-right"><?php echo $category['sort_order']; ?></td>
                     <td class="text-right">
-                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . ((isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '')); ?>" style="text-decoration: none">
+                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . ((isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '')); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_EDIT; ?>">
                         <div class="fa-stack fa-lg edit">
                           <i class="fa fa-circle fa-stack-2x base"></i>
                           <i class="fa fa-pencil fa-stack-1x overlay" aria-hidden="true"></i>
                         </div>
                       </a>
-                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=delete_category'); ?>" style="text-decoration: none">
+                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=delete_category'); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_DELETE; ?>">
                         <div class="fa-stack fa-lg delete">
                           <i class="fa fa-circle fa-stack-2x base"></i>
                           <i class="fa fa-trash-o fa-stack-1x overlay" aria-hidden="true"></i>
                         </div>
                       </a>
-                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=move_category'); ?>" style="text-decoration: none">
+                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=move_category'); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_MOVE; ?>">
                         <div class="fa-stack fa-lg move">
                           <i class="fa fa-circle fa-stack-2x base"></i>
                           <i class="fa fa-arrows fa-stack-1x overlay" aria-hidden="true"></i>
@@ -695,14 +695,14 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
 // bof: categories meta tags
                       if (zen_get_category_metatags_keywords($category['categories_id'], (int)$_SESSION['languages_id']) or zen_get_category_metatags_description($category['categories_id'], (int)$_SESSION['languages_id'])) {
                         ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=edit_category_meta_tags' . '&activeTab=categoryTabs4'); ?>" style="text-decoration: none">
+                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=edit_category_meta_tags' . '&activeTab=categoryTabs4'); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>">
                           <div class="fa-stack fa-lg metatags-on">
                             <i class="fa fa-circle fa-stack-2x base"></i>
                             <i class="fa fa-asterisk fa-stack-1x overlay" aria-hidden="true"></i>
                           </div>
                         </a>
                       <?php } else { ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=edit_category_meta_tags' . '&activeTab=categoryTabs4'); ?>" style="text-decoration: none">
+                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=edit_category_meta_tags' . '&activeTab=categoryTabs4'); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>">
                           <div class="fa-stack fa-lg metatags-off">
                             <i class="fa fa-circle fa-stack-2x base"></i>
                             <i class="fa fa-asterisk fa-stack-1x overlay" aria-hidden="true"></i>
@@ -873,25 +873,25 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                     ?>
                     <td class="text-right"><?php echo $product['products_sort_order']; ?></td>
                     <td class="text-right">
-                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=new_product' . (isset($_GET['search']) ? '&search=' . $_GET['search'] : '')); ?>" style="text-decoration: none">
+                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=new_product' . (isset($_GET['search']) ? '&search=' . $_GET['search'] : '')); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_EDIT; ?>">
                         <div class="fa-stack fa-lg edit">
                           <i class="fa fa-circle fa-stack-2x base"></i>
                           <i class="fa fa-pencil fa-stack-1x overlay" aria-hidden="true"></i>
                         </div>
                       </a>
-                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=delete_product'); ?>" style="text-decoration: none">
+                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=delete_product'); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_DELETE; ?>">
                         <div class="fa-stack fa-lg delete">
                           <i class="fa fa-circle fa-stack-2x base"></i>
                           <i class="fa fa-trash-o fa-stack-1x overlay" aria-hidden="true"></i>
                         </div>
                       </a>
-                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=move_product'); ?>" style="text-decoration: none">
+                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=move_product'); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_MOVE; ?>">
                         <div class="fa-stack fa-lg move">
                           <i class="fa fa-circle fa-stack-2x base"></i>
                           <i class="fa fa-arrows fa-stack-1x overlay" aria-hidden="true"></i>
                         </div>
                       </a>
-                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=copy_product'); ?>" style="text-decoration: none">
+                      <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=copy_product'); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_COPY; ?>">
                         <div class="fa-stack fa-lg copy">
                           <i class="fa fa-circle fa-stack-2x base"></i>
                           <i class="fa fa-clone fa-stack-1x overlay" aria-hidden="true"></i>
@@ -899,7 +899,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                       </a>
 
                       <?php if (defined('FILENAME_IMAGE_HANDLER') && file_exists(DIR_FS_ADMIN . FILENAME_IMAGE_HANDLER . '.php')) { ?>
-                        <a href="<?php echo zen_href_link(FILENAME_IMAGE_HANDLER, 'products_filter=' . $product['products_id'] . '&current_category_id=' . $current_category_id); ?>" style="text-decoration: none">
+                        <a href="<?php echo zen_href_link(FILENAME_IMAGE_HANDLER, 'products_filter=' . $product['products_id'] . '&current_category_id=' . $current_category_id); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_IMAGE_HANDLER; ?>">
                           <div class="fa-stack fa-lg imagehandler">
                             <i class="fa fa-circle fa-stack-2x base"></i>
                             <i class="fa fa-stack-1x fa-image overlay" aria-hidden="true"></i>
@@ -914,7 +914,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                       <?php
                       if (zen_has_product_attributes($product['products_id'], 'false')) {
                         ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $product['products_id'] . '&action=attribute_features' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" style="text-decoration: none">
+                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $product['products_id'] . '&action=attribute_features' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_ATTRIBUTES; ?>">
                           <div class="fa-stack fa-lg attributes-on">
                             <i class="fa fa-circle fa-stack-2x base"></i>
                             <i class="fa fa-list fa-stack-1x overlay" aria-hidden="true"></i>
@@ -923,7 +923,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                         <?php
                       } else {
                         ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'products_filter=' . $product['products_id'] . '&current_category_id=' . $current_category_id); ?>" style="text-decoration: none">
+                        <a href="<?php echo zen_href_link(FILENAME_ATTRIBUTES_CONTROLLER, 'products_filter=' . $product['products_id'] . '&current_category_id=' . $current_category_id); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_ATTRIBUTES; ?>">
                           <div class="fa-stack fa-lg attributes-off">
                             <i class="fa fa-circle fa-stack-2x base"></i>
                             <i class="fa fa-list fa-stack-1x overlay" aria-hidden="true"></i>
@@ -938,7 +938,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                       <?php
                       if ($zc_products->get_allow_add_to_cart($product['products_id']) == "Y") {
                         ?>
-                        <a href="<?php echo zen_href_link(FILENAME_PRODUCTS_PRICE_MANAGER, 'products_filter=' . $product['products_id'] . '&current_category_id=' . $current_category_id); ?>" style="text-decoration: none">
+                        <a href="<?php echo zen_href_link(FILENAME_PRODUCTS_PRICE_MANAGER, 'products_filter=' . $product['products_id'] . '&current_category_id=' . $current_category_id); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_PRICE_MANAGER; ?>">
                           <div class="fa-stack fa-lg pricemanager-on">
                             <i class="fa fa-circle fa-stack-2x base"></i>
                             <i class="fa fa-stack-1x fa-dollar overlay" aria-hidden="true"></i>
@@ -956,7 +956,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
 // meta tags
                       if (zen_get_metatags_keywords($product['products_id'], (int)$_SESSION['languages_id']) or zen_get_metatags_description($product['products_id'], (int)$_SESSION['languages_id'])) {
                         ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'page=' . $_GET['page'] . '&product_type=' . $product['products_type'] . '&cPath=' . $cPath . '&pID=' . $product['products_id']); ?>" style="text-decoration: none">
+                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'page=' . $_GET['page'] . '&product_type=' . $product['products_type'] . '&cPath=' . $cPath . '&pID=' . $product['products_id']); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>">
                           <div class="fa-stack fa-lg metatags-on">
                             <i class="fa fa-circle fa-stack-2x base"></i>
                             <i class="fa fa-asterisk fa-stack-1x overlay" aria-hidden="true"></i>
@@ -965,7 +965,7 @@ if (is_dir(DIR_FS_CATALOG_IMAGES)) {
                         <?php
                       } else {
                         ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'page=' . $_GET['page'] . '&product_type=' . $product['products_type'] . '&cPath=' . $cPath . '&pID=' . $product['products_id']); ?>" style="text-decoration: none">
+                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'page=' . $_GET['page'] . '&product_type=' . $product['products_type'] . '&cPath=' . $cPath . '&pID=' . $product['products_id']); ?>" style="text-decoration: none" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>">
                           <div class="fa-stack fa-lg metatags-off">
                             <i class="fa fa-circle fa-stack-2x base"></i>
                             <i class="fa fa-asterisk fa-stack-1x overlay" aria-hidden="true"></i>

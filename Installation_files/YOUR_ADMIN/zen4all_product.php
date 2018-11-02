@@ -911,7 +911,7 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
       </div>
     </div>
     <!-- Product preview modal-->
-    <?php // include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
+    <?php include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
     <!-- Autoload Additional Modals -->
     <?php
     $modalNeedle = 'modal_';

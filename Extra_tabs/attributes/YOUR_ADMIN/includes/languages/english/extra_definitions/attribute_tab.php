@@ -38,3 +38,5 @@ define('TITLE_ADD_ATTRIBUTE', 'Add Attribute');
 
 // delete confirm modal
 define('TITLE_CONFIRM_DELETE', 'Confirm Delete');
+define('TEXT_INFO_PRODUCTS_VALUE_NAME', 'Option Value Name');
+define('TEXT_DELETE_ATTRIBUTES_VALUE', 'Confirm deletion of the Option Value for Option Name ...');
