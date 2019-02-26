@@ -27,7 +27,8 @@ $tables = '';
 
 $productTypeFieldsQuery = "SELECT product_type, field_name, sort_order, tab_id
                            FROM " . TABLE_PRODUCT_FIELDS_TO_TYPE . "
-                           WHERE product_type = " . (int)$productType;
+                           WHERE product_type = " . (int)$productType . "
+                           ORDER BY tab_id,sort_order";
 $productTypeFields = $db->Execute($productTypeFieldsQuery);
 $fieldsAvailable = [];
 foreach ($productTypeFields as $productFields) {
@@ -37,7 +38,7 @@ foreach ($productTypeFields as $productFields) {
   ];
   include PRODUCT_FIELDS_INCLUDES_SQL_FOLDER . $productFields['field_name'] . '.php';
 }
-//$pInfo = new objectInfo($parameters);
+
 $productInfo = array_merge_recursive($fieldsAvailable, $parameters);
 
 $extraTabsPath = DIR_WS_MODULES . 'extra_tabs';
@@ -174,7 +175,7 @@ if (!$category_lookup->EOF) {
                 <div id="productTabs<?php echo $tab['sortOrder']; ?>" class="tab-pane fade in <?php echo ($tab['sortOrder'] == '1' ? 'active' : ''); ?>">
                     <?php
                     foreach ($productInfo as $key => $infoField) {
-                      if ($infoField['tabId'] == $tab['sortOrder']) {
+                      if ($infoField['tabId'] == $tab['id']) {
                         ?>
                       <div class="form-group">
                           <?php include PRODUCT_FIELDS_INCLUDES_HTML_OUTPUT_FOLDER . $key . '.php'; ?>
