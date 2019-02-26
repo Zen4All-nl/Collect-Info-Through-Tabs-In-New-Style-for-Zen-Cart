@@ -43,7 +43,7 @@ if ($zc150) { // continue Zen Cart 1.5.0
     if ((int)$configuration_group_id > 0) {
       zen_register_admin_page($admin_page, 'BOX_CATALOG_ZEN4ALL_CATEGORIES_PRODUCT_LISTING', 'FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING', '', 'catalog', 'Y', $configuration_group_id);
 
-      $messageStack->add('Enabled Additional Images Uploader Tools Menu Item', 'success');
+      $messageStack->add('Enabled Zen4All Cittins Categories / Products Listing', 'success');
     }
   }
   $admin_page = 'catalogZen4AllProducts';
@@ -54,7 +54,7 @@ if ($zc150) { // continue Zen Cart 1.5.0
     if ((int)$configuration_group_id > 0) {
       zen_register_admin_page($admin_page, 'BOX_CATALOG_ZEN4ALL_PRODUCTS', 'FILENAME_ZEN4ALL_PRODUCTS', '', 'catalog', 'N', $configuration_group_id);
 
-      $messageStack->add('Enabled Additional Images Uploader Tools Menu Item', 'success');
+      $messageStack->add('Enabled Zen4All Cittins Products Page', 'success');
     }
   }
   $admin_page = 'catalogZen4AllProductLayoutEditor';

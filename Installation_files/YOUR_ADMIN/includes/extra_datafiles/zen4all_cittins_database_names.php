@@ -6,10 +6,7 @@
  * and open the template in the editor.
  */
 
-define('TABLE_PRODUCT_TYPE_FIELD_TYPES', 'product_type_field_types');
-define('TABLE_PRODUCT_TYPE_FIELDS', 'product_type_fields');
-define('TABLE_PRODUCT_TYPE_FIELDS_TO_TYPE', 'product_type_fields_to_type');
+define('TABLE_PRODUCT_FIELDS_TO_TYPE', DB_PREFIX . 'product_fields_to_type');
 
-define('TABLE_PRODUCT_TABS', 'product_tabs');
-define('TABLE_PRODUCTS_EXTRA', 'products_extra');
-define('TABLE_PRODUCTS_DESCRIPTION_EXTRA', 'products_description_extra');
+define('TABLE_PRODUCT_TABS', DB_PREFIX . 'product_tabs');
+define('TABLE_PRODUCT_TABS_NAMES', DB_PREFIX . 'product_tabs_names');
