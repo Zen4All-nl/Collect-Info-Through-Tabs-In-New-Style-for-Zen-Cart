@@ -38,7 +38,7 @@ foreach ($productTypeFields as $productFields) {
   ];
   include PRODUCT_FIELDS_INCLUDES_SQL_FOLDER . $productFields['field_name'] . '.php';
 }
-
+$productInfo = [];
 $productInfo = array_merge_recursive($fieldsAvailable, $parameters);
 
 $extraTabsPath = DIR_WS_MODULES . 'extra_tabs';
@@ -229,40 +229,22 @@ if (!$category_lookup->EOF) {
               <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#" role="button">
                 <i class="fa fa-tv"></i> <?php echo IMAGE_PREVIEW; ?>
               </a>
-              <?php if ($productId != '') { ?>
-                <button name="insertButton" id="btnsubmit" class="btn btn-primary" onclick="saveProduct()" type="submit" >
-                  <i class="fa fa-save"></i> <?php echo IMAGE_SAVE; ?>
-                </button>
-              <?php } else { ?>
-                <button name="updateButton" id="btnsubmit" class="btn btn-primary" onclick="saveProduct()" type="submit" >
-                  <i class="fa fa-save"></i> <?php echo IMAGE_INSERT; ?>
-                </button>
-              <?php } ?>
-              <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (!empty($productId) ? '&pID=' . $productId : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-warning" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
+                <button name="<?php echo ($productId != '' ? 'insertButton' : 'updateButton'); ?>" id="btnsubmit" class="btn btn-success" onclick="saveProduct()" type="submit">
+                  <i class="fa fa-save"></i> <?php echo ($productId != '' ? IMAGE_SAVE : IMAGE_INSERT); ?>
+                </button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (!empty($productId) ? '&pID=' . $productId : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-default" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
             </div>
           </form>
         </div>
         <div class="panel-footer text-center">
-          <strong>Cittins is developed by <a href="https:zen4all.nl" title="Zen4All">Zen4All</a>.</strong> - Version: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2171"><?php echo MODULE_ZEN4ALL_CITTINS_VERSION; ?></a> - <a href="https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style/releases/latest"><i class="fa fa-github fa-lg"></i> Github</a>
+          <strong>Cittins is developed by <a href="https:zen4all.nl" title="Zen4All">Zen4All</a>.</strong> - Version: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2171"><?php echo MODULE_ZEN4ALL_CITTINS_VERSION; ?></a> - <a href="https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style/releases/latest"><i class="fa fa-github fa-lg"></i> Github</a><br>
+          <img src="images/zen4all_logo_small.png"> Copyright  &COPY; 2008-<?php echo date("Y"); ?> Zen4All
         </div>
       </div>
       <!-- footer //-->
       <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
       <!-- footer_eof //-->
     </div>
-    <!-- Creates the bootstrap modal where the image will appear -->
-    <?php
-    list($imageWidth, $imageHeight) = getimagesize(DIR_FS_CATALOG_IMAGES . $pInfo->products_image);
-    $mediumWith = (int)MEDIUM_IMAGE_WIDTH;
-    if ($imageWidth > $mediumWith) {
-      $width = $mediumWith;
-    } else {
-      $width = $imageWidth;
-    }
-    if ($height > MEDIUM_IMAGE_HEIGHT) {
-      $height = MEDIUM_IMAGE_HEIGHT;
-    }
-    ?>
+
     <!-- Message Stack modal-->
     <div id="collectInfoMessageStack" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog">
@@ -284,106 +266,13 @@ if (!$category_lookup->EOF) {
         </div>
       </div>
     </div>
-    <!-- Product main image preview modal-->
-    <div id="imagePreviewModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only"><?php echo TEXT_CLOSE; ?></span></button>
-            <h4 class="modal-title" id="imagePreviewModalLabel"><?php echo IMAGE_PREVIEW; ?></h4>
-          </div>
-          <div class="modal-body text-center" id="mainImageLarger">
-              <?php echo zen_image(DIR_WS_CATALOG_IMAGES . $pInfo->products_image, '', $width) ?>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo TEXT_CLOSE; ?></button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Product main image delete modal-->
-    <div id="mainImageDeleteModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i><span class="sr-only"><?php echo TEXT_CLOSE; ?></span></button>
-            <h4 class="modal-title" id="mainImageDeleteModalLabel"><?php echo IMAGE_DELETE; ?></h4>
-          </div>
-          <div class="modal-body">
 
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo TEXT_CLOSE; ?></button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Product main image add/edit modal-->
+    <!-- Autoload Product modals -->
     <?php
-    $dir_info = zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES);
-    $default_directory = substr($pInfo->products_image, 0, strpos($pInfo->products_image, DIRECTORY_SEPARATOR) + 1);
+    foreach (glob(DIR_WS_MODALS . 'product/*.php') as $filename) {
+      include $filename;
+    }
     ?>
-    <div id="mainImageEditModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
-              <i class="fa fa-times" aria-hidden="true"></i>
-              <span class="sr-only"><?php echo TEXT_CLOSE; ?></span>
-            </button>
-            <h4 class="modal-title" id="imageModalLabel">Image Edit</h4>
-          </div>
-          <form name="mainImageSelect" method="post" enctype="multipart/form-data" id="mainImageSelect">
-            <div class="modal-body">
-
-              <div class="form-group">
-                  <?php echo zen_draw_file_field('products_image', '', 'id="fileField" class="form-control" name="image" accept="image/*"'); ?>
-              </div>
-              <div class="form-group">
-                  <?php echo zen_draw_label(TEXT_PRODUCTS_IMAGE_DIR, 'img_dir', 'class="control-label"'); ?>
-                  <?php echo zen_draw_pull_down_menu('img_dir', $dir_info, $default_directory, 'id="image_dir" class="form-control"'); ?>
-              </div>
-              <div class="form-group">
-                  <?php echo zen_draw_label(TEXT_IMAGES_OVERWRITE, 'overwrite', 'class="control-label"'); ?>
-                <div class="input-group">
-                  <div class="radioBtn btn-group">
-                    <a class="btn btn-info notActive" data-toggle="overwrite" data-title="0"><?php echo TABLE_HEADING_NO; ?></a>
-                    <a class="btn btn-info active" data-toggle="overwrite" data-title="1"><?php echo TABLE_HEADING_YES; ?></a>
-                  </div>
-                  <?php echo zen_draw_hidden_field('overwrite', '1', 'class="overwrite"'); ?>
-                </div>
-              </div>
-              <?php if ($pInfo->products_image != '') { ?>
-                <div class="form-group">
-                    <?php echo zen_draw_label(TEXT_RENAME_ADDITIONAL_IMAGES, 'rename', 'class="control-label"'); ?>
-                  <div class="input-group">
-                    <div class="radioBtn btn-group">
-                      <a class="btn btn-info notActive" data-toggle="rename" data-title="0"><?php echo TABLE_HEADING_NO; ?></a>
-                      <a class="btn btn-info active" data-toggle="rename" data-title="1"><?php echo TABLE_HEADING_YES; ?></a>
-                    </div>
-                    <?php echo zen_draw_hidden_field('rename', '1', 'class="rename"'); ?>
-                  </div>
-                </div>
-              <?php } ?>
-              <hr style="border-top: 1px solid #8c8b8b">
-              <div class="form-group">
-                  <?php echo zen_draw_label(TEXT_PRODUCTS_IMAGE_MANUAL, 'products_image_manual', 'class="control-label"'); ?>
-                  <?php echo zen_draw_input_field('products_image_manual', '', 'class="form-control"'); ?>
-              </div>
-            </div>
-            <div class="modal-footer">
-                <?php echo zen_draw_hidden_field('products_previous_image', $pInfo->products_image); ?>
-                <?php echo zen_draw_hidden_field('productId', $productId); ?>
-                <?php echo zen_draw_hidden_field('current_category_id', $current_category_id); ?>
-              <button type="submit" class="btn btn-primary" onclick="saveMainImage();"><i class="fa fa-save"></i></button>
-              <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> <?php echo TEXT_CLOSE; ?></button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    <!-- Product preview modal-->
-    <?php include DIR_WS_MODULES . 'product/preview_modal.php'; ?>
     <!-- Autoload Additional Modals -->
     <?php
     $modalNeedle = 'modal_';
@@ -413,13 +302,15 @@ if (!$category_lookup->EOF) {
           $(this).parent().find('a[data-toggle="' + tog + '"]').not('[data-title="' + sel + '"]').removeClass('active').addClass('notActive');
           $(this).parent().find('a[data-toggle="' + tog + '"][data-title="' + sel + '"]').removeClass('notActive').addClass('active');
       });
-      $('#mainImageEditModal').on('click', '.radioBtn a', function () {
-          var sel = $(this).data('title');
-          var tog = $(this).data('toggle');
-          $(this).parent().next('.' + tog).prop('value', sel);
-          $(this).parent().find('a[data-toggle="' + tog + '"]').not('[data-title="' + sel + '"]').removeClass('active').addClass('notActive');
-          $(this).parent().find('a[data-toggle="' + tog + '"][data-title="' + sel + '"]').removeClass('notActive').addClass('active');
+    </script>
+    <script>
+      $('#productInfo').change(function() {
+        $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
       });
+      $('#productInfo .radioBtn a').on('click', (function(e) {
+        e.preventDefault();
+        $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
+      }));
     </script>
     <!-- load main javascript for collect_info -->
     <?php require_once 'includes/javascript/z4a_jscriptCollectInfo.php'; ?>
