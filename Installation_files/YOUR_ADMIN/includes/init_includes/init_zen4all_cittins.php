@@ -1,12 +1,12 @@
 <?php
 
 /*
- * init_additional_images_uploader.php
+ * init_zen4all_cittins.php
  *
- * @copyright Copyright 2003-2018 Zen Cart Development Team
+ * @copyright Copyright 2003-2019 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version Author: bislewl  2/19/2018 12:18 PM Modified in zencart_additional_images_uploader
+ * @version Author: Erik Kerkhoven 1-3-2019
  * 
  */
 
@@ -36,7 +36,9 @@ if (defined($module_constant)) {
                     ('Version', '" . $module_constant . "', '0.0.0', 'Version installed:', " . $configuration_group_id . ", 0, NOW(), NOW(), NULL, NULL);");
 }
 if ($configuration_group_id == '') {
-  $config = $db->Execute("SELECT configuration_group_id FROM " . TABLE_CONFIGURATION . " WHERE configuration_key= '" . $module_constant . "'");
+  $config = $db->Execute("SELECT configuration_group_id
+                          FROM " . TABLE_CONFIGURATION . "
+                          WHERE configuration_key= '" . $module_constant . "'");
   $configuration_group_id = $config->fields['configuration_group_id'];
 }
 
@@ -51,7 +53,10 @@ if (version_compare($newest_version, $current_version) > 0) {
     if (version_compare($newest_version, substr($installer, 0, - 4)) >= 0 && version_compare($current_version, substr($installer, 0, - 4)) < 0) {
       include($module_installer_directory . '/' . $installer);
       $current_version = str_replace("_", ".", substr($installer, 0, - 4));
-      $db->Execute("UPDATE " . TABLE_CONFIGURATION . " SET configuration_value = '" . $current_version . "' WHERE configuration_key = '" . $module_constant . "' LIMIT 1;");
+      $db->Execute("UPDATE " . TABLE_CONFIGURATION . "
+                    SET configuration_value = '" . $current_version . "'
+                    WHERE configuration_key = '" . $module_constant . "'
+                    LIMIT 1;");
       $messageStack->add("Installed " . $module_name . " v" . $current_version, 'success');
     }
   }

@@ -2,7 +2,8 @@
 
 class zcAjaxAdminCollectInfo extends base {
 
-  private function setProductId($productId, $current_category_id) {
+  private function setProductId($productId, $current_category_id)
+  {
     global $db, $messageStack;
     $languages = zen_get_languages();
     if (isset($productId) && $productId != '') {
@@ -18,27 +19,34 @@ class zcAjaxAdminCollectInfo extends base {
       zen_update_products_price_sorter($productId);
 
       $db->Execute("INSERT INTO " . TABLE_PRODUCTS_TO_CATEGORIES . " (products_id, categories_id)
-                    VALUE ('" . (int)$productId . "', '" . (int)$current_category_id . "')");
+                    VALUE (" . (int)$productId . ", " . (int)$current_category_id . ")");
 
       for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
         $language_id = $languages[$i]['id'];
+
+        $sql_data_array = array(
+          'products_name' => '',
+          'products_description' => '',
+          'products_url' => '');
 
         $insert_sql_data = array(
           'products_id' => (int)$productId,
           'language_id' => (int)$language_id);
 
-        zen_db_perform(TABLE_PRODUCTS_DESCRIPTION, $insert_sql_data);
-        zen_record_admin_activity('New product ' . (int)$productId . ' added via admin console.', 'info');
-        $messageStack->add_session('New product ' . (int)$productId, 'success');
-        return $productId;
+        $sql_array = array_merge($sql_data_array, $insert_sql_data);
+        zen_db_perform(TABLE_PRODUCTS_DESCRIPTION, $sql_array);
       }
+      zen_record_admin_activity('New product ' . (int)$productId . ' added via admin console.', 'info');
+      $messageStack->add_session('New product ' . (int)$productId, 'success');
+      return $productId;
     }
   }
 
-  public function setImage() {
+  public function setImage()
+  {
     $data = new objectInfo($_POST);
 
-    $productId = $this->setProductId($data->productId, $current_category_id);
+    $productId = $this->setProductId($data->productId, $data->current_category_id);
 
     $products_image_name = $newImage['products_image']['name'];
     /*   if ($data->products_image_manual'] != '') {
@@ -69,7 +77,8 @@ class zcAjaxAdminCollectInfo extends base {
       'productId' => $productId]);
   }
 
-  public function saveProduct() {
+  public function saveProduct()
+  {
     global $db, $messageStack;
     $data = new objectInfo($_POST);
     $languages = zen_get_languages();
@@ -107,8 +116,8 @@ class zcAjaxAdminCollectInfo extends base {
 // when set to none remove from database
 // is out dated for browsers use radio only
 
-      $sql_data_array['products_date_added'] = 'now()';
-      $sql_data_array['master_categories_id'] = ((int)$data->master_category > 0 ? (int)$data->master_category : (int)$data->master_categories_id);
+      $sql_data_array['products_last_modified'] = 'now()';
+      $sql_data_array['master_categories_id'] = (!empty($data->master_category) && (int)$data->master_category > 0 ? (int)$data->master_category : (int)$data->master_categories_id);
 
       zen_db_perform(TABLE_PRODUCTS, $sql_data_array, 'update', "products_id = " . (int)$productId);
 
@@ -186,7 +195,8 @@ class zcAjaxAdminCollectInfo extends base {
      */
     if (!function_exists('convertToFloat')) {
 
-      function convertToFloat($input = 0) {
+      function convertToFloat($input = 0)
+      {
         if ($input === null) {
           return 0;
         }
@@ -198,13 +208,14 @@ class zcAjaxAdminCollectInfo extends base {
 
         return (float)$val;
       }
+
     }
     $updateInsertButton = 'save';
     return (['updateInsertButton' => $updateInsertButton]);
+  }
 
-    }
-
-  public function messageStack() {
+  public function messageStack()
+  {
     global $messageStack;
     if ($messageStack->size > 0) {
       return([
