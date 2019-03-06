@@ -38,7 +38,10 @@ foreach ($productTypeFields as $productFields) {
   ];
   include PRODUCT_FIELDS_INCLUDES_SQL_FOLDER . $productFields['field_name'] . '.php';
 }
-$productInfo = [];
+if(isset($additionalTable) && $additionalTable != ''){
+foreach($additionalTable as $item){
+  $tables .= $item;
+}}
 $productInfo = array_merge_recursive($fieldsAvailable, $parameters);
 
 $extraTabsPath = DIR_WS_MODULES . 'extra_tabs';

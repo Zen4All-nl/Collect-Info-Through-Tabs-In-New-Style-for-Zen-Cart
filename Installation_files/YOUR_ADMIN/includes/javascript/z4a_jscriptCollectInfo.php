@@ -35,8 +35,8 @@
           }
       }));
   }
-  function getAdditionalImages(){
-  
+  function getAdditionalImages() {
+
   }
   function saveProduct() {
       $("#productInfo").off('submit').on('submit', (function (e) {
@@ -46,11 +46,9 @@
           zcJS.ajax({
               url: 'ajax.php?act=ajaxAdminCollectInfo&method=saveProduct',
               data: formData
-          }).done(function (resultArray) {
+          }).done(function () {
               getMessageStack();
-              if (resultArray['updateInsertButton'] == 'save') {
-              $('button[name="insertButton"]').prop('value', '<?php echo IMAGE_SAVE; ?>').attr('name', 'saveButton');
-            }
+              $('button[name="insertButton"]').prop('value', '<?php echo IMAGE_SAVE; ?>').attr('name', 'saveButton').removeClass('btn-warning').addClass('btn-success');
           });
       }));
   }
@@ -59,11 +57,13 @@
           url: 'ajax.php?act=ajaxAdminCollectInfo&method=messageStack'
       }).done(function (resultArray) {
           //console.log(resultArray);
-          $('#collectInfoMessageStackText').html(resultArray.modalMessageStack);
-          $('#collectInfoMessageStack').modal('show');
-          setTimeout(function () {
-              $('#collectInfoMessageStack').modal('hide');
-          }, 4000);
+          if (resultArray) {
+              $('#collectInfoMessageStackText').html(resultArray.modalMessageStack);
+              $('#collectInfoMessageStack').modal('show');
+              setTimeout(function () {
+                  $('#collectInfoMessageStack').modal('hide');
+              }, 4000);
+          }
       });
   }
 </script>
