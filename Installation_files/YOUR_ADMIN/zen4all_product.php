@@ -38,10 +38,11 @@ foreach ($productTypeFields as $productFields) {
   ];
   include PRODUCT_FIELDS_INCLUDES_SQL_FOLDER . $productFields['field_name'] . '.php';
 }
-if(isset($additionalTable) && $additionalTable != ''){
-foreach($additionalTable as $item){
-  $tables .= $item;
-}}
+if (isset($additionalTable) && $additionalTable != '') {
+  foreach ($additionalTable as $item) {
+    $tables .= $item;
+  }
+}
 $productInfo = array_merge_recursive($fieldsAvailable, $parameters);
 
 $extraTabsPath = DIR_WS_MODULES . 'extra_tabs';
@@ -231,9 +232,9 @@ if (!$category_lookup->EOF) {
               <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#" role="button">
                 <i class="fa fa-tv"></i> <?php echo IMAGE_PREVIEW; ?>
               </a>
-                <button name="<?php echo ($productId != '' ? 'insertButton' : 'updateButton'); ?>" id="btnsubmit" class="btn btn-success" onclick="saveProduct()" type="submit">
-                  <i class="fa fa-save"></i> <?php echo ($productId != '' ? IMAGE_SAVE : IMAGE_INSERT); ?>
-                </button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (!empty($productId) ? '&pID=' . $productId : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-default" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
+              <button name="<?php echo ($productId != '' ? 'insertButton' : 'updateButton'); ?>" id="btnsubmit" class="btn btn-success" onclick="saveProduct()" type="submit">
+                <i class="fa fa-save"></i> <?php echo ($productId != '' ? IMAGE_SAVE : IMAGE_INSERT); ?>
+              </button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (!empty($productId) ? '&pID=' . $productId : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-default" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
             </div>
           </form>
         </div>
@@ -306,12 +307,12 @@ if (!$category_lookup->EOF) {
       });
     </script>
     <script>
-      $('#productInfo').change(function() {
-        $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
+      $('#productInfo').change(function () {
+          $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
       });
-      $('#productInfo .radioBtn a').on('click', (function(e) {
-        e.preventDefault();
-        $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
+      $('#productInfo .radioBtn a').on('click', (function (e) {
+          e.preventDefault();
+          $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
       }));
     </script>
     <!-- load main javascript for collect_info -->
