@@ -13,26 +13,27 @@ if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
 }
 
-$module_constant = 'MODULE_ZEN4ALL_CITTINS_VERSION'; // This should be a UNIQUE name followed by _VERSION for convention
-$module_installer_directory = DIR_FS_ADMIN . 'includes/installers/zen4all_cittins'; // This is the directory your installer is in, usually this is lower case
-$module_name = "Zen4All Cittins"; // This should be a plain English or Other in a user friendly way
-$module_file_for_version_check = ''; // File to check for new version so it doesn't check on every page
-$zencart_com_plugin_id = 2171; // from zencart.com plugins - Leave Zero not to check
-//Just change the stuff above... Nothing down here should need to change
-
+$module_constant = 'MODULE_ZEN4ALL_CITTINS_VERSION';
+$module_installer_directory = DIR_FS_ADMIN . 'includes/installers/zen4all_cittins';
+$module_name = "Zen4All Cittins";
+$module_file_for_version_check = '';
+$zencart_com_plugin_id = 2171;
 
 $configuration_group_id = '';
 if (defined($module_constant)) {
   $current_version = constant($module_constant);
 } else {
   $current_version = "0.0.0";
-  $db->Execute("INSERT INTO " . TABLE_CONFIGURATION_GROUP . " (configuration_group_title, configuration_group_description, sort_order, visible) VALUES ('" . $module_name . "', 'Set " . $module_name . " Options', '1', '1');");
+  $db->Execute("INSERT INTO " . TABLE_CONFIGURATION_GROUP . " (configuration_group_title, configuration_group_description, sort_order, visible)
+                VALUES ('" . $module_name . "', '" . $module_name . " Settings', '1', '1');");
   $configuration_group_id = $db->Insert_ID();
 
-  $db->Execute("UPDATE " . TABLE_CONFIGURATION_GROUP . " SET sort_order = " . $configuration_group_id . " WHERE configuration_group_id = " . $configuration_group_id . ";");
+  $db->Execute("UPDATE " . TABLE_CONFIGURATION_GROUP . "
+                SET sort_order = " . $configuration_group_id . "
+                WHERE configuration_group_id = " . $configuration_group_id . ";");
 
-  $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES
-                    ('Version', '" . $module_constant . "', '0.0.0', 'Version installed:', " . $configuration_group_id . ", 0, NOW(), NOW(), NULL, NULL);");
+  $db->Execute("INSERT INTO " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added)
+                VALUES ('Version', '" . $module_constant . "', '0.0.0', 'Version installed:', " . $configuration_group_id . ", 0, NOW(), NOW());");
 }
 if ($configuration_group_id == '') {
   $config = $db->Execute("SELECT configuration_group_id
@@ -44,14 +45,14 @@ if ($configuration_group_id == '') {
 $installers = scandir($module_installer_directory, 1);
 
 $newest_version = $installers[0];
-$newest_version = substr($newest_version, 0, - 4);
+$newest_version = substr($newest_version, 0, -4);
 
 sort($installers);
 if (version_compare($newest_version, $current_version) > 0) {
   foreach ($installers as $installer) {
-    if (version_compare($newest_version, substr($installer, 0, - 4)) >= 0 && version_compare($current_version, substr($installer, 0, - 4)) < 0) {
+    if (version_compare($newest_version, substr($installer, 0, -4)) >= 0 && version_compare($current_version, substr($installer, 0, -4)) < 0) {
       include($module_installer_directory . '/' . $installer);
-      $current_version = str_replace("_", ".", substr($installer, 0, - 4));
+      $current_version = str_replace("_", ".", substr($installer, 0, -4));
       $db->Execute("UPDATE " . TABLE_CONFIGURATION . "
                     SET configuration_value = '" . $current_version . "'
                     WHERE configuration_key = '" . $module_constant . "'
