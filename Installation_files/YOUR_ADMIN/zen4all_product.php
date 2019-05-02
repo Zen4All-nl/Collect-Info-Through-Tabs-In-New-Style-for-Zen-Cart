@@ -54,24 +54,23 @@ if ($productId != '') {
   zen4allCheckProductTables($productId);
 
   $product = $db->Execute("SELECT p.products_id, p.products_date_added, p.products_last_modified, p.master_categories_id" . $fields . "
-                           FROM " . TABLE_PRODUCTS . " p,
-                                " . TABLE_PRODUCTS_DESCRIPTION . " pd
-                           LEFT JOIN  " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd ON pd.products_id = mtpd.products_id
+                           FROM " . TABLE_PRODUCTS . " p
+                           LEFT JOIN " . TABLE_PRODUCTS_DESCRIPTION . " pd ON pd.products_id = p.products_id
+                             AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
+                           LEFT JOIN " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd ON mtpd.products_id = p.products_id
                              AND mtpd.language_id = pd.language_id
                            " . $tables . "
-                           WHERE p.products_id = " . $productId . "
-                           AND p.products_id = pd.products_id
-                           AND pd.language_id = " . (int)$_SESSION['languages_id']);
+                           WHERE p.products_id = " . $productId);
+
   foreach ($product->fields as $fieldName => $value) {
     $productInfo[$fieldName]['value'] = $value;
   }
 }
 $category_lookup = $db->Execute("SELECT c.categories_image, cd.categories_name
-                                 FROM " . TABLE_CATEGORIES . " c,
-                                      " . TABLE_CATEGORIES_DESCRIPTION . " cd
-                                 WHERE c.categories_id = " . (int)$current_category_id . "
-                                 AND c.categories_id = cd.categories_id
-                                 AND cd.language_id = " . (int)$_SESSION['languages_id']);
+                                 FROM " . TABLE_CATEGORIES . " c
+                                 LEFT JOIN " . TABLE_CATEGORIES_DESCRIPTION . " cd AND cd.categories_id = c.categories_id
+                                   AND cd.language_id = " . (int)$_SESSION['languages_id'] . "
+                                 WHERE c.categories_id = " . (int)$current_category_id);
 if (!$category_lookup->EOF) {
   $cInfo = new objectInfo($category_lookup->fields);
 } else {
