@@ -38,7 +38,11 @@ foreach ($productTypeFields as $productFields) {
   ];
   include PRODUCT_FIELDS_INCLUDES_SQL_FOLDER . $productFields['field_name'] . '.php';
 }
-$productInfo = [];
+if (isset($additionalTable) && $additionalTable != '') {
+  foreach ($additionalTable as $item) {
+    $tables .= $item;
+  }
+}
 $productInfo = array_merge_recursive($fieldsAvailable, $parameters);
 
 $extraTabsPath = DIR_WS_MODULES . 'extra_tabs';
@@ -51,24 +55,23 @@ if ($productId != '') {
   zen4allCheckProductTables($productId);
 
   $product = $db->Execute("SELECT p.products_id, p.products_date_added, p.products_last_modified, p.master_categories_id" . $fields . "
-                           FROM " . TABLE_PRODUCTS . " p,
-                                " . TABLE_PRODUCTS_DESCRIPTION . " pd
-                           LEFT JOIN  " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd ON pd.products_id = mtpd.products_id
+                           FROM " . TABLE_PRODUCTS . " p
+                           LEFT JOIN " . TABLE_PRODUCTS_DESCRIPTION . " pd ON pd.products_id = p.products_id
+                             AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
+                           LEFT JOIN " . TABLE_META_TAGS_PRODUCTS_DESCRIPTION . " mtpd ON mtpd.products_id = p.products_id
                              AND mtpd.language_id = pd.language_id
                            " . $tables . "
-                           WHERE p.products_id = " . $productId . "
-                           AND p.products_id = pd.products_id
-                           AND pd.language_id = " . (int)$_SESSION['languages_id']);
+                           WHERE p.products_id = " . $productId);
+
   foreach ($product->fields as $fieldName => $value) {
     $productInfo[$fieldName]['value'] = $value;
   }
 }
 $category_lookup = $db->Execute("SELECT c.categories_image, cd.categories_name
-                                 FROM " . TABLE_CATEGORIES . " c,
-                                      " . TABLE_CATEGORIES_DESCRIPTION . " cd
-                                 WHERE c.categories_id = " . (int)$current_category_id . "
-                                 AND c.categories_id = cd.categories_id
-                                 AND cd.language_id = " . (int)$_SESSION['languages_id']);
+                                 FROM " . TABLE_CATEGORIES . " c
+                                 LEFT JOIN " . TABLE_CATEGORIES_DESCRIPTION . " cd AND cd.categories_id = c.categories_id
+                                   AND cd.language_id = " . (int)$_SESSION['languages_id'] . "
+                                 WHERE c.categories_id = " . (int)$current_category_id);
 if (!$category_lookup->EOF) {
   $cInfo = new objectInfo($category_lookup->fields);
 } else {
@@ -105,7 +108,7 @@ if (!$category_lookup->EOF) {
     <!-- header //-->
     <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-ui-touch-punch-c@1.4.0/jquery.ui.touch-punch.min.js" integrity="sha256-gGj3FfxkKbWCLsDZ/LXAqVmckxEYkbljkHPeMrMs94U=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-ui-touch-punch@0.2.3/jquery.ui.touch-punch.min.js" integrity="sha256-AAhU14J4Gv8bFupUUcHaPQfvrdNauRHMt+S4UVcaJb0=" crossorigin="anonymous"></script>
     <script>
     // init datepicker defaults with localization
     $(function () {
@@ -229,9 +232,9 @@ if (!$category_lookup->EOF) {
               <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#" role="button">
                 <i class="fa fa-tv"></i> <?php echo IMAGE_PREVIEW; ?>
               </a>
-                <button name="<?php echo ($productId != '' ? 'insertButton' : 'updateButton'); ?>" id="btnsubmit" class="btn btn-success" onclick="saveProduct()" type="submit">
-                  <i class="fa fa-save"></i> <?php echo ($productId != '' ? IMAGE_SAVE : IMAGE_INSERT); ?>
-                </button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (!empty($productId) ? '&pID=' . $productId : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-default" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
+              <button name="<?php echo ($productId != '' ? 'insertButton' : 'updateButton'); ?>" id="btnsubmit" class="btn btn-success" onclick="saveProduct()" type="submit">
+                <i class="fa fa-save"></i> <?php echo ($productId != '' ? IMAGE_SAVE : IMAGE_INSERT); ?>
+              </button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (!empty($productId) ? '&pID=' . $productId : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-default" id="btncancel" name="btncancel"><i class="fa fa-undo"></i> Back </a>
             </div>
           </form>
         </div>
@@ -304,12 +307,12 @@ if (!$category_lookup->EOF) {
       });
     </script>
     <script>
-      $('#productInfo').change(function() {
-        $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
+      $('#productInfo').change(function () {
+          $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
       });
-      $('#productInfo .radioBtn a').on('click', (function(e) {
-        e.preventDefault();
-        $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
+      $('#productInfo .radioBtn a').on('click', (function (e) {
+          e.preventDefault();
+          $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
       }));
     </script>
     <!-- load main javascript for collect_info -->

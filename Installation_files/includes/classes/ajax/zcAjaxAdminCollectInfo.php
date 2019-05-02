@@ -87,8 +87,21 @@ class zcAjaxAdminCollectInfo extends base {
     if ($data->products_model . $data->products_url . $data->products_name . $data->products_description != '') {
       $products_date_available = zen_db_prepare_input($data->products_date_available);
       $products_date_available = (date('Y-m-d') < $products_date_available) ? $products_date_available : 'null';
+      $master_categories_id = (!empty($data->master_category) && (int)$data->master_category > 0 ? (int)$data->master_category : (int)$data->master_categories_id);
 // Data-cleaning to prevent data-type mismatch errors:
-      $sql_data_array = array(
+      $tables = '';
+      $sql_data_fields = "products_type = " . (int)$data->product_type . ", products_date_available = '" . $products_date_available . "', products_last_modified = now(), master_categories_id = " . $master_categories_id;
+      foreach ($data as $key => $field) {
+        if (!is_array($field)) {
+          $sql_data_array[$key] = $field;
+        }
+      }
+      $db->Execute("UPDATE " . TABLE_PRODUCTS . " p
+                    INNER JOIN " . TABLE_PRODUCT_MUSIC_EXTRA . " pme ON (p.products_id = pme.products_id)
+                    " . $tables . "
+                    SET " . $sql_data_fields . "
+                        WHERE p.userid = 1 AND a.lid = 1 AND b.userid = 1");
+      /*   $sql_data_array = array(
         'products_quantity' => convertToFloat($data->products_quantity),
         'products_type' => (int)$data->product_type,
         'products_model' => zen_db_prepare_input($data->products_model),
@@ -112,14 +125,14 @@ class zcAjaxAdminCollectInfo extends base {
         'products_discount_type' => (int)$data->products_discount_type,
         'products_discount_type_from' => (int)$data->products_discount_type_from,
         'products_price_sorter' => convertToFloat($data->products_price_sorter),
-      );
+        ); */
 // when set to none remove from database
 // is out dated for browsers use radio only
 
       $sql_data_array['products_last_modified'] = 'now()';
       $sql_data_array['master_categories_id'] = (!empty($data->master_category) && (int)$data->master_category > 0 ? (int)$data->master_category : (int)$data->master_categories_id);
 
-      zen_db_perform(TABLE_PRODUCTS, $sql_data_array, 'update', "products_id = " . (int)$productId);
+      /* zen_db_perform(TABLE_PRODUCTS, $sql_data_array, 'update', "products_id = " . (int)$productId);
 
       zen_record_admin_activity('Updated product ' . (int)$productId . ' via admin console.', 'info');
       $messageStack->add_session('Updated product ' . (int)$productId, 'success');
@@ -173,19 +186,32 @@ class zcAjaxAdminCollectInfo extends base {
           $db->Execute($remove_products_metatag);
         } else {
 
-          zen_db_perform(TABLE_META_TAGS_PRODUCTS_DESCRIPTION, $sql_data_array, 'update', "products_id = " . (int)$productId . " and language_id = " . (int)$language_id);
+        zen_db_perform(TABLE_META_TAGS_PRODUCTS_DESCRIPTION, $sql_data_array, 'update', "products_id = " . (int)$productId . " and language_id = " . (int)$language_id);
         }
-      }
+        }
 
-      $extraTabsupate = dirList(DIR_WS_MODULES . 'extra_tabs/', 'tab_update_product.php');
-      if (isset($extraTabsupate) && $extraTabsupate != '') {
+        $extraTabsupate = dirList(DIR_WS_MODULES . 'extra_tabs/', 'tab_update_product.php');
+        if (isset($extraTabsupate) && $extraTabsupate != '') {
         foreach ($extraTabsupate as $tabUpdate) {
-          include($tabUpdate);
+        include($tabUpdate);
         }
-      }
+        } */
     } else {
       $messageStack->add_session(ERROR_NO_DATA_TO_SAVE, 'error');
     }
+    return(['test' => $test]);
+  }
+
+  public function messageStack()
+  {
+    global $messageStack;
+    if ($messageStack->size > 0) {
+      return([
+        'modalMessageStack' => $messageStack->output()]);
+    }
+  }
+
+}
 
     /**
      * NOTE: THIS IS HERE FOR BACKWARD COMPATIBILITY. The function is properly declared in the functions files instead.
@@ -208,19 +234,5 @@ class zcAjaxAdminCollectInfo extends base {
 
         return (float)$val;
       }
-
-    }
-    $updateInsertButton = 'save';
-    return (['updateInsertButton' => $updateInsertButton]);
-  }
-
-  public function messageStack()
-  {
-    global $messageStack;
-    if ($messageStack->size > 0) {
-      return([
-        'modalMessageStack' => $messageStack->output()]);
-    }
-  }
 
 }
