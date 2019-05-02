@@ -4,7 +4,6 @@
  * init_zen4all_cittins.php
  *
  * @copyright Copyright 2003-2019 Zen Cart Development Team
- * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version Author: Erik Kerkhoven 1-3-2019
  * 
