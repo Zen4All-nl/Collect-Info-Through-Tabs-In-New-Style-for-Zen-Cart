@@ -40,14 +40,12 @@
   }
   function updateTabSortOrder() {
       var SortOrder = document.getElementById('tabs');
-      console.log(SortOrder);
       $("#tabs").off('submit').on('submit', (function (e) {
           e.preventDefault();
           zcJS.ajax({
               url: 'ajax.php?act=ajaxAdminProductLayoutEditor&method=updateTabSortOrder',
               data: new FormData(SortOrder)
           }).done(function (resultArray) {
-              console.log(resultArray);
           });
       }));
   }
