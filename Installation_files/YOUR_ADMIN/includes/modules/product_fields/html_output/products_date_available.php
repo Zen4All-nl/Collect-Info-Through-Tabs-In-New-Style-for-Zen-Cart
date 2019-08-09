@@ -6,7 +6,7 @@
     </span>
     <?php echo zen_draw_input_field('products_date_available', $productInfo['products_date_available']['value'], 'class="form-control"'); ?>
   </div>
-  <span class="help-block errorText">(YYYY-MM-DD)</span>
+  <span class="help-block errorText">(<?php echo DATE_FORMAT_DATE_PICKER; ?>)</span>
 </div>
 <!-- script for datepicker -->
 <script>
@@ -14,7 +14,7 @@
       'singleDatePicker': true,
       'showDropdowns': true,
       'locale': {
-          'format': 'YYYY-MM-DD',
+          'format': '<?php echo DATE_FORMAT_DATE_PICKER; ?>',
           'daysOfWeek': [
               '<?php echo _SUNDAY_SHORT; ?>',
               '<?php echo _MONDAY_SHORT; ?>',
@@ -41,4 +41,9 @@
       }
   }
   );
+  <?php
+  if(empty($productInfo['products_date_available']['value'])) {
+    echo '$(\'input[name="products_date_available"]\').val(\'\');';
+  }
+  ?>
 </script>

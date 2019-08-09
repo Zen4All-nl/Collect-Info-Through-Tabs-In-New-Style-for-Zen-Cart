@@ -69,7 +69,7 @@ if ($productId != '') {
 }
 $category_lookup = $db->Execute("SELECT c.categories_image, cd.categories_name
                                  FROM " . TABLE_CATEGORIES . " c
-                                 LEFT JOIN " . TABLE_CATEGORIES_DESCRIPTION . " cd AND cd.categories_id = c.categories_id
+                                 LEFT JOIN " . TABLE_CATEGORIES_DESCRIPTION . " cd ON cd.categories_id = c.categories_id
                                    AND cd.language_id = " . (int)$_SESSION['languages_id'] . "
                                  WHERE c.categories_id = " . (int)$current_category_id);
 if (!$category_lookup->EOF) {
@@ -83,23 +83,18 @@ if (!$category_lookup->EOF) {
 <html <?php echo HTML_PARAMS; ?>>
   <head>
     <meta charset="<?php echo CHARSET; ?>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
     <title><?php echo TITLE; ?></title>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="includes/stylesheet.css">
     <link rel="stylesheet" href="includes/css/collect_info.css">
-    <link rel="stylesheet" href="includes/cssjsmenuhover.css" media="all" id="hoverJS">
-    <script src="includes/menu.js"></script>
+    <link rel="stylesheet" href="includes/css/daterangepicker.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
     <script src="includes/general.js"></script>
-    <script>
-      function init() {
-          cssjsmenu('navbar');
-          if (document.getElementById) {
-              var kill = document.getElementById('hoverJS');
-              kill.disabled = true;
-          }
-      }
-    </script>
   </head>
-  <body onload="init()">
+  <body>
       <?php
       if ($editor_handler != '') {
         include $editor_handler;
@@ -109,18 +104,9 @@ if (!$category_lookup->EOF) {
     <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-ui-touch-punch@0.2.3/jquery.ui.touch-punch.min.js" integrity="sha256-AAhU14J4Gv8bFupUUcHaPQfvrdNauRHMt+S4UVcaJb0=" crossorigin="anonymous"></script>
-    <script>
-    // init datepicker defaults with localization
-    $(function () {
-        $.datepicker.setDefaults($.extend({}, $.datepicker.regional["<?php echo $_SESSION['languages_code'] == 'en' ? '' : $_SESSION['languages_code']; ?>"], {
-            showOn: "both",
-            buttonImage: "images/calendar.gif",
-            dateFormat: "<?php echo DATE_FORMAT_DATEPICKER_ADMIN; ?>",
-            changeMonth: true,
-            changeYear: true
-        }));
-    });
-    </script>
+    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
     <!-- header_eof //-->
     <div class="container-fluid">
       <div class="panel panel-default">
@@ -135,7 +121,7 @@ if (!$category_lookup->EOF) {
               <?php
               echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']);
               echo zen_draw_hidden_field('cPath', $cPath);
-              echo zen_draw_hidden_field('product_type', $productType);
+              echo zen_draw_hidden_field('products_type', $productType);
               echo zen_draw_hidden_field('productId', $productId);
               echo zen_draw_hidden_field('current_category_id', $current_category_id);
 
@@ -181,7 +167,7 @@ if (!$category_lookup->EOF) {
                       if ($infoField['tabId'] == $tab['id']) {
                         ?>
                       <div class="form-group">
-                          <?php include PRODUCT_FIELDS_INCLUDES_HTML_OUTPUT_FOLDER . $key . '.php'; ?>
+                          <?php include INCLUDES_HTML_OUTPUT_FOLDER . $key . '.php'; ?>
                       </div>
                       <?php
                     }
@@ -191,10 +177,6 @@ if (!$category_lookup->EOF) {
                 <?php
                 $tabSortContent = $tab['sortOrder'];
               }
-              ?>
-
-
-              <?php
               $tabContentsNeedle = 'tab_contents_';
               if (isset($extraTabsFiles) && $extraTabsFiles != '') {
                 $tabSortContent++;
@@ -211,7 +193,6 @@ if (!$category_lookup->EOF) {
               }
               ?>
             </div>
-
             <span>
                 <?php
 // hidden fields not changeable on products page
@@ -225,9 +206,7 @@ if (!$category_lookup->EOF) {
                 echo zen_draw_hidden_field('products_price_sorter', $productInfo['products_price_sorter']['value']);
                 echo zen_draw_hidden_field('products_date_added', (zen_not_null($productInfo['products_date_added']['value']) ? $productInfo['products_date_added']['value'] : date('Y-m-d')));
                 ?>
-
             </span>
-
             <div class="btn-group">
               <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#" role="button">
                 <i class="fa fa-tv"></i> <?php echo IMAGE_PREVIEW; ?>
@@ -239,8 +218,8 @@ if (!$category_lookup->EOF) {
           </form>
         </div>
         <div class="panel-footer text-center">
-          <strong>Cittins is developed by <a href="https:zen4all.nl" title="Zen4All">Zen4All</a>.</strong> - Version: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2171"><?php echo MODULE_ZEN4ALL_CITTINS_VERSION; ?></a> - <a href="https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style/releases/latest"><i class="fa fa-github fa-lg"></i> Github</a><br>
-          <img src="images/zen4all_logo_small.png"> Copyright  &COPY; 2008-<?php echo date("Y"); ?> Zen4All
+          <strong>Cittins is developed by <a href="https:zen4all.nl" title="Zen4All" target="_blank">Zen4All</a>.</strong> - Version: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2171" target="_blank"><?php echo ZEN4ALL_CITTINS_VERSION; ?></a> - <a href="https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style/releases/latest" target="_blank"><i class="fa fa-github fa-lg"></i> Github</a><br>
+          <img src="images/zen4all_logo_small.png" alt="Zen4All Logo" title="Zen4All Logo"> Copyright  &COPY; 2008-<?php echo date("Y"); ?> Zen4All
         </div>
       </div>
       <!-- footer //-->
