@@ -13,9 +13,9 @@ if (!defined('IS_ADMIN_FLAG')) {
   die('Illegal Access');
 }
 
-$module_constant = 'MODULE_ZEN4ALL_CITTINS_VERSION';
+$module_constant = 'ZEN4ALL_CITTINS_VERSION';
 $module_installer_directory = DIR_FS_ADMIN . 'includes/installers/zen4all_cittins';
-$module_name = "Zen4All Cittins";
+$module_name = 'Zen4All Cittins';
 $module_file_for_version_check = '';
 $zencart_com_plugin_id = 2171;
 
@@ -23,7 +23,7 @@ $configuration_group_id = '';
 if (defined($module_constant)) {
   $current_version = constant($module_constant);
 } else {
-  $current_version = "0.0.0";
+  $current_version = '0.0.0';
   $db->Execute("INSERT INTO " . TABLE_CONFIGURATION_GROUP . " (configuration_group_title, configuration_group_description, sort_order, visible)
                 VALUES ('" . $module_name . "', '" . $module_name . " Settings', '1', '1');");
   $configuration_group_id = $db->Insert_ID();
