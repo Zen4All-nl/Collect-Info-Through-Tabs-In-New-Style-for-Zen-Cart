@@ -273,7 +273,7 @@ $fieldTypesArray = [
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h1><?php echo HEADING_TITLE . (isset($action) && $action != '' ? ' <i class="fa fa-angle-double-right" aria-hidden="true"></i> ' : '') . $actionTitle; ?></h1>
+          <h1><?php echo HEADING_TITLE . (!empty($action) ? ' <i class="fa fa-angle-double-right" aria-hidden="true"></i> ' : '') . $actionTitle; ?></h1>
         </div>
         <div class="panel-body">
           <div id="actionPanel" class="panel col-sm-2">
@@ -281,7 +281,7 @@ $fieldTypesArray = [
             <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=add_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_ADD_FIELD; ?></a>
             <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_DELETE_FIELD; ?></a>
             <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=tabs' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_TABS; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=productTypes' . '&type_id=' . $selectedProductTypeId) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_PRODUCT_TYPES; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=productTypes' . '&set_product_type=' . $selectedProductTypeId) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_PRODUCT_TYPES; ?></a>
           </div>
           <?php
           switch ($action) {
@@ -611,7 +611,7 @@ $fieldTypesArray = [
                                     if (in_array($productTypes[$i]['type_id'], $tab['productType'])) {
                                       ?>
                                     <li><?php echo $productTypes[$i]['type_name']; ?></li>
-                                  <?php
+                                    <?php
                                   }
                                 }
                                 ?>
@@ -672,7 +672,7 @@ $fieldTypesArray = [
               <?php
               break;
             case 'productTypes':
-              $productTypeInfoArray = getProductTypeInfo($_GET['type_id']);
+              $productTypeInfoArray = getProductTypeInfo($_GET['set_product_type']);
               ?>
               <div class="col-sm-10">
                 <h4><?php echo TEXT_HEADING_EDIT_PRODUCT_TYPE; ?> :: <?php echo $productTypeInfoArray->type_name; ?></h4>
@@ -713,7 +713,7 @@ $fieldTypesArray = [
                   <div class="form-group">
                       <?php echo zen_draw_label(TEXT_PRODUCT_TYPES_ALLOW_ADD_CART, 'catalog_add_to_cart', 'class="control-label col-sm-3"'); ?>
                     <div class="col-sm-9 col-md-6">
-                        <?php echo zen_draw_checkbox_field('catalog_add_to_cart', $productTypeInfoArray->allow_add_to_cart, ($productTypeInfoArray->allow_add_to_cart == 'Y' ? true : false), 'class="form-control"'); ?>
+                        <?php echo zen_draw_checkbox_field('catalog_add_to_cart', $productTypeInfoArray->allow_add_to_cart, ($productTypeInfoArray->allow_add_to_cart == 'Y'), 'class="form-control"'); ?>
                     </div>
                   </div>
                   <div class="form-group">
