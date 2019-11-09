@@ -95,11 +95,6 @@ if (!$category_lookup->EOF) {
     <script src="includes/general.js"></script>
   </head>
   <body>
-      <?php
-      if ($editor_handler != '') {
-        include $editor_handler;
-      }
-      ?>
     <!-- header //-->
     <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
@@ -111,27 +106,25 @@ if (!$category_lookup->EOF) {
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="col-sm-11"><?php echo sprintf(TEXT_NEW_PRODUCT, zen_output_generated_category_path($current_category_id)); ?></h3>
-          <?php echo zen_info_image($cInfo->categories_image, $cInfo->categories_name, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?>
+          <h3 class="panel-title col-sm-10"><?php echo sprintf(TEXT_NEW_PRODUCT, zen_output_generated_category_path($current_category_id)); ?></h3>
+          <div class="col-sm-2"><?php echo zen_info_image($cInfo->categories_image, $cInfo->categories_name, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></div>
         </div>
         <div class="panel-body">
-            <?php
-            ?>
           <form name="productInfo" enctype="multipart/form-data" id="productInfo" class="form-horizontal">
-              <?php
-              echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']);
-              echo zen_draw_hidden_field('cPath', $cPath);
-              echo zen_draw_hidden_field('products_type', $productType);
-              echo zen_draw_hidden_field('productId', $productId);
-              echo zen_draw_hidden_field('current_category_id', $current_category_id);
+            <?php
+            echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']);
+            echo zen_draw_hidden_field('cPath', $cPath);
+            echo zen_draw_hidden_field('products_type', $productType);
+            echo zen_draw_hidden_field('productId', $productId);
+            echo zen_draw_hidden_field('current_category_id', $current_category_id);
 
-              $availableTabsArray = getTabsInType($productType);
-              ?>
+            $availableTabsArray = getTabsInType($productType);
+            ?>
             <ul class="nav nav-tabs" data-tabs="tabs">
-                <?php
-                $tabSort = '';
-                foreach ($availableTabsArray as $tab) {
-                  ?>
+              <?php
+              $tabSort = '';
+              foreach ($availableTabsArray as $tab) {
+                ?>
                 <li<?php echo ($tab['sortOrder'] == '1' ? ' class="active"' : ''); ?>>
                   <a data-toggle="tab" href="#productTabs<?php echo $tab['sortOrder']; ?>"><?php echo $tab['tabName']; ?></a>
                 </li>
@@ -157,17 +150,17 @@ if (!$category_lookup->EOF) {
               ?>
             </ul>
             <div class="tab-content">
-                <?php
-                $tabSortContent = '';
-                foreach ($availableTabsArray as $tab) {
-                  ?>
+              <?php
+              $tabSortContent = '';
+              foreach ($availableTabsArray as $tab) {
+                ?>
                 <div id="productTabs<?php echo $tab['sortOrder']; ?>" class="tab-pane fade in <?php echo ($tab['sortOrder'] == '1' ? 'active' : ''); ?>">
-                    <?php
-                    foreach ($productInfo as $key => $infoField) {
-                      if ($infoField['tabId'] == $tab['id']) {
-                        ?>
+                  <?php
+                  foreach ($productInfo as $key => $infoField) {
+                    if ($infoField['tabId'] == $tab['id']) {
+                      ?>
                       <div class="form-group">
-                          <?php include INCLUDES_HTML_OUTPUT_FOLDER . $key . '.php'; ?>
+                        <?php include INCLUDES_HTML_OUTPUT_FOLDER . $key . '.php'; ?>
                       </div>
                       <?php
                     }
@@ -184,7 +177,7 @@ if (!$category_lookup->EOF) {
                   if (strpos($tabContent, $tabContentsNeedle) !== false) {
                     ?>
                     <div id="productTabs<?php echo $tabSortContent; ?>" class="tab-pane fade">
-                        <?php include(DIR_WS_MODULES . 'extra_tabs/' . $tabContent); ?>
+                      <?php include(DIR_WS_MODULES . 'extra_tabs/' . $tabContent); ?>
                     </div>
                     <?php
                     $tabSortContent++;
@@ -194,18 +187,18 @@ if (!$category_lookup->EOF) {
               ?>
             </div>
             <span>
-                <?php
+              <?php
 // hidden fields not changeable on products page
-                if (!array_search('categories', $extraTabsFiles) && $productId > 0) {
-                  echo zen_draw_hidden_field('master_categories_id', $productInfo['master_categories_id']['value']);
-                }
-                if (!array_search('discounts', $extraTabsFiles)) {
-                  echo zen_draw_hidden_field('products_discount_type', $productInfo['products_discount_type']['value']);
-                  echo zen_draw_hidden_field('products_discount_type_from', $productInfo['products_discount_type_from']['value']);
-                }
-                echo zen_draw_hidden_field('products_price_sorter', $productInfo['products_price_sorter']['value']);
-                echo zen_draw_hidden_field('products_date_added', (zen_not_null($productInfo['products_date_added']['value']) ? $productInfo['products_date_added']['value'] : date('Y-m-d')));
-                ?>
+              if (!array_search('categories', $extraTabsFiles) && $productId > 0) {
+                echo zen_draw_hidden_field('master_categories_id', $productInfo['master_categories_id']['value']);
+              }
+              if (!array_search('discounts', $extraTabsFiles)) {
+                echo zen_draw_hidden_field('products_discount_type', $productInfo['products_discount_type']['value']);
+                echo zen_draw_hidden_field('products_discount_type_from', $productInfo['products_discount_type_from']['value']);
+              }
+              echo zen_draw_hidden_field('products_price_sorter', $productInfo['products_price_sorter']['value']);
+              echo zen_draw_hidden_field('products_date_added', (zen_not_null($productInfo['products_date_added']['value']) ? $productInfo['products_date_added']['value'] : date('Y-m-d')));
+              ?>
             </span>
             <div class="btn-group">
               <a id="previewPopUp" class="btn btn-default" name="btnpreview" href="#" role="button">
@@ -269,29 +262,29 @@ if (!$category_lookup->EOF) {
     <script>
       // script for tooltips
       $(document).ready(function () {
-          $('[data-toggle="tooltip"]').tooltip();
+        $('[data-toggle="tooltip"]').tooltip();
       });
       // script for preview popup
       $('#previewPopUp').on('click', (function (e) {
-          e.preventDefault();
-          $('#previewmodal').modal('show');
+        e.preventDefault();
+        $('#previewmodal').modal('show');
       }));
       // script for sliding checkbox
       $('body').on('click', '.radioBtn a', function () {
-          var sel = $(this).data('title');
-          var tog = $(this).data('toggle');
-          $(this).parent().next('.' + tog).prop('value', sel);
-          $(this).parent().find('a[data-toggle="' + tog + '"]').not('[data-title="' + sel + '"]').removeClass('active').addClass('notActive');
-          $(this).parent().find('a[data-toggle="' + tog + '"][data-title="' + sel + '"]').removeClass('notActive').addClass('active');
+        var sel = $(this).data('title');
+        var tog = $(this).data('toggle');
+        $(this).parent().next('.' + tog).prop('value', sel);
+        $(this).parent().find('a[data-toggle="' + tog + '"]').not('[data-title="' + sel + '"]').removeClass('active').addClass('notActive');
+        $(this).parent().find('a[data-toggle="' + tog + '"][data-title="' + sel + '"]').removeClass('notActive').addClass('active');
       });
     </script>
     <script>
       $('#productInfo').change(function () {
-          $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
+        $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
       });
       $('#productInfo .radioBtn a').on('click', (function (e) {
-          e.preventDefault();
-          $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
+        e.preventDefault();
+        $('#btnsubmit').removeClass('btn-success').addClass('btn-warning');
       }));
     </script>
     <!-- load main javascript for collect_info -->
@@ -305,6 +298,9 @@ if (!$category_lookup->EOF) {
           include (DIR_WS_MODULES . 'extra_tabs/' . $jscriptFile);
         }
       }
+    }
+    if ($editor_handler != '') {
+      include $editor_handler;
     }
     ?>
   </body>
