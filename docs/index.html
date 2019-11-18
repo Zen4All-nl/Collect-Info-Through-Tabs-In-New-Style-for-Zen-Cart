@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Zen Cart Collect Info Through Tabs In New Style (CITTINS)</title>
+    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <link href="css/default.css" type="text/css" rel="stylesheet">
+    <link href="css/styles.css" type="text/css" rel="stylesheet">
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="page-header text-center">
+      <h1>Collect Info Through Tabs In New Style (CITTINS) v1.2.0</h1>
+    </div>
+    <div class="container-fluid">
+      <div class="panel panel-body">
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#credits">Title</a></li>
+          <li><a data-toggle="tab" href="#about">About</a></li>
+          <li><a data-toggle="tab" href="#installation">Installation</a></li>
+          <li><a data-toggle="tab" href="#use">How to Use</a></li>
+          <li><a data-toggle="tab" href="#notes">Notes &amp; Demos</a></li>
+          <li><a data-toggle="tab" href="#history">History</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane fade in active" id="credits">
+            <h2>Credits</h2>
+            <ul>
+              <li><strong>Version:&nbsp;</strong> v1.2.0 (Released November, 2018)</li>
+              <li><strong>Original Author:</strong> Zen4All (<a href="https://zen4all.nl">https://zen4all.nl</a>)</li>
+              <li><strong>Designed for:</strong> Zen Cart &ge; v1.5.5 Release</li>
+              <li><strong>Tabs based on:</strong> Bootstrap 3.3.7</li>
+              <li><strong>License:</strong> under the <a href="../LICENSE">GPL</a></li>
+              <li><strong>Support:</strong> Given via the <a href="https://www.zen-cart.com/showthread.php?223068-Collect-Info-Through-Tabs-In-New-Style-(CITTINS)-Support-Thread&p=1337614#post1337614">Zen-Cart Forums</a></li>
+            </ul>
+          </div>
+          <div class="tab-pane fade" id="about">
+            <h2>What does this module do?</h2>
+            <p>The current collect info page can be quite long, specially when having multiple languages, and extra fields. This is not very user friendly. Therefore I started searching for a better solution.</p>
+            <p>After looking at many other shopping cart frameworks, I have a pretty good idea of how I want the new collect info page to look. It will be a page with tabs for different categories of information. The default tabs are:</p>
+            <ul>
+              <li>General</li>
+              <li>Data</li>
+              <li>Manufacturer</li>
+              <li>Image</li>
+            </ul>
+            <p>This is the information that is currently available by default on the product collect info pages, with one exception, I added the meta tags to the collect page.</p>
+            <h2>Extra Tabs</h2>
+            <p>There are some extra tabs available at this time of writing:</p>
+            <ul>
+              <li>Discounts
+                <ul>
+                  <li>This tab can be used to add quantity discounts to a product. Although it is a standard function in Zen Cart it is well hidden</li>
+                </ul>
+              </li>
+              <li>Information
+                <ul>
+                  <li>Very basic, needs updating with more useful info</li>
+                </ul>
+              </li>
+              <li>Product Attributes
+                <ul>
+                  <li>This tab adds the full functionality off the Attributes controller page to your product edit page.</li>
+                </ul>
+              </li>
+              <li>Category
+                <ul>
+                  <li>Adds the ability to link products to multiple categories, and to set the master category.</li>
+                </ul>
+              </li>
+            </ul>
+            <h2>Future development</h2>
+            <p>In future releases I plan on adding extra info, by using more drop in modules. This way others can contribute by writing their own tabs, that will be included by dropping the files in a specific folder (for example: admin/includes/modules/extra_tabs). Extra tabs that are planned are:</p>
+            <ul>
+              <li>Specials / featured (maybe one tab, combined in the Discounts tab, or multiple)</li>
+              <li>Product history</li>
+              <li>Product reports (Views, purchases, etc.)</li>
+              <li>Also I a want to add ajax to add things like (additional) images dynamically, or a dynamic preview eliminating the need for the preview_info.php, and update_product.php files.</li>
+            </ul>
+
+            <p>Some screen shots:</p>
+            <a id="image01" href="#">
+              <img id="imgage01" class="img-thumbnail" src="images/collect_info_01_thumbnail.png" alt="General Info" title="General Info" width="250" height="250">
+            </a>
+            <a id="image02" href="#">
+              <img id="imgage02" class="img-thumbnail" src="images/collect_info_02_thumbnail.png" alt="Products Data" title="Products Data" width="250" height="250">
+            </a>
+            <a id="image03" href="#">
+              <img id="imgage03" class="img-thumbnail" src="images/collect_info_03_thumbnail.png" alt="Products Image" title="Products Image" width="250" height="250">
+            </a>
+          </div>
+          <div class="tab-pane fade" id="installation">
+            <h2>Minimum Requirements</h2>
+            <ul>
+              <li>Zen Cart 1.5.5e or higher</li>
+              <li>PHP 5.5 or Higher</li>
+            </ul>
+            <p>Although this module is designed to work with Zen Cart 1.5.5e or higher, it may also work on lower version. This has not bee n tested, and I am not planning on giving any active (free) support for that.<br>A minimum of php 5.4 is needed, because earlier php versions are lacking some needed functions.</p>
+            <h2>Installation</h2>
+            <p>All files are arranged in the correct Zen Cart v1.5.x structure.</p>
+            <ol>
+              <li>Rename the "YOUR_ADMIN" folder to the admin folder name you are using</li>
+              <li style="font-weight: bold">Make sure you have made a back up of all your existing files, and database.</li>
+              <li>Upload the files to your store. In the file list below you can see which files are new and which files need merging. If you are sure the original files you have in your store are un altered, you can overwrite the files marked in orange. Else you need to merge in the differences, using a tool like Beyond Compare, or WinMerge. The changes are marked clearly in the files, like this:<br>
+                <code>/* BOF Zen4All - CITTINS - 1 of 1 */<br>
+                  CHANGED CODE<br>
+                  /* EOF Zen4All - CITTINS - 1 of 1 */
+                </code>
+              </li>
+              <li>Login to your store's admin</li>
+            </ol>
+            <p>Files to upload</p>
+            <ul>
+              <li style="color: green">YOUR_ADMIN\includes\css\collect_info.css</li>
+              <li style="color: green">YOUR_ADMIN\includes\functions\extra_functions\functionsCollectProductInfoExtra.php</li>
+              <li style="color: green">YOUR_ADMIN\includes\languages\english\extra_definitions\tabs.php</li>
+              <li style="color: orange">YOUR_ADMIN\includes\languages\english\product.php</li>
+              <li style="color: orange">YOUR_ADMIN\includes\languages\english.php</li>
+              <li style="color: green">YOUR_ADMIN\includes\modules\extra_tabs (empty folder)</li>
+              <li style="color: orange">YOUR_ADMIN\includes\modules\product\collect_info.php</li>
+              <li style="color: orange">YOUR_ADMIN\includes\modules\product\preview_info.php</li>
+              <li style="color: orange">YOUR_ADMIN\includes\modules\update_product.php</li>
+              <li style="color: orange">YOUR_ADMIN\includes\ckeditor.php</li>
+              <li style="color: orange">YOUR_ADMIN\includes\header.php</li>
+              <li style="color: orange">YOUR_ADMIN\includes\stylesheet.css</li>
+              <li style="color: orange">YOUR_ADMIN\product.php</li>
+            </ul>
+            <h3>Un-install CITINS</h3>
+            <p>To un-install this module undo all the file-changes you made above.</p>
+          </div>
+          <div class="tab-pane fade" id="use">
+            <h2>How to Use</h2>
+            <p>This replaces the default collect info page, but the functionality is the same. Add/edit your info on the different tabs. Press save and you will continue to the product preview page as usually.</p>
+          </div>
+          <div class="tab-pane fade" id="notes">
+            <h2>Notes</h2>
+            <p>&nbsp;</p>
+          </div>
+          <!--end sc5-->
+          <div class="tab-pane fade" id="history">
+            <h2>History</h2>
+            <p>November 2017 - v1.0.1 (Bug Fix) - Zen4All</p>
+            <ul>
+              <li>Fixed data sanitizing</li>
+              <li>Changed some html for better viewing</li>
+              <li>Changed files:
+                <ul>
+                  <li>Extra_tabs\attributes\YOUR_ADMIN\attributeApi.php</li>
+                  <li>Extra_tabs\attributes\YOUR_ADMIN\includes\languages\english\attributes_controller.php</li>
+                  <li>Extra_tabs\attributes\YOUR_ADMIN\includes\modules\extra_tabs\attributas\jscript_attribute.php</li>
+                  <li>Extra_tabs\attributes\YOUR_ADMIN\includes\modules\extra_tabs\attributes\tab_contents_collect_nfo.php</li>
+                  <li>Extra_tabs\category\YOUR_ADMIN\includes\modules\extra_tabs\category\tab_title_collect_info.php</li>
+                  <li>Installation_files\YOUR_ADMIN\includes\functions\extra_functions\functionsCollectProductInfoExtra.php</li>
+                  <li>Installation_files\YOUR_ADMIN\includes\modules\product\collect_info.php</li>
+                </ul>
+                  
+              </li>
+            </ul>
+            <p>October 2017 - v1.0 (Release) - Zen4All</p>
+            <ul>
+              <li>Initial release for Zen 1.5.5</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p>&nbsp;</p>
+      </div>
+    </footer>
+    <div id="imageModal01" class="modal fade" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="imageModalLabel">General Info</h4>
+          </div>
+          <div class="modal-body">
+            <img class="img-thumbnail" src="images/collect_info_01.png" alt="General Info" title="General Info">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="imageModal02" class="modal fade" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="imageModalLabel">Products Data</h4>
+          </div>
+          <div class="modal-body">
+            <img class="img-thumbnail" src="images/collect_info_02.png" alt="Products Data" title="Products Data">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="imageModal03" class="modal fade" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="imageModalLabel">Products Image</h4>
+          </div>
+          <div class="modal-body">
+            <img class="img-thumbnail" src="images/collect_info_03.png" alt="Products Image" title="Products Image">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      $("#image01").on("click", function () {
+        $('#imageModal01').modal('show');
+      });
+    </script>
+    <script>
+      $("#image02").on("click", function () {
+        $('#imageModal02').modal('show');
+      });
+    </script>
+    <script>
+      $("#image03").on("click", function () {
+        $('#imageModal03').modal('show');
+      });
+    </script>
+  </body>
+</html>

@@ -50,10 +50,10 @@ $columnVisibility = $_SESSION['columnVisibility'];
 
 $zco_notifier->notify('NOTIFY_BEGIN_ADMIN_CATEGORIES', $action);
 
-if ((!isset($_SESSION['categories_products_sort_order']) && $_SESSION['categories_products_sort_order'] != '') || $_GET['reset_sort_order'] == '1') {
-  $_SESSION['categories_products_sort_order'] = CATEGORIES_PRODUCTS_SORT_ORDER;
-} else {
-  $_SESSION['categories_products_sort_order'] = $_GET['list_order'];
+if (!isset($_SESSION['cittinsCategoriesProductsSortOrder']) || empty($_SESSION['cittinsCategoriesProductsSortOrder'])) {
+  $_SESSION['cittinsCategoriesProductsSortOrder'] = ZEN4ALL_CITTINS_DEFAULT_LISTING_SORTORDER;
+} elseif (isset($_GET['list_order'])) {
+  $_SESSION['cittinsCategoriesProductsSortOrder'] = (int)$_GET['list_order'];
 }
 
 if (zen_not_null($action)) {
@@ -179,12 +179,6 @@ if ($check_products > 0) {
             if (!isset($_GET['page'])) {
               $_GET['page'] = '';
             }
-            if (isset($_GET['set_display_categories_dropdown'])) {
-              $_SESSION['display_categories_dropdown'] = $_GET['set_display_categories_dropdown'];
-            }
-            if (!isset($_SESSION['display_categories_dropdown'])) {
-              $_SESSION['display_categories_dropdown'] = 0;
-            }
             ?>
             <div class="row"><?php echo zen_draw_separator('pixel_trans.gif', '100%', '1'); ?></div>
             <label class="control-label col-sm-6 col-md-4">View Settings</label>
@@ -273,51 +267,49 @@ if ($check_products > 0) {
                 <tr valign="middle">
                   <th><?php echo zen_draw_checkbox_field('', '', false, '', 'id="select_all"'); ?></th>
                   <th class="text-right shrink">
-                    <?php echo (($_GET['list_order'] == 'id-asc' || $_GET['list_order_'] == 'id-desc') ? '<span class="SortOrderHeader">' . TABLE_HEADING_ID . '</span>' : TABLE_HEADING_ID); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=id-asc'); ?>"><?php echo ($_GET['list_order'] == 'id-asc' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=id-desc'); ?>"><?php echo ($_GET['list_order'] == 'id-desc' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <?php echo (($_GET['list_order'] == '1' || $_GET['list_order_'] == '2') ? '<span class="SortOrderHeader">' . TABLE_HEADING_ID . '</span>' : TABLE_HEADING_ID); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=1'); ?>"><?php echo ($_GET['list_order'] == '1' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=2'); ?>"><?php echo ($_GET['list_order'] == '2' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
                   </th>
                   <th class="ColumnName noWrap">
-                    <?php echo (($_GET['list_order'] == 'name-asc' || $_GET['list_order_'] == 'name-desc') ? '<span class="SortOrderHeader">' . TABLE_HEADING_CATEGORIES_PRODUCTS . '</span>' : TABLE_HEADING_CATEGORIES_PRODUCTS); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=name-asc'); ?>"><?php echo ($_GET['list_order'] == 'name-asc' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=name-desc'); ?>"><?php echo ($_GET['list_order'] == 'name-desc' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <?php echo (($_GET['list_order'] == '3' || $_GET['list_order_'] == '4') ? '<span class="SortOrderHeader">' . TABLE_HEADING_CATEGORIES_PRODUCTS . '</span>' : TABLE_HEADING_CATEGORIES_PRODUCTS); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=3'); ?>"><?php echo ($_GET['list_order'] == '3' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=4'); ?>"><?php echo ($_GET['list_order'] == '4' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
                   </th>
                   <th class="ColumnModel hidden-sm hidden-xs noWrap">
-                    <?php echo (($_GET['list_order'] == 'model-asc' || $_GET['list_order_'] == 'model-desc') ? '<span class="SortOrderHeader">' . TABLE_HEADING_MODEL . '</span>' : TABLE_HEADING_MODEL); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=model-asc'); ?>"><?php echo ($_GET['list_order'] == 'model-asc' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=model-desc'); ?>"><?php echo ($_GET['list_order'] == 'model-desc' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <?php echo (($_GET['list_order'] == '5' || $_GET['list_order_'] == '6') ? '<span class="SortOrderHeader">' . TABLE_HEADING_MODEL . '</span>' : TABLE_HEADING_MODEL); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=5'); ?>"><?php echo ($_GET['list_order'] == '5' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=6'); ?>"><?php echo ($_GET['list_order'] == '6' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
                   </th>
                   <th class="ColumnPrice text-right hidden-sm hidden-xs noWrap">
-                    <?php echo (($_GET['list_order'] == 'price-asc' || $_GET['list_order_'] == 'price-desc') ? '<span class="SortOrderHeader">' . TABLE_HEADING_PRICE . '</span>' : TABLE_HEADING_PRICE); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=price-asc'); ?>"><?php echo ($_GET['list_order'] == 'price-asc' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=price-desc'); ?>"><?php echo ($_GET['list_order'] == 'price-desc' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <?php echo (($_GET['list_order'] == '7' || $_GET['list_order_'] == '8') ? '<span class="SortOrderHeader">' . TABLE_HEADING_PRICE . '</span>' : TABLE_HEADING_PRICE); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=7'); ?>"><?php echo ($_GET['list_order'] == '7' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=8'); ?>"><?php echo ($_GET['list_order'] == '8' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
                   </th>
                   <th class="hidden"></th>
                   <th class="ColumnQuantity text-right hidden-sm hidden-xs noWrap">
-                    <?php echo (($_GET['list_order'] == 'quantity-asc' || $_GET['list_order_'] == 'quantity-desc') ? '<span class="SortOrderHeader">' . TABLE_HEADING_QUANTITY . '</span>' : TABLE_HEADING_QUANTITY); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=quantity-asc'); ?>"><?php echo ($_GET['list_order'] == 'quantity-asc' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=quantity-desc'); ?>"><?php echo ($_GET['list_order'] == 'quantity-desc' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <?php echo (($_GET['list_order'] == '9' || $_GET['list_order_'] == '10') ? '<span class="SortOrderHeader">' . TABLE_HEADING_QUANTITY . '</span>' : TABLE_HEADING_QUANTITY); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=9'); ?>"><?php echo ($_GET['list_order'] == '9' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=10'); ?>"><?php echo ($_GET['list_order'] == '10' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
                   </th>
                   <th class="ColumnStatus text-right hidden-sm hidden-xs"><?php echo TABLE_HEADING_STATUS; ?></th>
                   <th class="ColumnSort text-right hidden-sm hidden-xs noWrap">
-                    <?php echo (($_GET['list_order'] == 'sort_order-asc' || $_GET['list_order'] == 'sort_order-desc') ? '<span class="SortOrderHeader">' . TABLE_HEADING_CATEGORIES_SORT_ORDER . '</span>' : TABLE_HEADING_CATEGORIES_SORT_ORDER); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=sort_order-asc'); ?>"><?php echo ($_GET['list_order'] == 'sort_order-asc' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=sort_order-desc'); ?>"><?php echo ($_GET['list_order'] == 'sort_order-desc' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <?php echo (($_GET['list_order'] == '11' || $_GET['list_order'] == '12') ? '<span class="SortOrderHeader">' . TABLE_HEADING_CATEGORIES_SORT_ORDER . '</span>' : TABLE_HEADING_CATEGORIES_SORT_ORDER); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=11'); ?>"><?php echo ($_GET['list_order'] == '11' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=12'); ?>"><?php echo ($_GET['list_order'] == '12' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
                   </th>
                   <th class="text-right"><?php echo TABLE_HEADING_ACTION; ?></th>
                 </tr>
               </thead>
               <tbody>
                 <?php
-                switch ($_SESSION['categories_products_sort_order']) {
-                  case 'id-asc' :
-                    $order_by = "c.categories_id ASC";
-                    break;
-                  case 'id-desc' :
-                    $order_by = "c.categories_id DESC";
-                    break;
+                switch ($_SESSION['cittinsCategoriesProductsSortOrder']) {
                   case '1' :
-                  case 'name-asc' :
+                    $order_by = "c.categories_id ASC, cd.categories_name ASC";
+                    break;
+                  case '2' :
+                    $order_by = "c.categories_id DESC, cd.categories_name DESC";
+                    break;
+                  case '3' :
                     $order_by = "cd.categories_name ASC";
                     break;
-                  case 'name-desc' :
+                  case '4' :
                     $order_by = "cd.categories_name DESC";
                     break;
-                  case 'sort_order-desc' :
+                  case '11' :
+                    $order_by = "c.sort_order ASC, cd.categories_name ASC";
+                    break;
+                  case '12' :
                     $order_by = "c.sort_order DESC, cd.categories_name DESC";
                     break;
-                  case '0' :
-                  case 'sort_order-asc' :
-                  default :
-                    $order_by = "c.sort_order ASC, cd.categories_name ASC";
                 }
 
                 $categories_count = 0;
@@ -406,27 +398,42 @@ if ($check_products > 0) {
                   <?php
                 }
 
-                switch ($_SESSION['categories_products_sort_order']) {
-                  case (0):
-                    $order_by = "p.products_sort_order, pd.products_name";
+                switch ($_SESSION['cittinsCategoriesProductsSortOrder']) {
+                  case '1':
+                    $order_by = "p.products_id ASC, pd.products_name ASC";
                     break;
-                  case (1):
-                    $order_by = "pd.products_name";
+                  case '2':
+                    $order_by = "p.products_id DESC, pd.products_name DESC";
                     break;
-                  case (2);
-                    $order_by = "p.products_model";
+                  case '3':
+                    $order_by = "pd.products_name ASC";
                     break;
-                  case (3);
-                    $order_by = "p.products_quantity, pd.products_name";
+                  case '4':
+                    $order_by = "pd.products_name DESC";
                     break;
-                  case (4);
-                    $order_by = "p.products_quantity DESC, pd.products_name";
+                  case '5':
+                    $order_by = "p.products_model ASC";
                     break;
-                  case (5);
-                    $order_by = "p.products_price_sorter, pd.products_name";
+                  case '6':
+                    $order_by = "p.products_model DESC";
                     break;
-                  case (6);
-                    $order_by = "p.products_price_sorter DESC, pd.products_name";
+                  case '7':
+                    $order_by = "p.products_price_sorter ASC";
+                    break;
+                  case '8':
+                    $order_by = "p.products_price_sorter DESC";
+                    break;
+                  case '9':
+                    $order_by = "p.products_quantity ASC";
+                    break;
+                  case '10':
+                    $order_by = "p.products_quantity DESC";
+                    break;
+                  case '11':
+                    $order_by = "p.products_sort_order ASC, pd.products_name ASC";
+                    break;
+                  case '12':
+                    $order_by = "p.products_sort_order DESC, pd.products_name DESC";
                     break;
                 }
 

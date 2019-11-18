@@ -26,3 +26,7 @@ define('TEXT_DELETE_WARNING_CHILDS_START', '<b>WARNING:</b> There are');
 define('TEXT_DELETE_WARNING_CHILDS_END', '(child-)categories still linked to this category!');
 define('TEXT_DELETE_WARNING_PRODUCTS_START', '<b>WARNING:</b> There are');
 define('TEXT_DELETE_WARNING_PRODUCTS_END', 'products still linked to this category!');
+
+define('TEXT_MOVE_CATEGORIES_INTRO_START', 'Please select which category you wish');
+define('TEXT_MOVE_CATEGORIES_INTRO_END', 'to reside in.');
+define('TEXT_MOVE_CATEGORY', '; move to:');
