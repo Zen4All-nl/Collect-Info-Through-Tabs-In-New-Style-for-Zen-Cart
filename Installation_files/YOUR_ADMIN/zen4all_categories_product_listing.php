@@ -116,29 +116,8 @@ if ($check_products > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo TITLE; ?></title>
     <link rel="stylesheet" href="includes/stylesheet.css">
+    <link rel="stylesheet" href="includes/css/z4a_categories_product_listing.css">
     <script src="includes/general.js"></script>
-    <style>
-      .attributes-on {color: #000;}
-      .pricemanager-on {color: #000;}
-      .metatags-on {color: #000;}
-      .fa-folder, .fa-folder-open {color: burlywood;}
-      .folder, .folder:hover {
-        text-decoration: none;
-        color: #000;
-      }
-      .folder:hover .fa-folder:before {
-        content: "\f07c";
-      }
-      .noWrap {
-        white-space: nowrap;
-      }
-      #childs_count {
-        display: none;
-      }
-      #products_count {
-        display: none;
-      }
-    </style>
   </head>
   <body>
     <!-- header //-->
