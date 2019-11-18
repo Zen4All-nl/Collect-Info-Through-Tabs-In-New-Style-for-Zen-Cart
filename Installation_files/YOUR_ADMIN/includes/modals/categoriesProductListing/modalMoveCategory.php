@@ -1,17 +1,38 @@
 <?php
-
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 ?>
-
-        case 'move_category':
-          $heading[] = array('text' => '<h4>' . TEXT_INFO_HEADING_MOVE_CATEGORY . '</h4>');
-
-          $contents = array('form' => zen_draw_form('move_category', FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'action=move_category_confirm&cPath=' . $cPath, 'post', 'class="form-horizontal"') . zen_draw_hidden_field('categories_id', $cInfo->categories_id));
-          $contents[] = array('text' => sprintf(TEXT_MOVE_CATEGORIES_INTRO, $cInfo->categories_name));
-          $contents[] = array('text' => zen_draw_label(sprintf(TEXT_MOVE, $cInfo->categories_name), 'move_to_category_id') . zen_draw_pull_down_menu('move_to_category_id', zen_get_category_tree(), $current_category_id, 'class="form-control"'));
-          $contents[] = array('align' => 'center', 'text' => '<button type="submit" class="btn btn-primary">' . IMAGE_MOVE . '</button> <a href="' . zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&cID=' . $cInfo->categories_id) . '" class="btn btn-default" role="button">' . IMAGE_CANCEL . '</a>');
-          break;
+<div id="moveCategoryModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <i class="fa fa-times" aria-hidden="true"></i>
+          <span class="sr-only"><?php echo TEXT_CLOSE; ?></span>
+        </button>
+        <h4><?php echo TEXT_INFO_HEADING_MOVE_CATEGORY; ?></h4>
+      </div>
+      <form name="formMoveCategoryConfirm" action=""<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING); ?>" method="post" enctype="multipart/form-data" id="moveCategoryForm" class="form-horizontal">
+        <?php echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']); ?>
+        <div class="modal-body">
+          <div class="row">
+            <?php echo zen_draw_hidden_field('cPath', '', 'id="cPath"'); ?>
+            <?php echo zen_draw_hidden_field('categories_id', '', 'id="moveCategoryId"'); ?>
+            <div class="col-sm-12">
+              <p><strong><?php echo TEXT_MOVE_CATEGORIES_INTRO_START; ?>&nbsp;<span class="category_name"></span>&nbsp;<?php echo TEXT_MOVE_CATEGORIES_INTRO_END; ?></strong></p>
+            </div>
+            <div class="col-sm-12">
+              <?php echo zen_draw_label('<span class="category_name"></span>&nbsp;' . TEXT_MOVE_CATEGORY, 'move_to_category_id', 'id="label_moveToCategoryId"') . zen_draw_pull_down_menu('move_to_category_id', zen_get_category_tree(), '', 'class="form-control"'); ?>
+            </div>
+            <div class="col-sm-12 text-center">
+              <button type="submit" class="btn btn-danger" onclick="moveCategoryConfirm();"><?php echo IMAGE_MOVE; ?></button> <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo IMAGE_CANCEL; ?></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

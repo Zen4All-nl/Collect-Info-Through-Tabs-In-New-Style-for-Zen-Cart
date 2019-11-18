@@ -224,7 +224,7 @@ $fieldTypesArray = [
     <?php
     require 'includes/admin_html_head.php';
     ?>
-  <body onLoad="init()">
+  <body>
     <!-- header //-->
     <?php require DIR_WS_INCLUDES . 'header.php'; ?>
     <!-- header_eof //-->
@@ -273,7 +273,7 @@ $fieldTypesArray = [
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h1><?php echo HEADING_TITLE . (!empty($action) ? ' <i class="fa fa-angle-double-right" aria-hidden="true"></i> ' : '') . $actionTitle; ?></h1>
+          <h1 class="panel-title"><?php echo HEADING_TITLE . (!empty($action) ? ' <i class="fa fa-angle-double-right" aria-hidden="true"></i> ' : '') . $actionTitle; ?></h1>
         </div>
         <div class="panel-body">
           <div id="actionPanel" class="panel col-sm-2">
@@ -815,11 +815,15 @@ $fieldTypesArray = [
               </div>
           <?php } ?>
         </div>
+        <div class="panel-footer text-center">
+          <strong>Cittins is developed by <a href="https:zen4all.nl" title="Zen4All" target="_blank">Zen4All</a>.</strong> - Version: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2171" target="_blank"><?php echo ZEN4ALL_CITTINS_VERSION; ?></a> - <a href="https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style/releases/latest" target="_blank"><i class="fa fa-github fa-lg"></i> Github</a><br>
+          <img src="images/zen4all_logo_small.png" alt="Zen4All Logo" title="Zen4All Logo" width="100" height="33"> Copyright  &COPY; 2008-<?php echo date("Y"); ?> Zen4All
+        </div>
       </div>
     </div>
-    <?php require DIR_WS_INCLUDES . 'modals/modalTabEdit.php'; ?>
-    <?php require DIR_WS_INCLUDES . 'modals/modalTabDelete.php'; ?>
-    <?php require DIR_WS_INCLUDES . 'modals/modalTabInfo.php'; ?>
+    <?php require DIR_WS_INCLUDES . 'modals/productLayoutEditor/modalTabEdit.php'; ?>
+    <?php require DIR_WS_INCLUDES . 'modals/productLayoutEditor/modalTabDelete.php'; ?>
+    <?php require DIR_WS_INCLUDES . 'modals/productLayoutEditor/modalTabInfo.php'; ?>
 
     <?php require DIR_WS_INCLUDES . 'javascript/zen4all_jscript_productLayoutEditor.php'; ?>
     <!-- footer //-->

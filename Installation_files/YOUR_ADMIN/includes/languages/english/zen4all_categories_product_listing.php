@@ -21,3 +21,8 @@ define('TEXT_LISTING_IMAGE_HANDLER', 'Image Handler');
 define('TEXT_LISTING_ATTRIBUTES', 'Attributes');
 define('TEXT_LISTING_PRICE_MANAGER', 'Price Manager');
 define('TEXT_LISTING_EDIT_META_TAGS', 'Meta Tags');
+
+define('TEXT_DELETE_WARNING_CHILDS_START', '<b>WARNING:</b> There are');
+define('TEXT_DELETE_WARNING_CHILDS_END', '(child-)categories still linked to this category!');
+define('TEXT_DELETE_WARNING_PRODUCTS_START', '<b>WARNING:</b> There are');
+define('TEXT_DELETE_WARNING_PRODUCTS_END', 'products still linked to this category!');

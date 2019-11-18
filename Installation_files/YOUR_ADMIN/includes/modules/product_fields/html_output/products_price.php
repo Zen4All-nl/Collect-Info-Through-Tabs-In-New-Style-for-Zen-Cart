@@ -45,13 +45,29 @@ for ($i = 0, $n = sizeof($tax_class_array); $i < $n; $i++) {
   <div class="form-group">
       <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_NET, 'products_price', 'class="col-sm-3 control-label"'); ?>
     <div class="col-sm-9 col-md-6">
+      <div class="input-group">
+          <?php if ($currencySymbolLeft != '') { ?>
+          <span class="input-group-addon"><?php echo $currencySymbolLeft; ?></span>
+        <?php } ?>
         <?php echo zen_draw_input_field('products_price', $productInfo['products_price']['value'], 'onkeyup="updateGross()" class="form-control"'); ?>
+        <?php if ($currencySymbolRight != '') { ?>
+          <span class="input-group-addon"><?php echo $currencySymbolRight; ?></span>
+        <?php } ?>
+      </div>
     </div>
   </div>
   <div class="form-group">
       <?php echo zen_draw_label(TEXT_PRODUCTS_PRICE_GROSS, 'products_price_gross', 'class="col-sm-3 control-label"'); ?>
     <div class="col-sm-9 col-md-6">
-      <?php echo zen_draw_input_field('products_price_gross', $productInfo['products_price']['value'], 'onkeyup="updateNet()" class="form-control"'); ?>
+      <div class="input-group">
+          <?php if ($currencySymbolLeft != '') { ?>
+          <span class="input-group-addon"><?php echo $currencySymbolLeft; ?></span>
+        <?php } ?>
+        <?php echo zen_draw_input_field('products_price_gross', $productInfo['products_price']['value'], 'onkeyup="updateNet()" class="form-control"'); ?>
+        <?php if ($currencySymbolRight != '') { ?>
+          <span class="input-group-addon"><?php echo $currencySymbolRight; ?></span>
+        <?php } ?>
+      </div>
     </div>
   </div>
 </div>
