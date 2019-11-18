@@ -15,12 +15,12 @@
         </button>
         <h4 class="modal-title" id="deleteCategoryHeading"><?php echo TEXT_INFO_HEADING_DELETE_CATEGORY; ?></h4>
       </div>
-      <form name="formDeleteCategoryConfirm" action="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'action=delete_category_confirm'); ?>" method="post" enctype="multipart/form-data" id="deleteCategoryForm" class="form-horizontal">
+      <form name="formDeleteCategoryConfirm" method="post" enctype="multipart/form-data" id="deleteCategoryForm" class="form-horizontal">
         <?php echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']); ?>
         <div class="modal-body">
           <div class="row">
             <?php echo zen_draw_hidden_field('cPath', '', 'id="cPath"'); ?>
-            <?php echo zen_draw_hidden_field('categories_id', '', 'id="categoryId"'); ?>
+            <?php echo zen_draw_hidden_field('categories_id', '', 'id="deleteCategoryId"'); ?>
             <div class="col-sm-12">
               <p><strong><?php echo TEXT_DELETE_CATEGORY_INTRO; ?></strong></p>
             </div>
@@ -51,7 +51,7 @@
              */
             ?>
             <div class="col-sm-12 text-center">
-              <button type="submit" class="btn btn-danger" onclick="deletCategoryConfirm();"><?php echo IMAGE_DELETE; ?></button> <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo IMAGE_CANCEL; ?></button>
+              <button type="submit" class="btn btn-danger" onclick="deleteCategoryConfirm();"><?php echo IMAGE_DELETE; ?></button> <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo IMAGE_CANCEL; ?></button>
             </div>
           </div>
         </div>

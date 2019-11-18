@@ -22,9 +22,7 @@ if ($categoryId != '') {
 ?>
 <!doctype html>
 <html <?php echo HTML_PARAMS; ?>>
-  <?php
-  require('includes/admin_html_head.php');
-  ?>
+  <?php  require('includes/admin_html_head.php');  ?>
   <body>
     <style>
       /*

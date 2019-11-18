@@ -86,8 +86,6 @@ if (!$category_lookup->EOF) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
     <title><?php echo TITLE; ?></title>
-    <link rel="icon" href="../favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="includes/stylesheet.css">
     <link rel="stylesheet" href="includes/css/collect_info.css">
     <link rel="stylesheet" href="includes/css/daterangepicker.css">

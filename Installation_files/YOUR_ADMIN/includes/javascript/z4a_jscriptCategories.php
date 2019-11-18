@@ -50,9 +50,11 @@
 
       $("#categoryInfo").off('submit').on('submit', (function (e) {
           e.preventDefault();
+          var formData;
+          formData = $('#categoryInfo').serializeArray();
           zcJS.ajax({
               url: 'ajax.php?act=ajaxAdminCategories&method=save_category',
-              data: new FormData(this)
+              data: formData
           }).done(function (resultArray) {
               console.log(resultArray);
               // update hidden field action

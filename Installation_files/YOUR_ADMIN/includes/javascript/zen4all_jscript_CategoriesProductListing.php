@@ -27,10 +27,13 @@
       }
     });
   }
+  function setCategoryFlag() {
+
+  }
   function deleteCategory(categoryId, cPath) {
 
     $('#cPath').val(cPath);
-    $('#categoryId').val(categoryId);
+    $('#deleteCategoryId').val(categoryId);
     zcJS.ajax({
       url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=deleteCategory',
       data: {
@@ -48,12 +51,12 @@
       }
     });
     $('#deleteCategoryModal').on('hidden.bs.modal', function () {
-        $('#childs_count').hide();
-        $('#products_count').hide();
-        $('#childs_count_number').empty();
-        $('#products_count_number').empty();
-        $('#delCatModalCatName').empty();
-});
+      $('#childs_count').hide();
+      $('#products_count').hide();
+      $('#childs_count_number').empty();
+      $('#products_count_number').empty();
+      $('#delCatModalCatName').empty();
+    });
   }
   function deleteCategoryConfirm() {
 
@@ -72,8 +75,84 @@
         $('#childs_count_number').empty();
         $('#products_count_number').empty();
         $('#delCatModalCatName').empty();
+        $('#cID_' + resultArray.cID).empty();
+      });
+    }));
+  }
+  function moveCategory(categoryId, cPath) {
+    $('#cPath').val(cPath);
+    $('#moveCategoryId').val(categoryId);
+    $("#moveCategoryForm select").val(categoryId);
+    zcJS.ajax({
+      url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=moveCategory',
+      data: {
+        'categoryId': categoryId
+      }
+    }).done(function (resultArray) {
+      $('.category_name').html(resultArray.categoryName)
+    });
+    $('#moveCategoryModal').on('hidden.bs.modal', function () {
+      $('.category_name').empty();
+    });
+  }
+  function moveCategoryConfirm() {
+    $("#moveCategoryForm").off('submit').on('submit', (function (e) {
+      e.preventDefault();
+      var formData;
+      formData = $('#moveCategoryForm').serializeArray();
+      zcJS.ajax({
+        url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=moveCategoryConfirm',
+        data: formData
+      }).done(function (resultArray) {
+        console.log(resultArray);
+        $('#moveCategoryModal').modal('hide');
+        $('.category_name').empty();
+        $('#cID_' + resultArray.cID).empty();
+        getMessageStack();
       });
     }));
   }
 
+  function getMessageStack() {
+    zcJS.ajax({
+      url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=messageStack'
+    }).done(function (resultArray) {
+      //console.log(resultArray);
+      if (resultArray) {
+        $('#categoriesProductListingMessageStackText').html(resultArray.modalMessageStack);
+        $('#categoriesProductListingMessageStack').modal('show');
+        setTimeout(function () {
+          $('#collectInfoMessageStack').modal('hide');
+        }, 4000);
+      }
+    });
+  }
+  $(document).ready(function () {
+    /* BOF Column hiding*/
+    $(".checkbox-menu").on("change", "input[type='checkbox']", function () {
+      $(this).closest("li").toggleClass("active", this.checked);
+    });
+    $(document).on('click', '.allow-focus', function (e) {
+      e.stopPropagation();
+    });
+
+    $("#columnDropDown input:checkbox:not(:checked)").each(function () {
+      var column = 'table .' + $(this).attr("name");
+      $(column).hide();
+    });
+
+    $("#columnDropDown input:checkbox").click(function () {
+      var column = "table ." + $(this).attr("name");
+      $(column).toggle();
+      zcJS.ajax({
+        url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=setSessionColumnValue',
+        data: {
+          'column': $(this).attr("name")
+        }
+      }).done(function (result) {
+        console.log(result);
+      });
+    });
+    /* EOF Column hiding*/
+  });
 </script>
