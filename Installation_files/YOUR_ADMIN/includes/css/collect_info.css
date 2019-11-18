@@ -127,6 +127,11 @@ div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active
 .flagNotActive {
     opacity:0.50;
 }
+#editAttributeValueModal .modal-lg {
+    width: auto;
+    margin-left: 20px;
+    margin-right: 20px;
+}
 @media (min-width: 768px) {
     .row-eq-height {
         display: -webkit-box;

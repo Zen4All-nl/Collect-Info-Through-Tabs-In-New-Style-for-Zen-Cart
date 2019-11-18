@@ -6,6 +6,8 @@
  * and open the template in the editor.
  */
 
+if (!defined('DIR_WS_MODALS')) define('DIR_WS_MODALS', DIR_WS_INCLUDES . 'modals/');
+
 define('FILENAME_ZEN4ALL_CATEGORIES', 'zen4all_categories');
 define('FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING', 'zen4all_categories_product_listing');
 define('FILENAME_ZEN4ALL_PRODUCT', 'zen4all_product');

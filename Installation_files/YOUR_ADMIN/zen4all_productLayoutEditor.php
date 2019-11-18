@@ -4,9 +4,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require('includes/application_top.php');
+require 'includes/application_top.php';
 // temp language file loading
 include DIR_WS_LANGUAGES . $_SESSION['language'] . '/product_types.php';
+$languages = zen_get_languages();
+
 $action = (isset($_GET['action']) ? $_GET['action'] : '');
 
 if (zen_not_null($action)) {
@@ -14,23 +16,23 @@ if (zen_not_null($action)) {
     case 'layout_save':
       $data = new objectInfo($_POST);
       $action = '';
-      $deleteQuery = "DELETE FROM " . TABLE_PRODUCT_TYPE_FIELDS_TO_TYPE . "
-                      WHERE product_type_id = " . (int)$data->product_type_id;
+      $deleteQuery = "DELETE FROM " . TABLE_PRODUCT_FIELDS_TO_TYPE . "
+                      WHERE product_type = " . (int)$data->product_type;
       $db->Execute($deleteQuery);
       foreach ($data->tab as $value) {
         $sortOrder = 1;
         foreach ($value['layout'] as $layout) {
-          $insertQuery = "INSERT INTO " . TABLE_PRODUCT_TYPE_FIELDS_TO_TYPE . " (product_type_id, field_id, sort_order, tab_id, show_in_frontend)
-                          VALUES ('" . (int)$data->product_type_id . "',
-                                  '" . (int)$layout['field_id'] . "',
-                                  '" . (int)$sortOrder . "',
-                                  '" . (int)$layout['tab_id'] . "',
-                                  '" . (int)$layout['show_in_frontend'] . "')";
+          $insertQuery = "INSERT INTO " . TABLE_PRODUCT_FIELDS_TO_TYPE . " (product_type, field_name, sort_order, tab_id, show_in_frontend)
+                          VALUES (" . (int)$data->product_type . ",
+                                  '" . $layout['field_name'] . "',
+                                  " . (int)$sortOrder . ",
+                                  " . (int)$layout['tab_id'] . ",
+                                  " . (int)$layout['show_in_frontend'] . ")";
           $db->Execute($insertQuery);
           $sortOrder++;
         }
       }
-      zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (int)$data->product_type_id));
+      zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (int)$data->product_type));
       break;
     case 'insert_field' :
     case 'save_field' :
@@ -43,8 +45,8 @@ if (zen_not_null($action)) {
       }
       $selectedProductTypeId = (int)$_GET['set_product_type'];
       $checkFieldQuery = "SELECT id
-                          FROM " . TABLE_PRODUCT_TYPE_FIELDS . "
-                          WHERE name = '" . $data->name . "'";
+                          FROM " . TABLE_PRODUCT_FIELDS . "
+                          WHERE field_name = '" . $data->field_name . "'";
       $checkField = $db->Execute($checkFieldQuery);
       if ($checkField->RecordCount > 0) {
         // return with error
@@ -63,14 +65,14 @@ if (zen_not_null($action)) {
         ];
         if ($action == 'insert_field') {
           $insertSqlData = [
-            'name' => $data->name,
+            'field_name' => $data->field_name,
             'type' => (int)$data->type,
             'language_string' => (int)$data->language_string,
           ];
           $sqlArray = array_merge($sqlDataArray, $insertSqlData);
-          zen_db_perform(TABLE_PRODUCT_TYPE_FIELDS, $sqlArray);
+          zen_db_perform(TABLE_PRODUCT_FIELDS, $sqlArray);
 
-          $typeSqlInformation = setSqlTypeInformation($data->name, $data->type, $data->length, $data->default_value);
+          $typeSqlInformation = setSqlTypeInformation($data->field_name, $data->type, $data->length, $data->default_value);
 
           if ($data->language_string == '0') {
             $db->Execute("ALTER TABLE " . TABLE_PRODUCTS_EXTRA . " ADD " . $typeSqlInformation);
@@ -78,9 +80,9 @@ if (zen_not_null($action)) {
             $db->Execute("ALTER TABLE " . TABLE_PRODUCTS_DESCRIPTION_EXTRA . " ADD " . $typeSqlInformation);
           }
         } elseif ($action == 'save_field') {
-          zen_db_perform(TABLE_PRODUCT_TYPE_FIELDS, $sqlDataArray, 'update', "id = '" . (int)$data->id . "'");
+          zen_db_perform(TABLE_PRODUCT_FIELDS, $sqlDataArray, 'update', "id = '" . (int)$data->id . "'");
 
-          $db->Execute("ALTER TABLE " . TABLE_PRODUCTS_EXTRA . " CHANGE " . $fieldName->fields['name'] . " " . $fieldName->fields['name'] . " VARCHAR(" . (int)$data->length . ")");
+          $db->Execute("ALTER TABLE " . TABLE_PRODUCTS_EXTRA . " CHANGE " . $fieldName->fields['field_name'] . " " . $fieldName->fields['field_name'] . " VARCHAR(" . (int)$data->length . ")");
         }
       }
       $action = '';
@@ -90,42 +92,58 @@ if (zen_not_null($action)) {
 
       $action = '';
       $data = new objectInfo($_POST);
-      $fieldName = $db->Execute("SELECT name
-                                 FROM " . TABLE_PRODUCT_TYPE_FIELDS . "
+      $fieldName = $db->Execute("SELECT field_name
+                                 FROM " . TABLE_PRODUCT_FIELDS . "
                                  WHERE id = " . (int)$data->field_id);
-      $db->Execute("DELETE FROM " . TABLE_PRODUCT_TYPE_FIELDS . "
+      $db->Execute("DELETE FROM " . TABLE_PRODUCT_FIELDS . "
                     WHERE id = " . (int)$data->field_id);
 
-      $db->Execute("ALTER TABLE " . TABLE_PRODUCTS_EXTRA . " DROP " . $fieldName->fields['name']);
+      $db->Execute("ALTER TABLE " . TABLE_PRODUCTS_EXTRA . " DROP " . $fieldName->fields['field_name']);
       zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? 'set_product_type=' . $selectedProductTypeId : '')));
       break;
     case'insert_tab':
       $data = new objectInfo($_POST);
-      $checkDefineQuery = "SELECT define
-                           FROM " . TABLE_PRODUCT_TABS . "
-                           WHERE define = '" . $data->define . "'";
-      $checkDefine = $db->Execute($checkDefineQuery);
-      if ($checkDefine->RecordCount() > 0) {
-        ?>
-        <?php
-        zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'tab-define=' . $data->define));
-      } else {
-        $db->Execute("INSERT INTO " . TABLE_PRODUCT_TABS . " (define, sort_order)
-                      VALUES('" . $data->define . "',
-                             '" . $data->sort_order . "')");
-        $action = '';
-        zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR));
+
+      if (isset($data->product_type_id) && $data->product_type_id != '') {
+        $productTypeIds = implode('|', $data->product_type_id);
       }
+      $db->Execute("INSERT INTO " . TABLE_PRODUCT_TABS . " (sort_order, product_type_id)
+                    VALUES(" . (int)$data->sort_order . ", '" . $productTypeIds . "')");
+      $tabId = zen_db_insert_id();
+      for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
+        $language_id = $languages[$i]['id'];
+
+        $db->Execute("INSERT INTO " . TABLE_PRODUCT_TABS_NAMES . " (id, language_id, tab_name)
+                      VALUES (" . (int)$tabId . ", " . (int)$language_id . " , '" . $data->tab_name[$language_id] . "')");
+      }
+      $action = '';
+      zen_redirect(zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR));
       break;
     case'save_tab':
-      $data = new objectInfo($_POST['tab']);
+      $data = new objectInfo($_POST);
+      unset($data->securityToken);
+
       $sortOrder = 1;
       foreach ($data as $tabId) {
-        $updateSortOrderQuery = "UPDATE " . TABLE_PRODUCT_TABS . "
-                                 SET sort_order = " . (int)$sortOrder . "
-                                 WHERE id = " . (int)$tabId;
-        $db->Execute($updateSortOrderQuery);
+        if (isset($tabId['product_type_id']) && $tabId['product_type_id'] != '') {
+          $productTypeIds = implode('|', $tabId['product_type_id']);
+        } else {
+          $productTypeIds = null;
+        }
+
+        $db->Execute("UPDATE " . TABLE_PRODUCT_TABS . "
+                                 SET sort_order = " . (int)$sortOrder . ",
+                                     product_type_id = '" . $productTypeIds . "'
+                                 WHERE id = " . (int)$tabId['id']);
         $sortOrder++;
+
+        for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
+          $language_id = $languages[$i]['id'];
+          $db->Execute("UPDATE " . TABLE_PRODUCT_TABS_NAMES . "
+                        SET tab_name = '" . $tabId['tab_name'][$language_id] . "'
+                        WHERE id = " . (int)$tabId['id'] . "
+                        AND language_id = " . (int)$language_id);
+        }
       }
       break;
     case'delete_tab_confirm':
@@ -150,62 +168,51 @@ foreach ($productTypes as $productType) {
 }
 $selectedProductTypeId = (isset($_GET['set_product_type']) ? (int)$_GET['set_product_type'] : '1');
 
-$fieldsToAllProductTypeQuery = "SELECT DISTINCT field_id
-                                FROM " . TABLE_PRODUCT_TYPE_FIELDS_TO_TYPE . "
-                                ORDER BY field_id";
+$fieldsToAllProductTypeQuery = "SELECT DISTINCT field_name
+                                FROM " . TABLE_PRODUCT_FIELDS_TO_TYPE . "
+                                ORDER BY field_name";
 $fieldsToAllProductType = $db->Execute($fieldsToAllProductTypeQuery);
 
 $fieldsToAllProductTypeArray = [];
 foreach ($fieldsToAllProductType as $fieldToAllProductType) {
-  $fieldsToAllProductTypeArray[] = ['fieldId' => $fieldToAllProductType['field_id']];
+  $fieldsToAllProductTypeArray[] = ['fieldName' => $fieldToAllProductType['field_name']];
 }
 
 $fieldsToProductTypeQuery = "SELECT *
-                             FROM " . TABLE_PRODUCT_TYPE_FIELDS_TO_TYPE . "
-                             WHERE product_type_id = " . (int)$selectedProductTypeId . "
+                             FROM " . TABLE_PRODUCT_FIELDS_TO_TYPE . "
+                             WHERE product_type = " . (int)$selectedProductTypeId . "
                              ORDER BY tab_id, sort_order";
 $fieldsToProductType = $db->Execute($fieldsToProductTypeQuery);
 
 $fieldsToProductTypeArray = [];
 foreach ($fieldsToProductType as $fieldToProductType) {
   $fieldsToProductTypeArray[] = [
-    'productTypeId' => $fieldToProductType['product_type_id'],
-    'fieldId' => $fieldToProductType['field_id'],
+    'productTypeId' => $fieldToProductType['product_type'],
+    'fieldName' => $fieldToProductType['field_name'],
     'sortOrder' => $fieldToProductType['sort_order'],
     'tabId' => $fieldToProductType['tab_id'],
     'showInFrontend' => $fieldToProductType['show_in_frontend']];
 }
 
-$allFieldsQuery = "SELECT *
-                   FROM " . TABLE_PRODUCT_TYPE_FIELDS . "
-                   ORDER BY description";
-$allFields = $db->Execute($allFieldsQuery);
+$htmlOutputDirList = dirListProductFields(INCLUDES_HTML_OUTPUT_FOLDER);
 
 $allFieldsArray = [];
-foreach ($allFields as $field) {
-  $allFieldsArray[] = [
-    'id' => $field['id'],
-    'name' => $field['name'],
-    'type' => $field['type'],
-    'description' => $field['description'],
-    'value' => $field['default_value'],
-    'selectValues' => $field['select_values'],
-    'fieldLength' => $field['length'],
-    'core' => $field['core'],
-    'languageString' => $field['language_string']];
+foreach ($htmlOutputDirList as $field) {
+  $allFieldsArray[] = str_replace('.php', '', $field);
 }
 
-$fieldTypes = $db->Execute("SELECT *
-                            FROM " . TABLE_PRODUCT_TYPE_FIELD_TYPES);
-
-$fieldTypesArray = [];
-$fieldTypesArray[0] = [
-  'id' => '0',
-  'text' => PLEASE_SELECT];
-
-foreach ($fieldTypes as $type) {
-  $fieldTypesArray[] = ['id' => $type['id'], 'text' => $type['text']];
-}
+$fieldTypesArray = [
+  ['id' => '0', 'text' => PLEASE_SELECT],
+  ['id' => '1', 'text' => 'string'],
+  ['id' => '2', 'text' => 'text'],
+  ['id' => '3', 'text' => 'integer'],
+  ['id' => '4', 'text' => 'decimal'],
+  ['id' => '5', 'text' => 'float'],
+  ['id' => '6', 'text' => 'dropdown'],
+  ['id' => '7', 'text' => 'radio'],
+  ['id' => '8', 'text' => 'checkbox'],
+  ['id' => '9', 'text' => 'datetime']
+];
 ?>
 <!doctype html>
 <html <?php echo HTML_PARAMS; ?>>
@@ -215,11 +222,11 @@ foreach ($fieldTypes as $type) {
     $extraCss[1] = ['location' => 'includes/css/z4a_productLayoutEditor.css'];
     ?>
     <?php
-    require('includes/admin_html_head.php');
+    require 'includes/admin_html_head.php';
     ?>
-  <body onLoad="init()">
+  <body>
     <!-- header //-->
-    <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
+    <?php require DIR_WS_INCLUDES . 'header.php'; ?>
     <!-- header_eof //-->
     <!-- body //-->
     <?php if ($action == '') { ?>
@@ -243,7 +250,7 @@ foreach ($fieldTypes as $type) {
                     replacement += '<div id="' + dropElemId + '" class="ui-state-default" role="button">\n';
                     replacement += '<input type="checkbox" name="tab[' + dropTabId + '][layout][' + dropElemId + '][show_in_frontend]" value="1" checked="checked">&nbsp;|&nbsp;\n';
                     replacement += '<span>' + dropElemTxt + '</span>\n';
-                    replacement += '<input type="hidden" name="tab[' + dropTabId + '][layout][' + dropElemId + '][field_id]" value="' + dropElemId + '">\n';
+                    replacement += '<input type="hidden" name="tab[' + dropTabId + '][layout][' + dropElemId + '][field_name]" value="' + dropElemId + '">\n';
                     replacement += '<input type="hidden" name="tab[' + dropTabId + '][layout][' + dropElemId + '][tab_id]" value="' + dropTabId + '">\n';
                     replacement += '</div>\n';
                     $(ui.item).replaceWith(replacement);
@@ -266,24 +273,15 @@ foreach ($fieldTypes as $type) {
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h1><?php echo HEADING_TITLE . (isset($action) && $action != '' ? ' <i class="fa fa-angle-double-right" aria-hidden="true"></i> ' : '') . $actionTitle; ?></h1>
+          <h1 class="panel-title"><?php echo HEADING_TITLE . (!empty($action) ? ' <i class="fa fa-angle-double-right" aria-hidden="true"></i> ' : '') . $actionTitle; ?></h1>
         </div>
         <div class="panel-body">
           <div id="actionPanel" class="panel col-sm-2">
-            <h4><?php echo NAV_TITLE_FIELDS; ?></h4>
+            <h4><?php echo NAV_TITLE_ACTIONS; ?></h4>
             <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=add_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_ADD_FIELD; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_EDIT_FIELD; ?></a>
             <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_field' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_DELETE_FIELD; ?></a>
-            <hr>
-            <h4><?php echo NAV_TITLE_TABS; ?></h4>
-            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=add_tab') ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_ADD_TAB; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_tab') ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_EDIT_TAB; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_tab') ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_DELETE_TAB; ?></a>
-            <hr>
-            <h4><?php echo NAV_TITLE_PRODUCT_TYPES; ?></h4>
-            <a href="#" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_ADD_PRODUCT_TYPE; ?></a>
-            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_product_type' . '&type_id=' . $selectedProductTypeId) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_EDIT_PRODUCT_TYPE; ?></a>
-            <a href="#" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_DELETE_PRODUCT_TYPE; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=tabs' . (isset($selectedProductTypeId) && $selectedProductTypeId != '' ? '&set_product_type=' . $selectedProductTypeId : '')) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_TABS; ?></a>
+            <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=productTypes' . '&set_product_type=' . $selectedProductTypeId) ?>" class="btn btn-primary btn-block" role="button"><?php echo BUTTON_PRODUCT_TYPES; ?></a>
           </div>
           <?php
           switch ($action) {
@@ -359,10 +357,10 @@ foreach ($fieldTypes as $type) {
                 <div class="row">
                     <?php echo zen_draw_form('add_field', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] . '&' : '') . 'action=insert_field', 'post', 'class="form-horizontal"'); ?>
                   <div id="field_name" class="form-group">
-                      <?php echo zen_draw_label(TEXT_FIELD_NAME, 'name', 'class="col-sm-3 control-label"'); ?>
+                      <?php echo zen_draw_label(TEXT_FIELD_NAME, 'field_name', 'class="col-sm-3 control-label"'); ?>
                     <i class="fa fa-lg fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?php echo TEXT_INFO_FIELD_NAME; ?>"></i>
                     <div class="col-sm-9 col-md-6">
-                        <?php echo zen_draw_input_field('name', '', 'placeholder="field_name" class="form-control"', true); ?>
+                        <?php echo zen_draw_input_field('field_name', '', 'placeholder="field_name" class="form-control"', true); ?>
                     </div>
                   </div>
                   <div id="field_description" class="form-group">
@@ -444,100 +442,6 @@ foreach ($fieldTypes as $type) {
               </div>
               <?php
               break;
-            case 'edit_field':
-              ?>
-              <div class="col-sm-10">
-                <div class="row">
-                    <?php
-                    $availableFieldsArray = getAvailableFields($allFieldsArray, $fieldsToAllProductTypeArray);
-                    $fieldsArray = [];
-                    foreach ($availableFieldsArray as $availableField) {
-                      $fieldsArray[] = [
-                        'id' => $availableField['id'],
-                        'text' => (!empty($availableField['description']) ? $availableField['description'] : $availableField['name'])];
-                    }
-                    ?>
-                    <?php echo zen_draw_form('set_product_field_form', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_field&set_product_type=' . $selectedProductTypeId, 'get', 'class="form-horizontal"'); ?>
-                  <div class="form-group">
-                      <?php echo zen_draw_label(TEXT_SELECT_FIELD, 'set_field', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9">
-                        <?php $selectedFieldId = (isset($_GET['set_field']) && $_GET['set_field'] != '' ? $_GET['set_field'] : $fieldsArray[0]['id']); ?>
-                        <?php echo zen_draw_pull_down_menu('set_field', $fieldsArray, $selectedFieldId, 'onchange="this.form.submit();" class="form-control"'); ?>
-                    </div>
-                    <?php echo zen_hide_session_id(); ?>
-                    <?php echo zen_post_all_get_params(); ?>
-                  </div>
-                  <?php echo '</form>'; ?>
-                </div>
-                <?php
-                $selectedFieldQuery = "SELECT *
-                                       FROM " . TABLE_PRODUCT_TYPE_FIELDS . "
-                                       WHERE id = " . (int)$selectedFieldId;
-                $selectedField = $db->Execute($selectedFieldQuery);
-                ?>
-                <div class="row">
-                    <?php echo zen_draw_form('edit_field', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] . '&' : '') . 'action=save_field', 'post', 'class="form-horizontal"'); ?>
-                  <div id="field_name" class="form-group">
-                      <?php echo zen_draw_label(TEXT_FIELD_NAME, 'name', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9">
-                        <?php echo zen_draw_input_field('name', $selectedField->fields['name'], 'class="form-control" disabled'); ?>
-                    </div>
-                  </div>
-                  <div id="field_description" class="form-group">
-                      <?php echo zen_draw_label(TEXT_FIELD_DESCRIPTION, 'description', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9">
-                        <?php echo zen_draw_input_field('description', $selectedField->fields['description'], 'class="form-control"'); ?>
-                    </div>
-                  </div>
-                  <div id="label_define" class="form-group">
-                      <?php echo zen_draw_label(TEXT_FIELD_LABEL_DEFINE, 'label_define', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9">
-                        <?php echo zen_draw_input_field('label_define', $selectedField->fields['label_define'], 'placeholder="LABEL_DEFINE" class="form-control"'); ?>
-                      <i class="fa fa-lg fa-info-circle" data-toggle="tooltip" data-placement="top" title="<?php echo TEXT_INFO_FIELD_LABEL_DEFINE; ?>"></i>
-                    </div>
-                  </div>
-                  <div id="field_type" class="form-group">
-                      <?php echo zen_draw_label(TEXT_FIELD_TYPE, 'type', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9">
-                        <?php echo zen_draw_pull_down_menu('type', $fieldTypesArray, $selectedField->fields['type'], 'class="form-control" disabled'); ?>
-                    </div>
-                  </div>
-                  <div id="default_value" class="form-group">
-                      <?php echo zen_draw_label(TEXT_FIELD_DEFAULT_VALUE, 'default_value', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9">
-                        <?php echo zen_draw_input_field('default_value', $selectedField->fields['default_value'], 'class="form-control"'); ?>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                      <?php echo zen_draw_label(TEXT_FIELD_SELECT_VALUES, 'select_values', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9">
-                        <?php echo zen_draw_input_field('select_values', $selectedField->fields['select_values'], 'class="form-control"'); ?>
-                    </div>
-                  </div>
-                  <div id="field_length" class="form-group">
-                      <?php echo zen_draw_label(TEXT_FIELD_LENGTH, 'length', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9">
-                        <?php echo zen_draw_input_field('length', $selectedField->fields['length'], 'class="form-control"'); ?>
-                    </div>
-                  </div>
-                  <div id="language_string" class="form-group">
-                      <?php echo zen_draw_label(TEXT_FIELD_LANGUAGE_STRING, 'language_string', 'class="col-sm-3 control-label"'); ?>
-                    <div class="col-sm-9">
-                      <div class="radio-inline">
-                        <label><?php echo zen_draw_radio_field('language_string', '0', ($selectedField->fields['language_string'] == 0 ? true : ''), '', 'disabled') . TEXT_NO; ?></label></div>
-                      <div class="radio-inline">
-                        <label><?php echo zen_draw_radio_field('language_string', '1', ($selectedField->fields['language_string'] == 1 ? true : ''), '', 'disabled') . TEXT_YES; ?></label></div>
-                    </div>
-                  </div>
-                  <div class="form-group text-right">
-                      <?php echo zen_draw_hidden_field('id', $selectedFieldId); ?>
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . (isset($_GET['set_product_type']) && $_GET['set_product_type'] != '' ? (int)$_GET['set_product_type'] : '')); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
-                  </div>
-                  <?php echo '</form>'; ?>
-                </div>
-              </div>
-              <?php
-              break;
             case 'delete_field' :
               ?>
               <div class="col-sm-10">
@@ -548,7 +452,7 @@ foreach ($fieldTypes as $type) {
                     foreach ($availableFieldsArray as $availableField) {
                       $fieldsArray[] = [
                         'id' => $availableField['id'],
-                        'text' => (!empty($availableField['description']) ? $availableField['description'] : $availableField['name'])];
+                        'text' => (!empty($availableField['description']) ? $availableField['description'] : $availableField['field_name'])];
                     }
                     ?>
                     <?php echo zen_draw_form('set_product_field_form', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=edit_field&set_product_type=' . $selectedProductTypeId, 'get', 'class="form-horizontal"'); ?>
@@ -580,18 +484,72 @@ foreach ($fieldTypes as $type) {
             case 'add_tab' :
               ?>
               <div class="col-sm-10">
-                <div class="row">
-                    <?php echo zen_draw_form('add_tab', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=insert_tab', 'post', 'class="form-horizontal"'); ?>
+                <div class="col-sm-5">
+                  <h3>Existing Tabs</h3>
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Sort Order</th>
+                        <th>Product Types</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $existingTabs = getAllTabs();
+                        foreach ($existingTabs as $tab) {
+                          ?>
+                        <tr>
+                          <td><?php echo $tab['tabName']; ?></td>
+                          <td><?php echo $tab['sortOrder']; ?></td>
+                          <td>
+                              <?php
+                              foreach ($tab['productType'] as $productType) {
+                                echo $productType . ', ';
+                              }
+                              ?>
+                          </td>
+                        </tr>
+                      <?php } ?>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col-sm-7">
+                  <h3>New Tab</h3>
+                  <?php echo zen_draw_form('add_tab', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=insert_tab', 'post', 'class="form-horizontal"'); ?>
                   <div class="form-group">
-                      <?php echo zen_draw_label(TEXT_TAB_DEFINE, 'define', 'class="col-sm-3 control-label"'); ?>
+                      <?php echo zen_draw_label(TEXT_TAB_TITLE, 'tab-name', 'class="col-sm-3 control-label"'); ?>
                     <div class="col-sm-9">
-                        <?php echo zen_draw_input_field('define', (isset($_GET['tab-define']) && $_GET['tab-define'] != '' ? $_GET['tab-define'] : ''), 'class="form-control" placeholder="TAB_XXXXXX"', true); ?>
+                        <?php for ($i = 0, $n = sizeof($languages); $i < $n; $i++) { ?>
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                              <?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']); ?>
+                          </span>
+                          <?php echo zen_draw_input_field('tab_name[' . $languages[$i]['id'] . ']', '', 'class="form-control"', true); ?>
+                        </div><br>
+                      <?php } ?>
                     </div>
                   </div>
                   <div class="form-group">
                       <?php echo zen_draw_label(TEXT_TAB_SORT_ORDER, 'sort_order', 'class="col-sm-3 control-label"'); ?>
                     <div class="col-sm-9">
                         <?php echo zen_draw_input_field('sort_order', '', 'class="form-control"'); ?>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                      <?php echo zen_draw_label(TEXT_TAB_PRODUCT_TYPE, 'product_type_id', 'class="col-sm-3 control-label"'); ?>
+                    <div class="col-sm-9">
+                        <?php
+                        $productTypes = getProductTypes();
+                        for ($i = 0, $n = sizeof($productTypes); $i < $n; $i++) {
+                          ?>
+                        <div class="checkbox">
+                          <label>
+                              <?php echo zen_draw_checkbox_field('product_type_id[' . $productTypes[$i]['type_id'] . ']', $productTypes[$i]['type_id']); ?>
+                              <?php echo $productTypes[$i]['type_name']; ?>
+                          </label>
+                        </div>
+                      <?php } ?>
                     </div>
                   </div>
                   <div class="form-group text-right">
@@ -602,28 +560,77 @@ foreach ($fieldTypes as $type) {
               </div>
               <?php
               break;
-            case 'edit_tab':
+            case 'tabs':
               ?>
               <div class="col-sm-10">
                 <div class="row">
-                    <?php echo zen_draw_form('edit_tab', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=save_tab', 'post', 'class="form-horizontal"'); ?>
-                  <div class="col-sm-3">
-                    <div id="tabs" class="connectedSortable">
-                        <?php
-                        $tabArray = getTabs();
-                        foreach ($tabArray as $tab) {
-                          ?>
-                        <div id="<?php echo $tab['id']; ?>" class="ui-state-default <?php echo ($tab['core'] == 1 ? 'ui-state-disabled' : ''); ?>" role="button">
-                          <i class="fa fa-arrows-v"></i>&nbsp;&nbsp;<?php echo (defined($tab['define']) && constant($tab['define']) != '' ? constant($tab['define']) : $tab['define']); ?>
-                          <?php echo zen_draw_hidden_field('tab[' . $tab['id'] . ']', $tab['id']); ?>
-                        </div>
-                        <?php
-                      }
-                      ?>
-                    </div>
+                    <?php echo zen_draw_form('tabs', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=save_tab', 'post', 'id="tabs" class="form-horizontal"'); ?>
+                  <div id="tabs" class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th></th>
+                          <th><?php echo TABLE_HEADING_TAB_NAME; ?></th>
+                          <th><?php echo TABLE_HEADING_PRODUCT_TYPES; ?></th>
+                          <th><?php echo TABLE_HEADING_ACTION; ?></th>
+                        </tr>
+                      </thead>
+                      <tbody id="sortableTabRows">
+                          <?php
+                          $tabArray = getAllTabs();
+                          $tabIsInUseQuery = "SELECT DISTINCT tab_id
+                                              FROM " . TABLE_PRODUCT_FIELDS_TO_TYPE;
+                          $tabIsInUse = $db->Execute($tabIsInUseQuery);
+                          $tabIsInUseArray = [];
+                          foreach ($tabIsInUse as $tab) {
+                            $tabIsInUseArray[] = [$tab['tab_id']];
+                          }
+                          foreach ($tabArray as $i => $tab) {
+                            ?>
+                          <tr id="<?php echo $tab['id']; ?>" class="ui-state-default" role="button">
+                            <td class="sortOrder" style="vertical-align: middle">
+                              <i class="fa fa-arrows-v fa-lg"></i><?php echo $tab['sortOrder']; ?>
+                              <?php echo zen_draw_hidden_field('tabSort[' . $i . '][sort_order]', $tab['sort_order'], 'class="sortOrderValue"'); ?>
+                              <?php echo zen_draw_hidden_field('tabSort[' . $i . '][id]', $tab['id']); ?>
+                            </td>
+                            <td>
+                                <?php for ($i = 0, $n = sizeof($languages); $i < $n; $i++) { ?>
+                                <div class="row">
+                                  <span>
+                                      <?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']); ?>
+                                  </span>
+                                  <?php echo getTabName($tab['id'], $languages[$i]['id']); ?>
+                                </div>
+                              <?php } ?>
+                            </td>
+                            <td>
+                              <ul>
+                                  <?php
+                                  $productTypes = getProductTypes();
+                                  for ($i = 0, $n = sizeof($productTypes); $i < $n; $i++) {
+                                    if (in_array($productTypes[$i]['type_id'], $tab['productType'])) {
+                                      ?>
+                                    <li><?php echo $productTypes[$i]['type_name']; ?></li>
+                                    <?php
+                                  }
+                                }
+                                ?>
+                              </ul>
+                            </td>
+                            <td class="text-right">
+                                <?php echo zen_draw_hidden_field('tab_id', $tab['id']); ?>
+                              <button type="button" id="button-edit-tab-<?php echo $tab['id']; ?>" class="btn btn-primary" data-toggle="modal" data-target="#TabEditModal" title="<?php echo IMAGE_EDIT; ?>" onclick="editTab('<?php echo $tab['id']; ?>');" <?php echo($tab['core'] == '1' ? 'disabled' : '') ?>><i class="fa fa-pencil fa-lg"></i></button>
+                              <button type="button" id="button-delete-tab-<?php echo $tab['id']; ?>" class="btn btn-warning" data-toggle="modal" data-target="#TabDeleteModal" title="<?php echo IMAGE_DELETE; ?>" onclick="deleteTab('<?php echo $tab['id']; ?>')" <?php echo($tab['core'] == '1' || in_array($tab['id'], $tabIsInUseArray) || $tab['productType'] != '' ? 'disabled' : '') ?>><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></button>
+                              <button type="button" id="button-info-tab-<?php echo $tab['id']; ?>" class="btn btn-info" data-toggle="modal" data-target="#TabInfoModal" title="<?php echo ICON_INFO; ?>" onclick="tabInfo('<?php echo $tab['id']; ?>')"><i class="fa fa-info"></i></button>
+                            </td>
+                          </tr>
+                          <?php echo zen_draw_hidden_field($tab['id'] . '[id]', $tab['id']); ?>
+                        <?php } ?>
+                      </tbody>
+                    </table>
                   </div>
                   <div class="row text-right">
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
+                    <button type="button" class="btn btn-primary" title="<?php echo IMAGE_INSERT; ?>"><i class="fa fa-lg fa-plus"></i></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, zen_get_all_get_params(['action'])); ?>" class="btn btn-default" role="button"><?php echo IMAGE_BACK; ?></a>
                   </div>
                   <?php echo '</form>'; ?>
                 </div>
@@ -633,28 +640,39 @@ foreach ($fieldTypes as $type) {
             case 'delete_tab':
               ?>
               <div class="col-sm-10">
-                <div class="row">
-                    <?php echo zen_draw_form('delete_tab', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_tab_confirm', 'post', 'class="form-horizontal"'); ?>
-                  <div class="row text-right">
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
-                  </div>
-                  <?php echo '</form>'; ?>
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th><?php echo TABLE_HEADING_TAB_NAME; ?></th>
+                        <th><?php echo TABLE_HEADING_ACTION; ?></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($availableTabsArray as $tab) { ?>
+                          <?php echo zen_draw_form('delete_tab', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_tab_confirm', 'post', 'class="form-horizontal"'); ?>
+                        <tr>
+                          <td><?php echo $tab['tabName']; ?></td>
+                          <td class="text-right">
+                              <?php echo zen_draw_hidden_field('tab_id', $tab['id']); ?>
+                            <button type="submit" class="btn btn-warning" title="<?php echo IMAGE_DELETE; ?>" <?php echo($tab['core'] == '1' || in_array($tab['id'], $tabIsInUseArray) || $tab['productType'] != '' ? 'disabled' : '') ?>><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></button> <?php if ($tab['core'] == '1' || in_array($tab['id'], $tabIsInUseArray) || $tab['productType'] != '') { ?>
+                              <button type="button" class="btn btn-info" onclick="getDeleteTabInfo('<?php echo $tab['id']; ?>')" data-toggle="modal" data-target="#DeleteTabInfoModal"><i class="fa fa-info"></i></button>
+                            <?php } ?>
+                          </td>
+                        </tr>
+                        <?php echo '</form>'; ?>
+                      <?php } ?>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="row text-right">
+                  <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button"><?php echo TEXT_CANCEL; ?></a>
                 </div>
               </div>
               <?php
               break;
-            case 'add_product_type':
-              ?>
-              <div class="col-sm-10">
-                <div class="row">
-                    <?php echo zen_draw_form('add_product_type', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=insert_product_type', 'post', 'class="form-horizontal"'); ?>
-                    <?php echo '</form>'; ?>
-                </div>
-              </div>
-              <?php
-              break;
-            case 'edit_product_type':
-              $productTypeInfoArray = getProductTypeInfo($_GET['type_id']);
+            case 'productTypes':
+              $productTypeInfoArray = getProductTypeInfo($_GET['set_product_type']);
               ?>
               <div class="col-sm-10">
                 <h4><?php echo TEXT_HEADING_EDIT_PRODUCT_TYPE; ?> :: <?php echo $productTypeInfoArray->type_name; ?></h4>
@@ -695,7 +713,7 @@ foreach ($fieldTypes as $type) {
                   <div class="form-group">
                       <?php echo zen_draw_label(TEXT_PRODUCT_TYPES_ALLOW_ADD_CART, 'catalog_add_to_cart', 'class="control-label col-sm-3"'); ?>
                     <div class="col-sm-9 col-md-6">
-                        <?php echo zen_draw_checkbox_field('catalog_add_to_cart', $productTypeInfoArray->allow_add_to_cart, ($productTypeInfoArray->allow_add_to_cart == 'Y' ? true : false), 'class="form-control"'); ?>
+                        <?php echo zen_draw_checkbox_field('catalog_add_to_cart', $productTypeInfoArray->allow_add_to_cart, ($productTypeInfoArray->allow_add_to_cart == 'Y'), 'class="form-control"'); ?>
                     </div>
                   </div>
                   <div class="form-group">
@@ -705,19 +723,9 @@ foreach ($fieldTypes as $type) {
                     </div>
                   </div>
                   <div class="form-group text-right">
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . $productTypeInfoArray->type_id); ?>" class="btn btn-default" role="button"><?php echo IMAGE_CANCEL; ?></a>
+                    <button type="button" class="btn btn-primary" title="<?php echo IMAGE_SAVE; ?>"><i class="fa fa-lg fa-plus"></i></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'set_product_type=' . $productTypeInfoArray->type_id); ?>" class="btn btn-default" role="button"><?php echo IMAGE_BACK; ?></a>
                   </div>
                   <?php echo '</form>'; ?>
-                </div>
-              </div>
-              <?php
-              break;
-            case 'delete_product_type':
-              ?>
-              <div class="col-sm-10">
-                <div class="row">
-                    <?php echo zen_draw_form('delete_product_type', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, 'action=delete_product_type_confirm', 'post', 'class="form-horizontal"'); ?>
-                    <?php echo '</form>'; ?>
                 </div>
               </div>
               <?php
@@ -749,69 +757,79 @@ foreach ($fieldTypes as $type) {
                 </div>
                 <div class="row"><?php echo zen_draw_separator('pixel_black.gif', '100%', '1') ?></div>
                 <div class="alert alert-info"><?php echo TEXT_INTRO_PRODUCT_TYPES; ?></div>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h4><?php echo TEXT_AVAILABLE_FIELDS; ?></h4>
-                    <div class="row">
-                      <div id="available_fields" class="connectedSortable">
-                          <?php $availableFieldsArray = getAvailableFields($allFieldsArray, $fieldsToProductTypeArray) ?>
-                          <?php for ($i = 0, $n = sizeof($availableFieldsArray); $i < $n; $i++) {
-                            ?>
-                          <div id="<?php echo $availableFieldsArray[$i]['id']; ?>" class="ui-state-default" role="button"><span><?php echo (!empty($availableFieldsArray[$i]['description']) ? $availableFieldsArray[$i]['description'] : $availableFieldsArray[$i]['name']); ?></span></div>
-                          <?php
-                        }
-                        ?>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <h4><?php echo TEXT_AVAILABLE_TABS; ?></h4>
-                    <?php echo zen_draw_form('fields', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, '&action=layout_save', 'post', 'class="form-horizontal"'); ?>
-                    <?php
-                    $availableTabsArray = getTabs();
-                    for ($i = 0, $n = sizeof($availableTabsArray); $i < $n; $i++) {
-                      ?>
-                      <div class="col-sm-3">
-                        <h3><?php echo ((defined($availableTabsArray[$i]['define']) && constant($availableTabsArray[$i]['define']) != '') ? constant($availableTabsArray[$i]['define']) : $availableTabsArray[$i]['define']); ?></h3>
-                        <div class="row">
-                          <div>show in front-end | drag</div>
-                          <div id="tab-<?php echo $availableTabsArray[$i]['id']; ?>" class="connectedSortable" name="<?php echo $availableTabsArray[$i]['id']; ?>">
-                              <?php
-                              $fields = getFieldsInTab($selectedProductTypeId, $availableTabsArray[$i]['id']);
-                              for ($j = 0, $m = sizeof($fields); $j < $m; $j++) {
-                                $fieldIsCore = fieldIsCore($fields[$j]['fieldId']);
-                                ?>
-                              <div id="<?php echo $fields[$j]['fieldId']; ?>" class="ui-state-default" role="button">
-                                <?php echo zen_draw_checkbox_field('tab[' . $fields[$j]['tabId'] . ']' . '[layout]' . '[' . $fields[$j]['fieldId'] . '][show_in_frontend]', '1', ($fields[$j]['showInFrontend'] == 1 ? true : false), 'class="ui-state-enabled"'); ?>&nbsp;|&nbsp;
-                                <span><?php echo getFieldName($fields[$j]['fieldId']); ?></span>
-                                <?php echo zen_draw_hidden_field('tab[' . $fields[$j]['tabId'] . ']' . '[layout]' . '[' . $fields[$j]['fieldId'] . '][field_id]', $fields[$j]['fieldId']); ?>
-                                <?php echo zen_draw_hidden_field('tab[' . $fields[$j]['tabId'] . ']' . '[layout]' . '[' . $fields[$j]['fieldId'] . '][tab_id]', $fields[$j]['tabId']); ?>
-                              </div>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th><h3><?php echo TEXT_AVAILABLE_FIELDS; ?></h3></th>
+                        <th><h3><?php echo TEXT_AVAILABLE_TABS; ?></h3></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <div id="available_fields" class="connectedSortable">
+                              <?php $availableFieldsArray = getAvailableFields($allFieldsArray, $fieldsToProductTypeArray) ?>
+                              <?php for ($i = 0, $n = sizeof($availableFieldsArray); $i < $n; $i++) { ?>
+                              <div id="<?php echo $availableFieldsArray[$i]; ?>" class="ui-state-default" role="button"><span><?php echo $availableFieldsArray[$i]; ?></span></div>
                             <?php } ?>
                           </div>
-                        </div>
-                      </div>
-                      <?php
-                    }
-                    ?>
-                  </div>
-                  <div class="col-sm-12 text-right">
-                      <?php echo zen_draw_hidden_field('product_type_id', $selectedProductTypeId); ?>
-                    <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, '', $request_type); ?>" class="btn btn-default" role="button">Reset</a>
-                  </div>
-                  <?php echo '</form>'; ?>
+                        </td>
+                        <td>
+
+                          <?php echo zen_draw_form('fields', FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR, '&action=layout_save', 'post', 'class="form-horizontal"'); ?>
+                          <?php
+                          $availableTabsArray = getTabsInType($selectedProductTypeId);
+                          for ($i = 0, $n = sizeof($availableTabsArray); $i < $n; $i++) {
+                            ?>
+                            <div class="row">
+                              <h4><?php echo $availableTabsArray[$i]['tabName']; ?></h4>
+                              <div class="row">
+                                <div id="tab-<?php echo $availableTabsArray[$i]['id']; ?>" class="connectedSortable" name="<?php echo $availableTabsArray[$i]['id']; ?>">
+                                    <?php
+                                    $fields = getFieldsInTab($selectedProductTypeId, $availableTabsArray[$i]['id']);
+                                    for ($j = 0, $m = sizeof($fields); $j < $m; $j++) {
+                                      ?>
+                                    <div id="<?php echo $fields[$j]['fieldName']; ?>" class="ui-state-default" role="button">
+                                      <?php echo zen_draw_checkbox_field('tab[' . $fields[$j]['tabId'] . ']' . '[layout]' . '[' . $fields[$j]['fieldName'] . '][show_in_frontend]', '1', ($fields[$j]['showInFrontend'] == 1 ? true : false), 'class="ui-state-enabled"'); ?>&nbsp;|&nbsp;
+                                      <span><?php echo $fields[$j]['fieldName']; ?></span>
+                                      <?php echo zen_draw_hidden_field('tab[' . $fields[$j]['tabId'] . ']' . '[layout]' . '[' . $fields[$j]['fieldName'] . '][field_name]', $fields[$j]['fieldName']); ?>
+                                      <?php echo zen_draw_hidden_field('tab[' . $fields[$j]['tabId'] . ']' . '[layout]' . '[' . $fields[$j]['fieldName'] . '][tab_id]', $fields[$j]['tabId']); ?>
+                                    </div>
+                                  <?php } ?>
+                                </div>
+                              </div>
+                            </div>
+                          <?php } ?>
+                          <div class="col-sm-12 text-right">
+                              <?php echo zen_draw_hidden_field('product_type', $selectedProductTypeId); ?>
+                            <button type="submit" class="btn btn-primary"><?php echo IMAGE_SAVE; ?></button> <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT_LAYOUT_EDITOR); ?>" class="btn btn-default" role="button">Reset</a>
+                          </div>
+                          <?php echo '</form>'; ?>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <!-- body_eof //-->
                 </div>
               </div>
-            <?php
-          }
-          ?>
+          <?php } ?>
+        </div>
+        <div class="panel-footer text-center">
+          <strong>Cittins is developed by <a href="https:zen4all.nl" title="Zen4All" target="_blank">Zen4All</a>.</strong> - Version: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2171" target="_blank"><?php echo ZEN4ALL_CITTINS_VERSION; ?></a> - <a href="https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style/releases/latest" target="_blank"><i class="fa fa-github fa-lg"></i> Github</a><br>
+          <img src="images/zen4all_logo_small.png" alt="Zen4All Logo" title="Zen4All Logo" width="100" height="33"> Copyright  &COPY; 2008-<?php echo date("Y"); ?> Zen4All
         </div>
       </div>
     </div>
+    <?php require DIR_WS_INCLUDES . 'modals/productLayoutEditor/modalTabEdit.php'; ?>
+    <?php require DIR_WS_INCLUDES . 'modals/productLayoutEditor/modalTabDelete.php'; ?>
+    <?php require DIR_WS_INCLUDES . 'modals/productLayoutEditor/modalTabInfo.php'; ?>
+
+    <?php require DIR_WS_INCLUDES . 'javascript/zen4all_jscript_productLayoutEditor.php'; ?>
     <!-- footer //-->
-    <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+    <?php require DIR_WS_INCLUDES . 'footer.php'; ?>
     <!-- footer_eof //-->
   </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+<?php
+require DIR_WS_INCLUDES . 'application_bottom.php';

@@ -50,11 +50,12 @@
 
       $("#categoryInfo").off('submit').on('submit', (function (e) {
           e.preventDefault();
+          var formData;
+          formData = $('#categoryInfo').serializeArray();
           zcJS.ajax({
               url: 'ajax.php?act=ajaxAdminCategories&method=save_category',
-              data: new FormData(this)
-          }).done(function (result) {
-              var resultArray = JSON.parse(result);
+              data: formData
+          }).done(function (resultArray) {
               console.log(resultArray);
               // update hidden field action
               if (resultArray['categoryId'] !== '' && $('#action').val() === 'insert_category') {
@@ -62,7 +63,7 @@
               }
               getMessageStack();
           });
-      }))
+      }));
   }
   function getMessageStack() {
       zcJS.ajax({
