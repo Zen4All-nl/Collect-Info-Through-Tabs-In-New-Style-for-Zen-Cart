@@ -7,53 +7,38 @@
  */
 ?>
 
-                  $heading[] = array(
-                      'text' => '<h5>' . TEXT_INFO_HEADING_STATUS_CATEGORY . '</h5>' . '<h4>' . zen_output_generated_category_path($current_category_id) . ' > ' . zen_get_category_name($cInfo->categories_id,
-                              $_SESSION['languages_id']) . '</h4>'
-                  );
-                  $contents = array(
-                      'form' => zen_draw_form('categories', FILENAME_CATEGORY_PRODUCT_LISTING,
-                              'action=update_category_status&cPath=' . $_GET['cPath'] . '&cID=' . $_GET['cID'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ($search_result ? '&search=' . $_GET['search'] : ''),
-                              'post', 'enctype="multipart/form-data"') . zen_draw_hidden_field('categories_id',
-                              $cInfo->categories_id) . zen_draw_hidden_field('categories_status',
-                              $cInfo->categories_status)
-                  );
-
-                  $contents[] = array('text' => TEXT_CATEGORIES_STATUS_INTRO . ' <strong>' . ($cInfo->categories_status == '1' ? TEXT_CATEGORIES_STATUS_OFF : TEXT_CATEGORIES_STATUS_ON) . '</strong>');
-                  $contents[] = array('text' => TEXT_CATEGORIES_STATUS_WARNING);
-
-                  if ($cInfo->categories_status == '1') {//category is currently Enabled, so Disable it
-
-                      $contents[] = array(
-                          'text' => (
-                              //hide subcategory selection if no subcategories
-                              zen_has_category_subcategories($_GET['cID']) ?
-                                  '<fieldset><legend>' . TEXT_SUBCATEGORIES_STATUS_INFO . '</legend>' .
-                                  '<div class="radio"><label class="control-label">' . zen_draw_radio_field('set_subcategories_status', 'set_subcategories_status_off', true) . TEXT_SUBCATEGORIES_STATUS_OFF . '</label></div>' .
-                                  '<div class="radio"><label class="control-label">' . zen_draw_radio_field('set_subcategories_status', 'set_subcategories_status_nochange') . TEXT_SUBCATEGORIES_STATUS_NOCHANGE . '</label></div></fieldset>' : '') .
-                              //hide products selection if no products
-                              (zen_get_products_to_categories($_GET['cID']) > 0 ?
-                                  '<fieldset><legend>' . TEXT_PRODUCTS_STATUS_INFO . '</legend>' .
-                                  '<div class="radio"><label>' . zen_draw_radio_field('set_products_status', 'set_products_status_off', true) . TEXT_PRODUCTS_STATUS_OFF . '</label></div>' .
-                                  '<div class="radio"><label>' . zen_draw_radio_field('set_products_status', 'set_products_status_nochange') . TEXT_PRODUCTS_STATUS_NOCHANGE . '</label></div></fieldset>' : ''));
-
-                  } else {//category is currently Disabled, so Enable it
-                      $contents[] = array(
-                          'text' => (
-                              //hide subcategory selection if no subcategories
-                              zen_has_category_subcategories($_GET['cID']) ?
-                                  '<fieldset><legend>' . TEXT_SUBCATEGORIES_STATUS_INFO . '</legend>' .
-                                  '<div class="radio"><label>' . zen_draw_radio_field('set_subcategories_status', 'set_subcategories_status_on', true) . TEXT_SUBCATEGORIES_STATUS_ON . '</label></div>' .
-                                  '<div class="radio"><label>' . zen_draw_radio_field('set_subcategories_status', 'set_subcategories_status_nochange') . TEXT_SUBCATEGORIES_STATUS_NOCHANGE . '</label></div></fieldset>' : '') .
-                              //hide products selection if no enabled nor disabled products
-                              (zen_get_products_to_categories($_GET['cID'], true) > 0 ?
-                                  '<fieldset><legend>' . TEXT_PRODUCTS_STATUS_INFO . '</legend>' .
-                                  '<div class="radio"><label>' . zen_draw_radio_field('set_products_status', 'set_products_status_on', true) . TEXT_PRODUCTS_STATUS_ON . '</label></div>' .
-                                  '<div class="radio"><label>' . zen_draw_radio_field('set_products_status', 'set_products_status_nochange') . TEXT_PRODUCTS_STATUS_NOCHANGE . '</label></div></fieldset>' : ''));
-                  }
-
-                  $contents[] = array(
-                      'align' => 'center',
-                      'text' => '<button type="submit" class="btn btn-primary">' . IMAGE_UPDATE . '</button> <a href="' . zen_href_link(FILENAME_CATEGORY_PRODUCT_LISTING,
-                              'cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ($search_result ? '&search=' . $_GET['search'] : '')) . '" class="btn btn-default" role="button">' . IMAGE_CANCEL . '</a>'
-                  );
+<div id="setCategoryFlagModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <i class="fa fa-times" aria-hidden="true"></i>
+          <span class="sr-only"><?php echo TEXT_CLOSE; ?></span>
+        </button>
+        <h4 class="modal-title" id="setFlagCategoriesHeading"><?php echo TEXT_INFO_HEADING_STATUS_CATEGORY; ?></h4><span id="setFlagCatIdHeading"></span>
+      </div>
+      <form name="formSetCategoryFlag" method="post" enctype="multipart/form-data" id="setCategoryFlagForm" class="form-horizontal">
+        <?php echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']); ?>
+        <?php echo zen_draw_hidden_field('categories_status', '', 'id="hiddenCategoriesStatus"'); ?>
+        <?php echo zen_draw_hidden_field('categories_id', '', 'id="hiddenCategoriesId"'); ?>
+        <?php echo zen_draw_hidden_field('cPath', '', 'id="hiddenCPath"'); ?>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <p><?php echo TEXT_CATEGORIES_STATUS_INTRO; ?> <strong><?php ($cInfo->categories_status == '1' ? TEXT_CATEGORIES_STATUS_OFF : TEXT_CATEGORIES_STATUS_ON); ?></strong></p>
+            </div>
+            <div class="col-sm-12">
+              <p><?php echo TEXT_CATEGORIES_STATUS_WARNING; ?></p>
+              <div id="FlagRadioHasCategorySubcategories" class="form-group">
+              </div>
+              <div id="FlagRadioGetProductsToCategories" class="form-group">
+              </div>
+              <div class="col-sm-12 text-center">
+                <button type="submit" class="btn btn-primary"onclick="setCategoryFlagConfirm();"><?php echo IMAGE_UPDATE; ?></button> <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo IMAGE_CANCEL; ?></button>
+              </div>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>

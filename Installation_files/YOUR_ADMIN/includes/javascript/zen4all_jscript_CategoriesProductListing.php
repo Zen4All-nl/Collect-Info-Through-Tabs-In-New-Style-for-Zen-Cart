@@ -21,14 +21,104 @@
       }
     }).done(function () {
       if (flag == '1') {
-        $('#flag_' + productId).removeClass('btn-danger').addClass('btn-success').attr('title', '<?php echo IMAGE_ICON_STATUS_ON; ?>').attr('onclick', 'setProductFlag(\'' + productId + '\',\'0\')');
+        $('#pFlag_' + productId).removeClass('btn-danger').addClass('btn-success').attr('title', '<?php echo IMAGE_ICON_STATUS_ON; ?>').attr('onclick', 'setProductFlag(\'' + productId + '\', \'0\')');
       } else {
-        $('#flag_' + productId).removeClass('btn-success').addClass('btn-danger').attr('title', '<?php echo IMAGE_ICON_STATUS_OFF; ?>').attr('onclick', 'setProductFlag(\'' + productId + '\',\'1\')');
+        $('#pFlag_' + productId).removeClass('btn-success').addClass('btn-danger').attr('title', '<?php echo IMAGE_ICON_STATUS_OFF; ?>').attr('onclick', 'setProductFlag(\'' + productId + '\', \'1\')');
       }
     });
   }
-  function setCategoryFlag() {
-
+  function setCategoryFlag(categoryId, cPath, flag) {
+    zcJS.ajax({
+      url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=setCategoryFlag',
+      data: {
+        'categoryId': categoryId,
+        'flag': flag,
+        'cPath': cPath,
+        'current_category_id': <?php echo $current_category_id; ?>
+      }
+    }).done(function (resultArray) {
+      $('#setFlagCatIdHeading').html(resultArray.path + ' > ' + resultArray.categoryName);
+      $('#hiddenCategoriesStatus').val(flag);
+      $('#hiddenCategoriesId').val(categoryId);
+      $('#hiddenCPath').val(cPath);
+      if (flag == 1 && resultArray.hasCategorySubcategories == true) {
+        $('#FlagRadioHasCategorySubcategories').html(
+                '\n<div class="col-sm-3"><?php echo TEXT_SUBCATEGORIES_STATUS_INFO; ?></div>\n' +
+                '<div class="col-sm-9">\n' +
+                '  <div class="radio">\n' +
+                '    <label><input type="radio" name="set_subcategories_status" value="set_subcategories_status_off" checked><?php echo TEXT_SUBCATEGORIES_STATUS_OFF; ?></label>\n' +
+                '  </div>\n' +
+                '  <div class="radio">\n' +
+                '    <label><input type="radio" name="set_subcategories_status" value="set_subcategories_status_nochange"><?php echo TEXT_SUBCATEGORIES_STATUS_NOCHANGE; ?></label>\n' +
+                '  </div>\n' +
+                '</div>\n'
+                );
+      }
+      if (flag == 1 && resultArray.getProductsToCategories > 0) {
+        $('#FlagRadioGetProductsToCategories').html(
+                '\n<div class="col-sm-3"><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></div>\n' +
+                '<div class="col-sm-9">\n' +
+                '  <div class="radio">\n' +
+                '    <label><input type="radio" name="set_products_status" value="set_products_status_off" checked><?php echo TEXT_SUBCATEGORIES_STATUS_OFF; ?></label>\n' +
+                '  </div>\n' +
+                '  <div class="radio">' +
+                '    <label><input type="radio" name="set_products_status" value="set_products_status_nochange"><?php echo TEXT_PRODUCTS_STATUS_NOCHANGE; ?></label>\n' +
+                '  </div>\n' +
+                '</div>\n'
+                );
+      }
+      if (flag == 0 && resultArray.hasCategorySubcategories == true) {
+        $('#FlagRadioHasCategorySubcategories').html(
+                '\n<div class="col-sm-3"><?php echo TEXT_SUBCATEGORIES_STATUS_INFO; ?></div>\n' +
+                '<div class="col-sm-9">\n' +
+                '  <div class="radio">\n' +
+                '    <label><input type="radio" name="set_subcategories_status" value="set_subcategories_status_on" checked><?php echo TEXT_SUBCATEGORIES_STATUS_ON; ?></label>\n' +
+                '  </div>\n' +
+                '  <div class="radio">\n' +
+                '    <label><input type="radio" name="set_subcategories_status" value="set_subcategories_status_nochange"><?php echo TEXT_SUBCATEGORIES_STATUS_NOCHANGE; ?></label>\n' +
+                '  </div>\n' +
+                '</div>\n'
+                );
+      }
+      if (flag == 0 && resultArray.getProductsToCategories > 0) {
+        $('#FlagRadioGetProductsToCategories').html(
+                '\n<div class="col-sm-3"><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></div>\n' +
+                '<div class="col-sm-9">\n' +
+                '  <div class="radio">\n' +
+                '    <label><input type="radio" name="set_products_status" value="set_products_status_on" checked><?php echo TEXT_PRODUCTS_STATUS_ON; ?></label>\n' +
+                '  </div>\n' +
+                '  <div class="radio">\n' +
+                '    <label><input type="radio" name="set_products_status" value="set_products_status_nochange"><?php echo TEXT_PRODUCTS_STATUS_NOCHANGE; ?></label>\n' +
+                '  </div>\n' +
+                '</div>\n'
+                );
+      }
+    });
+    $('#setCategoryFlagModal').on('hidden.bs.modal', function () {
+      $('#FlagRadioHasCategorySubcategories').empty();
+      $('#FlagRadioGetProductsToCategories').empty();
+    });
+  }
+  function setCategoryFlagConfirm() {
+    $("#setCategoryFlagForm").off('submit').on('submit', (function (e) {
+      e.preventDefault();
+      var formData;
+      formData = $('#setCategoryFlagForm').serializeArray();
+      zcJS.ajax({
+        url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=setCategoryFlagConfirm',
+        data: formData
+      }).done(function (resultArray) {
+        $('#setCategoryFlagModal').modal('hide');
+        $('#FlagRadioHasCategorySubcategories').empty();
+        $('#FlagRadioGetProductsToCategories').empty();
+        if (resultArray.newFlag == '1') {
+          $('#cFlag_' + resultArray.categoryId).removeClass('btn-danger').addClass('btn-success').attr('title', '<?php echo IMAGE_ICON_STATUS_ON; ?>').attr('onclick', 'setCategoryFlag(\'' + resultArray.categoryId + '\', \'' + resultArray.cPath + '\', \'1\')');
+        } else {
+          $('#cFlag_' + resultArray.categoryId).removeClass('btn-success').addClass('btn-danger').attr('title', '<?php echo IMAGE_ICON_STATUS_OFF; ?>').attr('onclick', 'setCategoryFlag(\'' + resultArray.categoryId + '\', \'' + resultArray.cPath + '\', \'0\')');
+        }
+        $('tr#cID_' + resultArray.categoryId + ' td.ColumnQuantity').html(resultArray.totalProductsOn + '<?php echo TEXT_PRODUCTS_STATUS_ON_OF; ?>' + resultArray.totalProducts + '<?php echo TEXT_PRODUCTS_STATUS_ACTIVE; ?>');
+      });
+    }));
   }
   function deleteCategory(categoryId, cPath) {
 

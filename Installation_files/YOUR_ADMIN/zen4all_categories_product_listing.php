@@ -366,9 +366,9 @@ if ($check_products > 0) {
                         <span class="btn btn-xs btn-warning" title="<?php echo IMAGE_ICON_LINKED; ?>">&nbsp;</span>
                       <?php } ?>
                       <?php if ($category['categories_status'] == '1') { ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'action=setflag_categories&flag=0&cID=' . $category['categories_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ((isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '')); ?>" class="btn btn-xs btn-success" title="<?php echo IMAGE_ICON_STATUS_ON; ?>">&nbsp;</a>
+                        <button type="button" data-toggle="modal" id="cFlag_<?php echo $category['categories_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="setCategoryFlag('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>', '1')" class="btn btn-xs btn-success" data-original-title="<?php echo IMAGE_ICON_STATUS_ON; ?>" data-target="#setCategoryFlagModal">&nbsp;</button>
                       <?php } else { ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'action=setflag_categories&flag=1&cID=' . $category['categories_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ((isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '')); ?>" class="btn btn-xs btn-danger" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>">&nbsp;</a>
+                        <button type="button" data-toggle="modal" id="cFlag_<?php echo $category['categories_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="setCategoryFlag('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>', '0')" class="btn btn-xs btn-danger" data-original-title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" data-target="#setCategoryFlagModal">&nbsp;</button>
                       <?php } ?>
                     </td>
                     <td class="ColumnSort text-right hidden-sm hidden-xs"><?php echo $category['sort_order']; ?></td>
@@ -722,6 +722,7 @@ if ($check_products > 0) {
     <!-- footer_eof //-->
     <?php require_once 'includes/modals/categoriesProductListing/modalDeleteCategory.php'; ?>
     <?php require_once 'includes/modals/categoriesProductListing/modalMoveCategory.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalSetFlagCategories.php'; ?>
     <?php require_once 'includes/javascript/zen4all_jscript_CategoriesProductListing.php'; ?>
     <?php
     if ($action != 'edit_category_meta_tags') { // bof: categories meta tags
