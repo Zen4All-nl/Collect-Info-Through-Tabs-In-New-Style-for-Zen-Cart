@@ -6,11 +6,6 @@
  */
 ?>
 <script>
-  $('#select_all').change(function () {
-    var checkboxes = $(this).closest('form').find(':checkbox');
-    checkboxes.prop('checked', $(this).is(':checked'));
-  });
-
   function setProductFlag(productId, flag) {
 
     zcJS.ajax({
@@ -158,7 +153,6 @@
         url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=deleteCategoryConfirm',
         data: formData
       }).done(function (resultArray) {
-        console.log(resultArray);
         $('#deleteCategoryModal').modal('hide');
         $('#childs_count').hide();
         $('#products_count').hide();
@@ -218,6 +212,10 @@
     });
   }
   $(document).ready(function () {
+    $('#select_all').change(function () {
+      var checkboxes = $(this).closest('form').find(':checkbox');
+      checkboxes.prop('checked', $(this).is(':checked'));
+    });
     /* BOF Column hiding*/
     $(".checkbox-menu").on("change", "input[type='checkbox']", function () {
       $(this).closest("li").toggleClass("active", this.checked);

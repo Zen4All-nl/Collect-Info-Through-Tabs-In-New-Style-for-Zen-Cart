@@ -172,7 +172,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
   {
     global $db, $zc_products;
     $data = new objectInfo($_POST);
-    // future cat specific deletion
+// future cat specific deletion
     $delete_linked = 'true';
     if (isset($data->delete_linked) && $data->delete_linked != '') {
       $delete_linked = $data->delete_linked;
