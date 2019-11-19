@@ -1,34 +1,48 @@
-<!DOCTYPE HTML>
-<html lang="en">
+<!doctype html>
+<html dir="ltr" lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Zen Cart Collect Info Through Tabs In New Style (CITTINS)</title>
-    <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
-    <link href="css/default.css" type="text/css" rel="stylesheet">
-    <link href="css/styles.css" type="text/css" rel="stylesheet">
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Zen4All Template Color Picker 1.0.0 for Zen Cart 1.5.6x</title>
+    <meta name="author" content="Zen4All">
+    <meta name="theme-color" content="#4285f4">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="favicon.ico" rel="icon" type="image/x-icon">
   </head>
   <body>
-    <div class="page-header text-center">
-      <h1>Collect Info Through Tabs In New Style (CITTINS) v1.2.0</h1>
-    </div>
     <div class="container-fluid">
-      <div class="panel panel-body">
-        <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#credits">Title</a></li>
-          <li><a data-toggle="tab" href="#about">About</a></li>
-          <li><a data-toggle="tab" href="#installation">Installation</a></li>
-          <li><a data-toggle="tab" href="#use">How to Use</a></li>
-          <li><a data-toggle="tab" href="#notes">Notes &amp; Demos</a></li>
-          <li><a data-toggle="tab" href="#history">History</a></li>
-        </ul>
-
-        <div class="tab-content">
+      <div class="card bg-light">
+        <div class="card-header">
+          <h1 class="card-title">Collect Info Through Tabs In New Style (CITTINS) v2.0.0</h1>
+        </div>
+        <div class="card-body">
+          <ul class="nav nav-tabs" id="Tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="overview-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="installation-tab" data-toggle="tab" href="#installation" role="tab" aria-controls="installation" aria-selected="false">Installation Instructions</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="setup-tab" data-toggle="tab" href="#setup" role="tab" aria-controls="setup" aria-selected="false">Configuration</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="credits-tab" data-toggle="tab" href="#credits" role="tab" aria-controls="credits" aria-selected="false">Credits & History</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="license-tab" data-toggle="tab" href="#license" role="tab" aria-controls="credits" aria-selected="false">License</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="donations-tab" data-toggle="tab" href="#donations" role="tab" aria-controls="donations" aria-selected="false">Donations</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="TabContent">
+            <div class="text-right">
+              <a href="https://www.zen-cart.com/showthread.php?226077-Zen4All-Template-Color-Picker" title="Support Thread" target="_blank" class="btn btn-info" role="button">Support Thread</a>
+              <a href="https://github.com/Zen4All-nl/Color-Picker-for-Zen-Cart" title="View on GitHub" target="_blank" class="btn btn-info" role="button">View on GitHub <i class="fa fa-github fa-lg"></i></a>
+            </div>
           <div class="tab-pane fade in active" id="credits">
             <h2>Credits</h2>
             <ul>
@@ -238,5 +252,8 @@
         $('#imageModal03').modal('show');
       });
     </script>
+    <script src="jscript/jquery-3.3.1.min.js"></script>
+    <script src="jscript/popper.min.js"></script>
+    <script src="jscript/bootstrap.min.js"></script>
   </body>
 </html>
