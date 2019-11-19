@@ -45,68 +45,72 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
     .pr-5{padding-right: 5px;}
   </style>
   <div class="row">
-  <div class="col-sm-2">
-    <div class="dropdown">
-      <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
-        <?php echo BUTTON_ADDITITONAL_ACTIONS; ?>
-        <i class="fa fa-caret-down"></i>
-      </button>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-        <li role="presentation"><a role="menuitem" href="<?php echo zen_href_link(FILENAME_OPTIONS_NAME_MANAGER) ?>" target="_blank"><?php echo IMAGE_OPTION_NAMES; ?></a></li>
-        <li role="presentation"><a role="menuitem" href="<?php echo zen_href_link(FILENAME_OPTIONS_VALUES_MANAGER) ?>" target="_blank"><?php echo IMAGE_OPTION_VALUES; ?></a></li>
-        <li role="presentation" class="divider"></li>
-        <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#update_sort_order_to_default"><?php echo TEXT_UPDATE_DEFAULTE_SORT_ORDER; ?></a></li>
-        <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#deleteAllAttributes"><?php echo TEXT_DELETE_ALL_OPTIONS_FROM_PRODUCT; ?></a></li>
-        <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#updateAttributesCopyToProduct"><?php echo TEXT_COPY_ALL_OPTIONS_TO_PRODUCT; ?></a></li>
-        <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#updateAttributesCopyToCategory"><?php echo TEXT_COPY_ALL_OPTIONS_TO_CATEGORY; ?></a></li>
-      </ul>
+    <div class="col-xs-12 col-sm-12 col-md-3">
+      <div class="dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">
+            <?php echo BUTTON_ADDITITONAL_ACTIONS; ?>
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+          <li role="presentation"><a role="menuitem" href="<?php echo zen_href_link(FILENAME_OPTIONS_NAME_MANAGER) ?>" target="_blank"><?php echo IMAGE_OPTION_NAMES; ?></a></li>
+          <li role="presentation"><a role="menuitem" href="<?php echo zen_href_link(FILENAME_OPTIONS_VALUES_MANAGER) ?>" target="_blank"><?php echo IMAGE_OPTION_VALUES; ?></a></li>
+          <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#update_sort_order_to_default"><?php echo TEXT_UPDATE_DEFAULTE_SORT_ORDER; ?></a></li>
+          <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#deleteAllAttributes"><?php echo TEXT_DELETE_ALL_OPTIONS_FROM_PRODUCT; ?></a></li>
+          <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#updateAttributesCopyToProduct"><?php echo TEXT_COPY_ALL_OPTIONS_TO_PRODUCT; ?></a></li>
+          <li role="presentation"><a role="menuitem" href="#" data-toggle="modal" data-target="#updateAttributesCopyToCategory"><?php echo TEXT_COPY_ALL_OPTIONS_TO_CATEGORY; ?></a></li>
+        </ul>
+      </div>
     </div>
-  </div>
-    <div class="col-sm-10">
-  <div class="table-responsive text-right">
-    <table class="table-striped table-bordered">
-      <tr>
-        <td class="smallText text-right"><?php echo LEGEND_BOX; ?></td>
-        <td class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_DISPLAY_ONLY; ?></td>
-        <td class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_IS_FREE; ?></td>
-        <td class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_DEFAULT; ?></td>
-        <td class="smallText text-center"><?php echo LEGEND_ATTRIBUTE_IS_DISCOUNTED; ?></td>
-        <td class="smallText text-center"><?php echo LEGEND_ATTRIBUTE_PRICE_BASE_INCLUDED; ?></td>
-        <td class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_REQUIRED; ?></td>
-        <td class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_IMAGES ?></td>
-        <td class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_DOWNLOAD ?></td>
-      </tr>
-      <tr>
-        <td class="smallText text-right"><?php echo LEGEND_KEYS; ?></td>
-        <td class="text-center attributes_display_only">
-          <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
-          <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
-        </td>
-        <td class="text-center product_attribute_is_free">
-          <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
-          <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
-        </td>
-        <td class="text-center attributes_default">
-          <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
-          <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
-        </td>
-        <td class="text-center attributes_discounted">
-          <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
-          <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
-        </td>
-        <td class="text-center attributes_price_base_included">
-          <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
-          <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
-        </td>
-        <td class="text-center attributes_required">
-          <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true"></i></button>
-          <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
-        </td>
-        <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_status_yellow.gif'); ?></td>
-        <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_status_green.gif') . '&nbsp;' . zen_image(DIR_WS_IMAGES . 'icon_status_red.gif'); ?></td>
-      </tr>
-    </table>
-  </div>
+    <div class="col-md-9 hidden-xs hidden-sm">
+      <div class="table-responsive text-right">
+        <table class="table-bordered">
+          <thead>
+            <tr>
+              <th class="smallText text-right"><?php echo LEGEND_BOX; ?></th>
+              <th class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_DISPLAY_ONLY; ?></th>
+              <th class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_IS_FREE; ?></th>
+              <th class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_DEFAULT; ?></th>
+              <th class="smallText text-center"><?php echo LEGEND_ATTRIBUTE_IS_DISCOUNTED; ?></th>
+              <th class="smallText text-center"><?php echo LEGEND_ATTRIBUTE_PRICE_BASE_INCLUDED; ?></th>
+              <th class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_REQUIRED; ?></th>
+              <th class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_IMAGES ?></th>
+              <th class="smallText text-center"><?php echo LEGEND_ATTRIBUTES_DOWNLOAD ?></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="smallText text-right"><?php echo LEGEND_KEYS; ?></td>
+              <td class="text-center attributes_display_only">
+                <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
+                <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
+              </td>
+              <td class="text-center product_attribute_is_free">
+                <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
+                <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
+              </td>
+              <td class="text-center attributes_default">
+                <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
+                <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
+              </td>
+              <td class="text-center attributes_discounted">
+                <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
+                <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
+              </td>
+              <td class="text-center attributes_price_base_included">
+                <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true" style="color:#f00;"></i></button>
+                <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
+              </td>
+              <td class="text-center attributes_required">
+                <button type="button" class="btn btn-xs btn-default" style="opacity:0.50;"><i class="fa fa-times" aria-hidden="true"></i></button>
+                <button type="button" class="btn btn-xs btn-default"><i class="fa fa-check" aria-hidden="true"></i></button>
+              </td>
+              <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_status_yellow.gif'); ?></td>
+              <td class="text-center"><?php echo zen_image(DIR_WS_IMAGES . 'icon_status_green.gif') . '&nbsp;' . zen_image(DIR_WS_IMAGES . 'icon_status_red.gif'); ?></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   <div class="table-responsive clearBoth">
@@ -120,7 +124,7 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
           <th class="text-right"><?php echo TABLE_HEADING_OPT_PRICE_PREFIX; ?>&nbsp;<?php echo TABLE_HEADING_OPT_PRICE; ?></th>
           <th class="text-right"><?php echo TABLE_HEADING_OPT_WEIGHT_PREFIX; ?>&nbsp;<?php echo TABLE_HEADING_OPT_WEIGHT; ?></th>
           <th class="text-right"><?php echo TABLE_HEADING_OPT_SORT_ORDER; ?></th>
-          <th class="text-center"><?php echo LEGEND_BOX; ?></th>
+          <th class="text-center hidden-xs hidden-sm"><?php echo LEGEND_BOX; ?></th>
           <th class="text-right"><?php echo TABLE_HEADING_PRICE_TOTAL; ?></th>
           <th class="text-center"><?php echo TABLE_HEADING_ACTION; ?></th>
         </tr>
@@ -184,7 +188,7 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
               <td <?php echo 'id="option-value-row-' . $attribute['products_attributes_id'] . '-e"'; ?> class="text-right align-middle"><?php echo $attribute['price_prefix']; ?>&nbsp;<?php echo $attribute['options_values_price']; ?></td>
               <td <?php echo 'id="option-value-row-' . $attribute['products_attributes_id'] . '-f"'; ?> class="text-right align-middle"><?php echo $attribute['products_attributes_weight_prefix']; ?>&nbsp;<?php echo $attribute['products_attributes_weight']; ?></td>
               <td <?php echo 'id="option-value-row-' . $attribute['products_attributes_id'] . '-g"'; ?> class="text-right align-middle"><?php echo $attribute['products_options_sort_order']; ?></td>
-              <td <?php echo 'id="option-value-row-' . $attribute['products_attributes_id'] . '-h"'; ?> class="text-center align-middle">
+              <td <?php echo 'id="option-value-row-' . $attribute['products_attributes_id'] . '-h"'; ?> class="text-center align-middle hidden-xs hidden-sm">
                 <span class="attributes_display_only">
                     <?php if ($attribute['attributes_display_only'] == '0') { ?>
                     <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_display_only"'; ?> class="btn btn-xs btn-default flagNotActive" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_display_only');" title="<?php echo LEGEND_ATTRIBUTES_DISPLAY_ONLY; ?>"><i class="fa fa-times" aria-hidden="true"></i>
@@ -218,7 +222,7 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
                 </span>
                 <span class="attributes_discounted">
                     <?php if ($attribute['attributes_discounted'] == '0') { ?>
-                    <button type="button" <?php echo 'id="flag-'. $attribute['products_attributes_id'] . '-attributes_discounted"'; ?> class="btn btn-xs btn-default flagNotActive" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_discounted');" title="<?php echo LEGEND_ATTRIBUTE_IS_DISCOUNTED; ?>">
+                    <button type="button" <?php echo 'id="flag-' . $attribute['products_attributes_id'] . '-attributes_discounted"'; ?> class="btn btn-xs btn-default flagNotActive" onClick="switchFlag('1', '<?php echo $attribute['products_attributes_id']; ?>', 'attributes_discounted');" title="<?php echo LEGEND_ATTRIBUTE_IS_DISCOUNTED; ?>">
                       <i class="fa fa-times" aria-hidden="true"></i>
                     </button>
                   <?php } else { ?>
@@ -281,7 +285,7 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
             </tr>
           <?php } // end foreach $attributes  ?>
         <?php } // end if ?>
-            <tr id="addAttribute">
+        <tr id="addAttribute">
           <td>
             <button type="button" data-toggle="modal" title="Add Attribute" class="btn btn-sm btn-primary" onclick="addAttribute();" data-original-title="Add Attribute" data-target="#addAttributeModal">
               <i class="fa fa-plus-circle"></i>
@@ -296,5 +300,5 @@ if (isset($_GET['pID']) && $_GET['pID'] != '') {
 } else {
   ?>
   <p class="bg-info"><?php echo TEXT_SAVE_PRODUCT_FIRST; ?></p>
-      <?php
+  <?php
 }
