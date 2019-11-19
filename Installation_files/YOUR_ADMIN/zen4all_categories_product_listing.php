@@ -720,9 +720,10 @@ if ($check_products > 0) {
     <!-- footer //-->
     <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
     <!-- footer_eof //-->
-    <?php require_once 'includes/modals/categoriesProductListing/modalDeleteCategory.php'; ?>
-    <?php require_once 'includes/modals/categoriesProductListing/modalMoveCategory.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalDeleteCategory.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalMoveCategory.php'; ?>
     <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalSetFlagCategories.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'messageStackModal.php'; ?>
     <?php require_once 'includes/javascript/zen4all_jscript_CategoriesProductListing.php'; ?>
     <?php
     if ($action != 'edit_category_meta_tags') { // bof: categories meta tags
