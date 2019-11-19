@@ -55,6 +55,7 @@ if (!isset($_SESSION['cittinsCategoriesProductsSortOrder']) || empty($_SESSION['
 } elseif (isset($_GET['list_order'])) {
   $_SESSION['cittinsCategoriesProductsSortOrder'] = (int)$_GET['list_order'];
 }
+$columnSortOrder = $_SESSION['cittinsCategoriesProductsSortOrder'];
 
 if (zen_not_null($action)) {
   switch ($action) {
@@ -267,24 +268,24 @@ if ($check_products > 0) {
                 <tr valign="middle">
                   <th><?php echo zen_draw_checkbox_field('', '', false, '', 'id="select_all"'); ?></th>
                   <th class="text-right shrink">
-                    <?php echo (($_GET['list_order'] == '1' || $_GET['list_order_'] == '2') ? '<span class="SortOrderHeader">' . TABLE_HEADING_ID . '</span>' : TABLE_HEADING_ID); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=1'); ?>"><?php echo ($_GET['list_order'] == '1' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=2'); ?>"><?php echo ($_GET['list_order'] == '2' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <span <?php echo (($columnSortOrder == '1' || $columnSortOrder == '2') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_ID; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=1'); ?>" class="<?php echo ($columnSortOrder == '1' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=2'); ?>" class="<?php echo ($columnSortOrder == '2' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
                   </th>
                   <th class="ColumnName noWrap">
-                    <?php echo (($_GET['list_order'] == '3' || $_GET['list_order_'] == '4') ? '<span class="SortOrderHeader">' . TABLE_HEADING_CATEGORIES_PRODUCTS . '</span>' : TABLE_HEADING_CATEGORIES_PRODUCTS); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=3'); ?>"><?php echo ($_GET['list_order'] == '3' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=4'); ?>"><?php echo ($_GET['list_order'] == '4' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <span <?php echo (($columnSortOrder == '3' || $columnSortOrder == '4') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_CATEGORIES_PRODUCTS; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=3'); ?>" class="<?php echo ($columnSortOrder == '3' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=4'); ?>"class="<?php echo ($columnSortOrder == '4' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
                   </th>
                   <th class="ColumnModel hidden-sm hidden-xs noWrap">
-                    <?php echo (($_GET['list_order'] == '5' || $_GET['list_order_'] == '6') ? '<span class="SortOrderHeader">' . TABLE_HEADING_MODEL . '</span>' : TABLE_HEADING_MODEL); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=5'); ?>"><?php echo ($_GET['list_order'] == '5' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=6'); ?>"><?php echo ($_GET['list_order'] == '6' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <span <?php echo (($columnSortOrder == '5' || $columnSortOrder == '6') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_MODEL; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=5'); ?>" class="<?php echo ($columnSortOrder == '5' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=6'); ?>" class="<?php echo ($columnSortOrder == '6' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
                   </th>
                   <th class="ColumnPrice text-right hidden-sm hidden-xs noWrap">
-                    <?php echo (($_GET['list_order'] == '7' || $_GET['list_order_'] == '8') ? '<span class="SortOrderHeader">' . TABLE_HEADING_PRICE . '</span>' : TABLE_HEADING_PRICE); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=7'); ?>"><?php echo ($_GET['list_order'] == '7' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=8'); ?>"><?php echo ($_GET['list_order'] == '8' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <span <?php echo (($columnSortOrder == '7' || $columnSortOrder == '8') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_PRICE; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=7'); ?>" class="<?php echo ($columnSortOrder == '7' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=8'); ?>" class="<?php echo ($columnSortOrder == '8' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
                   </th>
                   <th class="hidden"></th>
                   <th class="ColumnQuantity text-right hidden-sm hidden-xs noWrap">
-                    <?php echo (($_GET['list_order'] == '9' || $_GET['list_order_'] == '10') ? '<span class="SortOrderHeader">' . TABLE_HEADING_QUANTITY . '</span>' : TABLE_HEADING_QUANTITY); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=9'); ?>"><?php echo ($_GET['list_order'] == '9' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=10'); ?>"><?php echo ($_GET['list_order'] == '10' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <span <?php echo (($columnSortOrder == '9' || $columnSortOrder == '10') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_QUANTITY; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=9'); ?>" class="<?php echo ($columnSortOrder == '9' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=10'); ?>" class="<?php echo ($columnSortOrder == '10' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
                   </th>
                   <th class="ColumnStatus text-right hidden-sm hidden-xs"><?php echo TABLE_HEADING_STATUS; ?></th>
                   <th class="ColumnSort text-right hidden-sm hidden-xs noWrap">
-                    <?php echo (($_GET['list_order'] == '11' || $_GET['list_order'] == '12') ? '<span class="SortOrderHeader">' . TABLE_HEADING_CATEGORIES_SORT_ORDER . '</span>' : TABLE_HEADING_CATEGORIES_SORT_ORDER); ?>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=11'); ?>"><?php echo ($_GET['list_order'] == '11' ? '<i class="fa fa-caret-down fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-down fa-2x SortOrderHeaderLink"></i>'); ?></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=12'); ?>"><?php echo ($_GET['list_order'] == '12' ? '<i class="fa fa-caret-up fa-2x SortOrderHeader"></i>' : '<i class="fa fa-caret-up fa-2x SortOrderHeaderLink"></i>'); ?></a>
+                    <span <?php echo (($columnSortOrder == '11' || $columnSortOrder == '12') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_CATEGORIES_SORT_ORDER; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=11'); ?>" class="<?php echo ($columnSortOrder == '11' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=12'); ?>" class="<?php echo ($columnSortOrder == '10' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
                   </th>
                   <th class="text-right"><?php echo TABLE_HEADING_ACTION; ?></th>
                 </tr>
@@ -292,22 +293,23 @@ if ($check_products > 0) {
               <tbody>
                 <?php
                 switch ($_SESSION['cittinsCategoriesProductsSortOrder']) {
-                  case '1' :
+                  case (1) :
                     $order_by = "c.categories_id ASC, cd.categories_name ASC";
                     break;
-                  case '2' :
+                  case (2) :
                     $order_by = "c.categories_id DESC, cd.categories_name DESC";
                     break;
-                  case '3' :
+                  case (3) :
                     $order_by = "cd.categories_name ASC";
                     break;
-                  case '4' :
+                  case (4) :
                     $order_by = "cd.categories_name DESC";
                     break;
-                  case '11' :
+                  case (11) :
                     $order_by = "c.sort_order ASC, cd.categories_name ASC";
                     break;
-                  case '12' :
+                  case (12) :
+                  default :
                     $order_by = "c.sort_order DESC, cd.categories_name DESC";
                     break;
                 }
@@ -366,9 +368,9 @@ if ($check_products > 0) {
                         <span class="btn btn-xs btn-warning" title="<?php echo IMAGE_ICON_LINKED; ?>">&nbsp;</span>
                       <?php } ?>
                       <?php if ($category['categories_status'] == '1') { ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'action=setflag_categories&flag=0&cID=' . $category['categories_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ((isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '')); ?>" class="btn btn-xs btn-success" title="<?php echo IMAGE_ICON_STATUS_ON; ?>">&nbsp;</a>
+                        <button type="button" data-toggle="modal" id="cFlag_<?php echo $category['categories_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="setCategoryFlag('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>', '1')" class="btn btn-xs btn-success" data-original-title="<?php echo IMAGE_ICON_STATUS_ON; ?>" data-target="#setCategoryFlagModal">&nbsp;</button>
                       <?php } else { ?>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'action=setflag_categories&flag=1&cID=' . $category['categories_id'] . '&cPath=' . $cPath . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ((isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '')); ?>" class="btn btn-xs btn-danger" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>">&nbsp;</a>
+                        <button type="button" data-toggle="modal" id="cFlag_<?php echo $category['categories_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="setCategoryFlag('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>', '0')" class="btn btn-xs btn-danger" data-original-title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" data-target="#setCategoryFlagModal">&nbsp;</button>
                       <?php } ?>
                     </td>
                     <td class="ColumnSort text-right hidden-sm hidden-xs"><?php echo $category['sort_order']; ?></td>
@@ -399,40 +401,40 @@ if ($check_products > 0) {
                 }
 
                 switch ($_SESSION['cittinsCategoriesProductsSortOrder']) {
-                  case '1':
+                  case (1):
                     $order_by = "p.products_id ASC, pd.products_name ASC";
                     break;
-                  case '2':
+                  case (2):
                     $order_by = "p.products_id DESC, pd.products_name DESC";
                     break;
-                  case '3':
+                  case (3):
                     $order_by = "pd.products_name ASC";
                     break;
-                  case '4':
+                  case (4):
                     $order_by = "pd.products_name DESC";
                     break;
-                  case '5':
+                  case (5):
                     $order_by = "p.products_model ASC";
                     break;
-                  case '6':
+                  case (6):
                     $order_by = "p.products_model DESC";
                     break;
-                  case '7':
+                  case (7):
                     $order_by = "p.products_price_sorter ASC";
                     break;
-                  case '8':
+                  case (8):
                     $order_by = "p.products_price_sorter DESC";
                     break;
-                  case '9':
+                  case (9):
                     $order_by = "p.products_quantity ASC";
                     break;
-                  case '10':
+                  case (10):
                     $order_by = "p.products_quantity DESC";
                     break;
-                  case '11':
+                  case (11):
                     $order_by = "p.products_sort_order ASC, pd.products_name ASC";
                     break;
-                  case '12':
+                  case (12):
                     $order_by = "p.products_sort_order DESC, pd.products_name DESC";
                     break;
                 }
@@ -510,9 +512,9 @@ if ($check_products > 0) {
                         <span class="btn btn-xs btn-warning" title="<?php echo IMAGE_ICON_LINKED; ?>">&nbsp;</span>&nbsp;
                       <?php } ?>
                       <?php if ($product['products_status'] == '1') { ?>
-                        <button type="button" id="flag_<?php echo $product['products_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="setProductFlag('<?php echo $product['products_id']; ?>', '0')" class="btn btn-xs btn-success">&nbsp;</button>
+                        <button type="button" id="pFlag_<?php echo $product['products_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="setProductFlag('<?php echo $product['products_id']; ?>', '0')" class="btn btn-xs btn-success">&nbsp;</button>
                       <?php } else { ?>
-                        <button type="button" id="flag_<?php echo $product['products_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="setProductFlag('<?php echo $product['products_id']; ?>', '1')" class="btn btn-xs btn-danger">&nbsp;</button>
+                        <button type="button" id="pFlag_<?php echo $product['products_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="setProductFlag('<?php echo $product['products_id']; ?>', '1')" class="btn btn-xs btn-danger">&nbsp;</button>
                       <?php } ?>
                     </td>
                     <td class="ColumnSort text-right hidden-sm hidden-xs"><?php echo $product['products_sort_order']; ?></td>
@@ -720,8 +722,10 @@ if ($check_products > 0) {
     <!-- footer //-->
     <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
     <!-- footer_eof //-->
-    <?php require_once 'includes/modals/categoriesProductListing/modalDeleteCategory.php'; ?>
-    <?php require_once 'includes/modals/categoriesProductListing/modalMoveCategory.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalDeleteCategory.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalMoveCategory.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalSetFlagCategories.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'messageStackModal.php'; ?>
     <?php require_once 'includes/javascript/zen4all_jscript_CategoriesProductListing.php'; ?>
     <?php
     if ($action != 'edit_category_meta_tags') { // bof: categories meta tags

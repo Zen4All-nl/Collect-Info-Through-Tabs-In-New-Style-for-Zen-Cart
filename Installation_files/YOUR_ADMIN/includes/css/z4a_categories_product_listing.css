@@ -66,3 +66,13 @@ Collect information through tabs in new style - Cittins
   background-color: #449d44;
 }
 /* EOF Column Dropo Down */
+
+.SortOrderHeader {
+    color: #f60;
+    font-weight: bold;
+}
+
+.SortOrderHeaderLink {
+    color: #000;
+    font-weight: bold;
+}

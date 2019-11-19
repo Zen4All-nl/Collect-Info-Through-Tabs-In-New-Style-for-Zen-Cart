@@ -21,6 +21,88 @@ class zcAjaxAdminCategoriesProductListing extends base {
     }
   }
 
+  public function setCategoryFlag()
+  {
+
+    $data = new objectInfo($_POST);
+    $path = zen_output_generated_category_path($data->current_category_id);
+    $categoryName = zen_get_category_name($data->categoryId, $_SESSION['languages_id']);
+    $hasCategorySubcategories = zen_has_category_subcategories($data->categoryId);
+    $getProductsToCategories = zen_get_products_to_categories($data->categoryId, ($data->flag == '0' ? true : false));
+    return ([
+      'path' => $path,
+      'categoryName' => $categoryName,
+      'hasCategorySubcategories' => $hasCategorySubcategories,
+      'getProductsToCategories' => $getProductsToCategories
+    ]);
+  }
+
+  public function setCategoryFlagConfirm()
+  {
+    global $db;
+    $data = new objectInfo($_POST);
+    // disable category and products including subcategories
+    if (!isset($data->categories_id)) {
+      return(['error' => 'ERROR']);
+    }
+    $categories_id = zen_db_prepare_input($data->categories_id);
+
+    $categories = zen_get_category_tree($categories_id, '', '0', '', true);
+
+    // change the status of categories and products
+    zen_set_time_limit(600);
+    if ($data->categories_status == '1') {//form is coming from an Enabled category which is to be changed to Disabled
+      $category_status = '0'; //Disable this category
+      $subcategories_status = isset($data->set_subcategories_status) && $data->set_subcategories_status == 'set_subcategories_status_off' ? '0' : ''; //Disable subcategories or no change?
+      $products_status = isset($data->set_products_status) && $data->set_products_status == 'set_products_status_off' ? '0' : ''; //Disable products or no change?
+    } else {//form is coming from a Disabled category which is to be changed to Enabled
+      $category_status = '1'; //Enable this category
+      $subcategories_status = isset($data->set_subcategories_status) && $data->set_subcategories_status == 'set_subcategories_status_on' ? '1' : ''; //also Enable subcategories or no change?
+      $products_status = isset($data->set_products_status) && $data->set_products_status == 'set_products_status_on' ? '1' : ''; //Disable products or no change?
+    }
+
+    for ($i = 0, $n = sizeof($categories); $i < $n; $i++) {
+
+      //set categories_status
+      if ($categories[$i]['id'] == $categories_id) {//always update THIS category
+        $sql = "UPDATE " . TABLE_CATEGORIES . "
+                SET categories_status = " . (int)$category_status . "
+                WHERE categories_id = " . (int)$categories[$i]['id'];
+        $db->Execute($sql);
+      } elseif ($subcategories_status != '') {//optionally update subcategories if a change was selected
+        $sql = "UPDATE " . TABLE_CATEGORIES . "
+                SET categories_status = " . (int)$subcategories_status . "
+                WHERE categories_id = " . (int)$categories[$i]['id'];
+        $db->Execute($sql);
+      }
+
+      //set products_status
+      if ($products_status != '') {//only execute if a change was selected
+        $sql = "SELECT products_id
+                FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
+                WHERE categories_id = " . (int)$categories[$i]['id'];
+        $category_products = $db->Execute($sql);
+
+        foreach ($category_products as $category_product) {
+          $sql = "UPDATE " . TABLE_PRODUCTS . "
+                  SET products_status = " . (int)$products_status . "
+                  WHERE products_id = " . (int)$category_product['products_id'];
+          $db->Execute($sql);
+        }
+      }
+    }
+    $newFlag = ($data->categories_status == '1' ? '0' : '1');
+    $totalProducts = zen_get_products_to_categories($data->categories_id, true);
+    $totalProductsOn = zen_get_products_to_categories($data->categories_id, false);
+    return ([
+      'newFlag' => $newFlag,
+      'categoryId' => $data->categories_id,
+      'cPath' => $data->cPath,
+      'totalProducts' => $totalProducts,
+      'totalProductsOn' => $totalProductsOn
+    ]);
+  }
+
   public function deleteAttributes()
   {
     global $messageStack;
@@ -71,67 +153,6 @@ class zcAjaxAdminCategoriesProductListing extends base {
     zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
-  public function updateCategoryStatus()
-  {
-// disable category and products including subcategories
-    if (isset($_POST['categories_id'])) {
-      $categories_id = zen_db_prepare_input($_POST['categories_id']);
-
-      $categories = zen_get_category_tree($categories_id, '', '0', '', true);
-
-      for ($i = 0, $n = sizeof($categories); $i < $n; $i++) {
-        $product_ids = $db->Execute("SELECT products_id
-                                       FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
-                                       WHERE categories_id = " . (int)$categories[$i]['id']);
-
-        foreach ($product_ids as $product_id) {
-          $products[$product_id['products_id']]['categories'][] = $categories[$i]['id'];
-        }
-      }
-
-// change the status of categories and products
-      zen_set_time_limit(600);
-      for ($i = 0, $n = sizeof($categories); $i < $n; $i++) {
-        if ($_POST['categories_status'] == '1') {
-          $categories_status = '0';
-          $products_status = '0';
-        } else {
-          $categories_status = '1';
-          $products_status = '1';
-        }
-
-        $sql = "UPDATE " . TABLE_CATEGORIES . "
-                  SET categories_status = " . (int)$categories_status . "
-                  WHERE categories_id = " . (int)$categories[$i]['id'];
-        $db->Execute($sql);
-
-// set products_status based on selection
-        if ($_POST['set_products_status'] == 'set_products_status_nochange') {
-// do not change current product status
-        } else {
-          if ($_POST['set_products_status'] == 'set_products_status_on') {
-            $products_status = '1';
-          } else {
-            $products_status = '0';
-          }
-
-          $sql = "SELECT products_id
-                    FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
-                    WHERE categories_id = " . (int)$categories[$i]['id'];
-          $category_products = $db->Execute($sql);
-
-          foreach ($category_products as $category_product) {
-            $sql = "UPDATE " . TABLE_PRODUCTS . "
-                      SET products_status = " . (int)$products_status . "
-                      WHERE products_id = " . (int)$category_product['products_id'];
-            $db->Execute($sql);
-          }
-        }
-      } // for
-    }
-    zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $_GET['cPath'] . '&cID=' . $_GET['cID'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '') . ((isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '')));
-  }
-
   public function deleteCategory()
   {
     $data = new objectInfo($_POST);
@@ -151,7 +172,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
   {
     global $db, $zc_products;
     $data = new objectInfo($_POST);
-    // future cat specific deletion
+// future cat specific deletion
     $delete_linked = 'true';
     if (isset($data->delete_linked) && $data->delete_linked != '') {
       $delete_linked = $data->delete_linked;
