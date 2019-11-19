@@ -196,7 +196,9 @@
       });
     }));
   }
-
+  function deleteProduct(){
+    
+  }
   function getMessageStack() {
     zcJS.ajax({
       url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=messageStack'
