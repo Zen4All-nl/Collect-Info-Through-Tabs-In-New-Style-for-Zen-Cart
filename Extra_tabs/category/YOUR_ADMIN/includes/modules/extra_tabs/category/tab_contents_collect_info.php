@@ -1,16 +1,16 @@
 <?php
 include (DIR_WS_LANGUAGES . $_SESSION['language'] . '/products_to_categories.php');
-$catagories_query = "SELECT DISTINCT ptoc.categories_id, cd.*
+$categories_query = "SELECT DISTINCT ptoc.categories_id, cd.*
                      FROM " . TABLE_PRODUCTS_TO_CATEGORIES . " ptoc
                      LEFT JOIN " . TABLE_CATEGORIES_DESCRIPTION . " cd ON cd.categories_id = ptoc.categories_id
-                       AND cd.language_id = '" . (int)$_SESSION['languages_id'] . "'
+                       AND cd.language_id = " . (int)$_SESSION['languages_id'] . "
                      ORDER BY cd.categories_name";
-$categories_list = $db->Execute($catagories_query);
+$categories_list = $db->Execute($categories_query);
 
 // current products to categories
 $products_list = $db->Execute("SELECT products_id, categories_id
                                FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
-                               WHERE products_id = '" . $_GET['pID'] . "'");
+                               WHERE products_id = " . (int)$_GET['pID']);
 ?>
 <p><?php echo TEXT_INFO_PRODUCTS_TO_CATEGORIES_LINKER_INTRO; ?></p>
 <?php

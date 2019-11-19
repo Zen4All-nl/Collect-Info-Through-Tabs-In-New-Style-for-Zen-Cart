@@ -645,7 +645,7 @@ if ($check_products > 0) {
                 <?php
               }
               if ($zc_skip_products == false) {
-                echo zen_draw_form('newproduct', FILENAME_ZEN4ALL_PRODUCT, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&action=new_product' . (isset($_GET['search']) ? '&search=' . $_GET['search'] : ''), 'post', 'class="form-horizontal"');
+                echo zen_draw_form('newproduct', FILENAME_ZEN4ALL_PRODUCT, 'action=new_product', 'post', 'class="form-horizontal"');
                 if (empty($_GET['search'])) {
                   ?>
                   <td class="text-right"><button type="submit" class="btn btn-primary"><?php echo IMAGE_NEW_PRODUCT; ?></button></td>

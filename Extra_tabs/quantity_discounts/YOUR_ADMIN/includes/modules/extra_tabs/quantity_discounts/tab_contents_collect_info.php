@@ -1,27 +1,15 @@
 <?php
 include (DIR_WS_LANGUAGES . $_SESSION['language'] . '/products_price_manager.php');
 if (isset($_GET['pID']) && empty($_POST)) {
-  $product_mdq = $db->Execute("SELECT products_mixed_discount_quantity FROM " . TABLE_PRODUCTS . " WHERE products_id = " . (int)$_GET['pID']);
-  $pInfo->updateObjectInfo($product_mdq->fields);
+  $product_mdq = $db->Execute("SELECT products_mixed_discount_quantity
+                               FROM " . TABLE_PRODUCTS . "
+                               WHERE products_id = " . (int)$_GET['pID']);
+  $productInfo['products_mixed_discount_quantity']['value'] = $product_mdq->fields['products_mixed_discount_quantity'];
+} else {
+  $productInfo['products_mixed_discount_quantity']['value'] = 0;
 }
 ?>
 <?php
-// Products can be purchased with mixed attributes for discount
-if (!isset($pInfo->products_mixed_discount_quantity))
-  $pInfo->products_mixed_discount_quantity = '1';
-switch ($pInfo->products_mixed_discount_quantity) {
-  case '0':
-    $in_products_mixed_discount_quantity = false;
-    $out_products_mixed_discount_quantity = true;
-    break;
-  case '1':
-    $in_products_mixed_discount_quantity = true;
-    $out_products_mixed_discount_quantity = false;
-    break;
-  default:
-    $in_products_mixed_discount_quantity = true;
-    $out_products_mixed_discount_quantity = false;
-}
 // Product is product discount type - None, Percentage, Actual Price, $$ off
 $discount_type_array = array(
   array('id' => '0', 'text' => DISCOUNT_TYPE_DROPDOWN_0),
@@ -33,22 +21,25 @@ $discount_type_array = array(
 $discount_type_from_array = array(
   array('id' => '0', 'text' => DISCOUNT_TYPE_FROM_DROPDOWN_0),
   array('id' => '1', 'text' => DISCOUNT_TYPE_FROM_DROPDOWN_1));
-if (isset($pInfo->products_id) && $pInfo->products_id != '') {
-  $discounts_qty = $db->Execute("SELECT * FROM " . TABLE_PRODUCTS_DISCOUNT_QUANTITY . " WHERE products_id = '" . $pInfo->products_id . "' ORDER BY discount_qty");
+if ($productInfo['products_id']['value'] != '') {
+  $discounts_qty = $db->Execute("SELECT *
+                                 FROM " . TABLE_PRODUCTS_DISCOUNT_QUANTITY . "
+                                 WHERE products_id = " . (int)$productInfo['products_id']['value'] . "
+                                 ORDER BY discount_qty");
 }
 $i = 0;
-$discount_name = array();
+$discount_name = [];
 
 if (isset($discounts_qty) && $discounts_qty->RecordCount() > 0) {
   foreach ($discounts_qty as $item) {
     $i++;
-    $discount_name[] = array(
+    $discount_name[] = [
       'id' => $i,
       'discount_qty' => $item['discount_qty'],
-      'discount_price' => $item['discount_price']);
+      'discount_price' => $item['discount_price']];
   }
 } elseif (isset($pInfo->discount_qty) && $pInfo->discount_qty != '') {
-  $tempDiscountQty= $pInfo->discount_qty;
+  $tempDiscountQty = $pInfo->discount_qty;
   $tempDiscountPrice = $pInfo->discount_price;
   for ($i = 0, $n = sizeof($tempDiscountQty); $i < $n; $i++) {
     $tempDiscount[$i + 1] = array(
@@ -58,10 +49,10 @@ if (isset($discounts_qty) && $discounts_qty->RecordCount() > 0) {
 
   foreach ($tempDiscount as $item) {
     $i++;
-    $discount_name[] = array(
+    $discount_name[] = [
       'id' => $i,
       'discount_qty' => $item['discount_qty'],
-      'discount_price' => $item['discount_price']);
+      'discount_price' => $item['discount_price']];
   }
 }
 $disqountRow = sizeof($discount_name);
@@ -74,10 +65,10 @@ $disqountRow = sizeof($discount_name);
           <?php echo zen_draw_label(TEXT_PRODUCTS_MIXED_DISCOUNT_QUANTITY, 'products_mixed_discount_quantity'); ?>
           <div class="input-group">
             <div class="radioBtn btn-group">
-              <a class="btn btn-info <?php echo($in_products_mixed_discount_quantity == true ? 'active' : 'notActive'); ?>" data-toggle="products_mixed_discount_quantity" data-title="1"><?php echo TEXT_YES; ?></a>
-              <a class="btn btn-info <?php echo($out_products_mixed_discount_quantity == true ? 'active' : 'notActive'); ?>" data-toggle="products_mixed_discount_quantity" data-title="0"><?php echo TEXT_NO; ?></a>
+              <a class="btn btn-info <?php echo($productInfo['products_mixed_discount_quantity']['value'] == '1' ? 'active' : 'notActive'); ?>" data-toggle="products_mixed_discount_quantity" data-title="1"><?php echo TEXT_YES; ?></a>
+              <a class="btn btn-info <?php echo($productInfo['products_mixed_discount_quantity']['value'] == '0' ? 'active' : 'notActive'); ?>" data-toggle="products_mixed_discount_quantity" data-title="0"><?php echo TEXT_NO; ?></a>
             </div>
-            <?php echo zen_draw_hidden_field('products_mixed_discount_quantity', ($in_products_mixed_discount_quantity == true ? '1' : '0'), 'class="products_mixed_discount_quantity"'); ?>
+            <?php echo zen_draw_hidden_field('products_mixed_discount_quantity', $productInfo['products_mixed_discount_quantity']['value'], 'class="products_mixed_discount_quantity"'); ?>
           </div>
         </td>
       </tr>

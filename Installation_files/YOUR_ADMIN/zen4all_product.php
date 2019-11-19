@@ -13,7 +13,7 @@ $languages = zen_get_languages();
 require(DIR_WS_CLASSES . 'currencies.php');
 $currencies = new currencies();
 
-$productType = (isset($_GET['product_type']) ? $_GET['product_type'] : '');
+$productType = (isset($_POST['product_type']) ? $_POST['product_type'] : (isset($_GET['pID']) ? zen_get_products_type($_GET['pID']) : 1));
 
 $parameters = [
   'products_id' => ['value' => ''],

@@ -207,7 +207,6 @@
               'options_id': optionId
           }
       }).done(function (resultArray) {
-          //console.log(resultArray);
           $('#deleteOptionName').html('<?php echo TEXT_INFO_PRODUCTS_OPTION_NAME; ?> ' + resultArray.optionsName);
           $('#deleteOptionId').html('<?php echo TEXT_INFO_PRODUCTS_OPTION_ID; ?> ' + resultArray.optionId);
            $('input[name="options_id"]').val(resultArray.optionId);
