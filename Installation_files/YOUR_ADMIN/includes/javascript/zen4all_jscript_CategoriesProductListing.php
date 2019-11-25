@@ -239,7 +239,6 @@
     zcJS.ajax({
       url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=messageStack'
     }).done(function (resultArray) {
-      //console.log(resultArray);
       if (resultArray) {
         $('#categoriesProductListingMessageStackText').html(resultArray.modalMessageStack);
         $('#categoriesProductListingMessageStack').modal('show');
@@ -261,12 +260,10 @@
     $(document).on('click', '.allow-focus', function (e) {
       e.stopPropagation();
     });
-
     $("#columnDropDown input:checkbox:not(:checked)").each(function () {
       var column = 'table .' + $(this).attr("name");
       $(column).hide();
     });
-
     $("#columnDropDown input:checkbox").click(function () {
       var column = "table ." + $(this).attr("name");
       $(column).toggle();

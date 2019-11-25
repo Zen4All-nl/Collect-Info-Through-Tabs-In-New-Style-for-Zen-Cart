@@ -6,7 +6,7 @@ if (isset($_GET['pID']) && empty($_POST)) {
                                WHERE products_id = " . (int)$_GET['pID']);
   $productInfo['products_mixed_discount_quantity']['value'] = $product_mdq->fields['products_mixed_discount_quantity'];
 } else {
-  $productInfo['products_mixed_discount_quantity']['value'] = 0;
+  $productInfo['products_mixed_discount_quantity']['value'] = '0';
 }
 ?>
 <?php
