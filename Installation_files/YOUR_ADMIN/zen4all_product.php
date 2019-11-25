@@ -13,7 +13,7 @@ $languages = zen_get_languages();
 require(DIR_WS_CLASSES . 'currencies.php');
 $currencies = new currencies();
 
-$productType = (isset($_GET['product_type']) ? $_GET['product_type'] : '');
+$productType = (isset($_POST['product_type']) ? $_POST['product_type'] : (isset($_GET['pID']) ? zen_get_products_type($_GET['pID']) : 1));
 
 $parameters = [
   'products_id' => ['value' => ''],
@@ -187,14 +187,14 @@ if (!$category_lookup->EOF) {
             <span>
               <?php
 // hidden fields not changeable on products page
-              if (!array_search('categories', $extraTabsFiles) && $productId > 0) {
+              if (!array_search('category/tab_title_collect_info.php', $extraTabsFiles) && $productId > 0) {
                 echo zen_draw_hidden_field('master_categories_id', $productInfo['master_categories_id']['value']);
               }
-              if (!array_search('discounts', $extraTabsFiles)) {
-                echo zen_draw_hidden_field('products_discount_type', $productInfo['products_discount_type']['value']);
-                echo zen_draw_hidden_field('products_discount_type_from', $productInfo['products_discount_type_from']['value']);
+              if (!array_search('quantity_discounts/tab_title_collect_info.php', $extraTabsFiles)) {
+                echo zen_draw_hidden_field('products_discount_type', (isset($productInfo['products_discount_type']['value']) && $productInfo['products_discount_type']['value'] != '' ? $productInfo['products_discount_type']['value'] : '0'));
+                echo zen_draw_hidden_field('products_discount_type_from', (isset($productInfo['products_discount_type_from']['value']) && $productInfo['products_discount_type']['value'] != '' ? $productInfo['products_discount_type_from']['value'] : '0'));
               }
-              echo zen_draw_hidden_field('products_price_sorter', $productInfo['products_price_sorter']['value']);
+              echo zen_draw_hidden_field('products_price_sorter', (isset($productInfo['products_price_sorter']['value']) && $productInfo['products_price_sorter']['value'] != '' ? $productInfo['products_price_sorter']['value'] : '0.0000'));
               echo zen_draw_hidden_field('products_date_added', (zen_not_null($productInfo['products_date_added']['value']) ? $productInfo['products_date_added']['value'] : date('Y-m-d')));
               ?>
             </span>

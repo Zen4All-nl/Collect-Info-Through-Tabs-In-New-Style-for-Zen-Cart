@@ -523,9 +523,9 @@ if ($check_products > 0) {
                         <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=new_product' . (isset($_GET['search']) ? '&search=' . $_GET['search'] : '')); ?>" title="<?php echo TEXT_LISTING_EDIT; ?>" class="btn btn-sm btn-info" role="button">
                           <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
                         </a>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=delete_product'); ?>" title="<?php echo TEXT_LISTING_DELETE; ?>" class="btn btn-sm btn-info" role="button">
+                        <button type="button" data-toggle="modal" title="<?php echo TEXT_LISTING_DELETE; ?>" class="btn btn-sm btn-info" onclick="deleteProduct('<?php echo $product['products_id']; ?>', '<?php echo $product['products_type']; ?>');" data-original-title="<?php echo TEXT_LISTING_DELETE; ?>" data-target="#deleteProductModal">
                           <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
-                        </a>
+                        </button>
                         <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=move_product'); ?>" title="<?php echo TEXT_LISTING_MOVE; ?>" class="btn btn-sm btn-info" role="button">
                           <i class="fa fa-arrows fa-lg" aria-hidden="true"></i>
                         </a>
@@ -645,7 +645,7 @@ if ($check_products > 0) {
                 <?php
               }
               if ($zc_skip_products == false) {
-                echo zen_draw_form('newproduct', FILENAME_ZEN4ALL_PRODUCT, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&action=new_product' . (isset($_GET['search']) ? '&search=' . $_GET['search'] : ''), 'post', 'class="form-horizontal"');
+                echo zen_draw_form('newproduct', FILENAME_ZEN4ALL_PRODUCT, 'action=new_product', 'post', 'class="form-horizontal"');
                 if (empty($_GET['search'])) {
                   ?>
                   <td class="text-right"><button type="submit" class="btn btn-primary"><?php echo IMAGE_NEW_PRODUCT; ?></button></td>
@@ -725,6 +725,7 @@ if ($check_products > 0) {
     <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalDeleteCategory.php'; ?>
     <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalMoveCategory.php'; ?>
     <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalSetFlagCategories.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalDeleteProduct.php'; ?>
     <?php require_once DIR_WS_MODALS . 'messageStackModal.php'; ?>
     <?php require_once 'includes/javascript/zen4all_jscript_CategoriesProductListing.php'; ?>
     <?php
