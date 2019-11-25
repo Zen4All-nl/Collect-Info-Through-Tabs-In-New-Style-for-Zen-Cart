@@ -196,8 +196,44 @@
       });
     }));
   }
-  function deleteProduct(){
-    
+  function deleteProduct(productId, product_type) {
+    $('#deleteProductId').val(productId);
+    $('#deleteProductCategoryId').val(<?php echo $current_category_id; ?>);
+    $('#deleteProductType').val(product_type);
+    zcJS.ajax({
+      url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=deleteProduct',
+      data: {
+        'productId': productId,
+        'currentCategoryId': <?php echo $current_category_id; ?>
+      }
+    }).done(function (resultArray) {
+      console.log(resultArray);
+      $('#delProdModalProdName').html(resultArray.productName);
+      $('#delProdModalIntro').html(resultArray.intro);
+      $('#delProdModalMasterCat').html(resultArray.masterCat);
+      $('#delProdModalCats').html(resultArray.contents);
+      $('#delProdModalMultipleCatManagerLink').attr('href', '<?php echo zen_href_link(FILENAME_PRODUCTS_TO_CATEGORIES); ?>' + '&products_filter=' + productId + '&current_category_id=<?php echo $current_category_id; ?>');
+    });
+    $('#deleteProductModal').on('hidden.bs.modal', function () {
+      $('#delProdModalProdName').empty();
+      $('#delProdModalIntro').empty();
+      $('#delProdModalMasterCat').empty();
+      $('#delProdModalCats').empty();
+    });
+  }
+  function deleteProductConfirm() {
+    $("#deleteProductForm").off('submit').on('submit', (function (e) {
+      e.preventDefault();
+      var formData;
+      formData = $('#deleteProductForm').serializeArray();
+      zcJS.ajax({
+        url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=deleteProductConfirm',
+        data: formData
+      }).done(function (resultArray) {
+        $('#deleteProductModal').modal('hide');
+        $('#pID_' + resultArray.pID).empty();
+      });
+    }));
   }
   function getMessageStack() {
     zcJS.ajax({

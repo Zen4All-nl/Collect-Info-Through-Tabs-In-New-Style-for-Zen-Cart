@@ -298,54 +298,114 @@ class zcAjaxAdminCategoriesProductListing extends base {
 
   public function deleteProduct()
   {
-    
+    include DIR_FS_ADMIN . 'includes/languages/dutch/category_product_listing.php';
+    $data = new objectInfo($_POST);
+    $productName = 'ID#' . $pInfo->products_id . ': ' . zen_get_products_name($data->productId, (int)$_SESSION['languages_id']);
+    $productCategories = zen_generate_category_path($data->productId, 'product');
+    if (!isset($categoryPath)) {
+      $categoryPath = '';
+    }
+    $productCategoriesString = '';
+
+    for ($i = 0, $n = sizeof($productCategories); $i < $n; $i++) {
+      $categoryPath = '';
+      for ($j = 0, $k = sizeof($productCategories[$i]); $j < $k; $j++) {
+        $categoryPath .= $productCategories[$i][$j]['text'];
+        if ($j + 1 < $k) {
+          $categoryPath .= '&nbsp;&gt;&nbsp;';
+        }
+      }
+      if (sizeof($productCategories) > 1 && zen_get_parent_category_id($data->productId) == $productCategories[$i][sizeof($productCategories[$i]) - 1]['id']) {
+        $productCategoriesString .= '<div class="checkbox">' . "\n";
+        $productCategoriesString .= '  <label>' . "\n";
+        $productCategoriesString .= '    <strong><span class="text-danger">' . zen_draw_checkbox_field('product_categories[]', $productCategories[$i][sizeof($productCategories[$i]) - 1]['id'], false) . $categoryPath . '</span></strong>' . "\n";
+        $productCategoriesString .= '  </label>' . "\n";
+        $productCategoriesString .= '</div>' . "\n";
+        $productMasterCategoryString = $categoryPath;
+      } else {
+        $productCategoriesString .= '<div class="checkbox">' . "\n";
+        $productCategoriesString .= '  <label>' . "\n";
+        $productCategoriesString .= '    <strong>' . zen_draw_checkbox_field('product_categories[]', $productCategories[$i][sizeof($productCategories[$i]) - 1]['id'], true) . $categoryPath . '</strong>' . "\n";
+        $productCategoriesString .= '  </label>' . "\n";
+        $productCategoriesString .= '</div>' . "\n";
+      }
+    }
+    $productCategoriesStringReturn = substr($productCategoriesString, 0, -4);
+    $intro = sprintf(TEXT_DELETE_PRODUCT_INTRO, $data->productId);
+    $masterCat = '<span class="text-danger"><strong>' . TEXT_MASTER_CATEGORIES_ID . ' ID#' . zen_get_parent_category_id($data->productId) . ' ' . $productMasterCategoryString . '</strong></span>';
+
+    return([
+      'productName' => $productName,
+      'masterCat' => $masterCat,
+      'productCategories' => $productCategories,
+      'intro' => $intro,
+      'contents' => $productCategoriesStringReturn
+    ]);
   }
 
   public function deleteProductConfirm()
   {
-    global $db;
+    global $db, $zc_products;
     $data = new objectInfo($_POST);
 
     $do_delete_flag = false;
-    if (isset($_POST['products_id']) && isset($_POST['product_categories']) && is_array($_POST['product_categories'])) {
-      $product_id = zen_db_prepare_input($_POST['products_id']);
-      $product_categories = $_POST['product_categories'];
+    if (isset($data->products_id) && isset($data->product_categories) && is_array($data->product_categories)) {
+      $product_id = (int)$data->products_id;
+      $product_categories = $data->product_categories;
       $do_delete_flag = true;
-      if (!isset($delete_linked)) {
+
+      $delete_linked = 'true';
+      if (isset($data->delete_linked) && $data->delete_linked == 'delete_linked_no') {
+        $delete_linked = 'false';
+      } else {
         $delete_linked = 'true';
       }
     }
 
-    if (zen_not_null($cascaded_prod_id_for_delete) && zen_not_null($cascaded_prod_cat_for_delete)) {
+    /*
+     * Zen4All: commented as this is nott used for now
+      if (!empty($cascaded_prod_id_for_delete) && !empty($cascaded_prod_cat_for_delete)) {
       $product_id = $cascaded_prod_id_for_delete;
       $product_categories = $cascaded_prod_cat_for_delete;
       $do_delete_flag = true;
       // no check for $delete_linked here, because it should already be passed from categories.php
-    }
+      }
+     */
 
     if ($do_delete_flag) {
-      //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__BELOW_HERE--------------------------------------------------------
-      if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product_confirm.php')) {
-        require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product_confirm.php');
+
+      /*
+       * PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__BELOW_HERE
+       */
+      if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($data->product_type) . '/zen4all_delete_product_confirm.php')) {
+        require(DIR_WS_MODULES . $zc_products->get_handler($data->product_type) . '/zen4all_delete_product_confirm.php');
       }
-      //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__ABOVE__HERE--------------------------------------------------------
-      // now do regular non-type-specific delete:
-      // remove product from all its categories:
-      for ($i = 0, $n = sizeof($product_categories); $i < $n; $i++) {
+      /*
+       * PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__ABOVE__HERE
+       */
+
+      /*
+       * now do regular non-type-specific delete:
+       * remove product from all its categories:
+       */
+      for ($k = 0, $m = sizeof($product_categories); $k < $m; $k++) {
         $db->Execute("DELETE FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
-                  WHERE products_id = " . (int)$product_id . "
-                  AND categories_id = " . (int)$product_categories[$i]);
+                      WHERE products_id = " . (int)$product_id . "
+                      AND categories_id = " . (int)$product_categories[$k]);
       }
       // confirm that product is no longer linked to any categories
       $count_categories = $db->Execute("SELECT COUNT(categories_id) AS total
-                                    FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
-                                    WHERE products_id = " . (int)$product_id);
-      // echo 'count of category links for this product=' . $count_categories->fields['total'] . '<br />';
+                                        FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
+                                        WHERE products_id = " . (int)$product_id);
+
       // if not linked to any categories, do delete:
       if ($count_categories->fields['total'] == '0') {
         zen_remove_product($product_id, $delete_linked);
       }
     } // endif $do_delete_flag
+    return ([
+      'pID' => $product_id
+    ]);
   }
 
   public function setSessionColumnValue()
