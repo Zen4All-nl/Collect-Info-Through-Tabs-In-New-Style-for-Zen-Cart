@@ -87,7 +87,7 @@ if (!$category_lookup->EOF) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
     <title><?php echo TITLE; ?></title>
     <link rel="stylesheet" href="includes/stylesheet.css">
-    <link rel="stylesheet" href="includes/css/collect_info.css">
+    <link rel="stylesheet" href="includes/css/zen4all_product.css">
     <link rel="stylesheet" href="includes/css/daterangepicker.css">
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> -->
     <script src="includes/general.js"></script>
@@ -104,8 +104,10 @@ if (!$category_lookup->EOF) {
     <div class="container-fluid">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title col-sm-10"><?php echo sprintf(TEXT_NEW_PRODUCT, zen_output_generated_category_path($current_category_id)); ?></h3>
-          <div class="col-sm-2"><?php echo zen_info_image($cInfo->categories_image, $cInfo->categories_name, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></div>
+          <div class="row">
+            <h3 class="panel-title col-sm-10"><?php echo sprintf(TEXT_NEW_PRODUCT, zen_output_generated_category_path($current_category_id)); ?></h3>
+            <div class="col-sm-2"><?php echo zen_info_image($cInfo->categories_image, $cInfo->categories_name, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></div>
+          </div>
         </div>
         <div class="panel-body">
           <form name="productInfo" enctype="multipart/form-data" id="productInfo" class="form-horizontal">

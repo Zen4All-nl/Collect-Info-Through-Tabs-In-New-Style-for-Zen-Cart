@@ -21,6 +21,10 @@ class zcAjaxAdminCategoriesProductListing extends base {
     }
   }
 
+  /**
+   * 
+   * @return array
+   */
   public function setCategoryFlag()
   {
 
@@ -37,6 +41,11 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $db
+   * @return array
+   */
   public function setCategoryFlagConfirm()
   {
     global $db;
@@ -103,6 +112,11 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $messageStack
+   * @return array
+   */
   public function deleteAttributes()
   {
     global $messageStack;
@@ -119,6 +133,9 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   */
   public function updateAttributesSortOrder()
   {
     zen_update_attributes_products_option_values_sort_order($_GET['products_id']);
@@ -127,6 +144,9 @@ class zcAjaxAdminCategoriesProductListing extends base {
     zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
+  /**
+   * 
+   */
   public function updateAttributesCopyToProduct()
   {
     $copy_attributes_delete_first = ($_POST['copy_attributes'] == 'copy_attributes_delete' ? '1' : '0');
@@ -137,6 +157,9 @@ class zcAjaxAdminCategoriesProductListing extends base {
     zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
+  /**
+   * 
+   */
   public function updateAttributesCopyToCategory()
   {
     $copy_attributes_delete_first = ($_POST['copy_attributes'] == 'copy_attributes_delete' ? '1' : '0');
@@ -153,6 +176,10 @@ class zcAjaxAdminCategoriesProductListing extends base {
     zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
+  /**
+   * 
+   * @return array
+   */
   public function deleteCategory()
   {
     $data = new objectInfo($_POST);
@@ -168,6 +195,12 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $db
+   * @global integer $zc_products
+   * @return array
+   */
   public function deleteCategoryConfirm()
   {
     global $db, $zc_products;
@@ -233,6 +266,10 @@ class zcAjaxAdminCategoriesProductListing extends base {
     return (['cID' => $data->categories_id]);
   }
 
+  /**
+   * 
+   * @return array
+   */
   public function moveCategory()
   {
     $data = new objectInfo($_POST);
@@ -242,6 +279,12 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $db
+   * @global type $messageStack
+   * @return array
+   */
   public function moveCategoryConfirm()
   {
     global $db, $messageStack;
@@ -296,6 +339,10 @@ class zcAjaxAdminCategoriesProductListing extends base {
     }
   }
 
+  /**
+   * 
+   * @return array
+   */
   public function deleteProduct()
   {
     include DIR_FS_ADMIN . 'includes/languages/dutch/category_product_listing.php';
@@ -343,6 +390,12 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $db
+   * @global integer $zc_products
+   * @return array
+   */
   public function deleteProductConfirm()
   {
     global $db, $zc_products;
@@ -408,6 +461,86 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @return array
+   */
+  public function moveProduct()
+  {
+    $data = new objectInfo($_POST);
+
+    $product_categories = zen_generate_category_path($data->productId, 'product');
+    for ($i = 0, $n = sizeof($product_categories); $i < $n; $i++) {
+      $category_path = '';
+      for ($j = 0, $k = sizeof($product_categories[$i]); $j < $k; $j++) {
+        $category_path .= $product_categories[$i][$j]['text'];
+        if ($j + 1 < $k) {
+          $category_path .= '&nbsp;&gt;&nbsp;';
+        }
+      }
+      if (sizeof($product_categories) > 1 && zen_get_parent_category_id($data->productId) == $product_categories[$i][sizeof($product_categories[$i]) - 1]['id']) {
+        $product_master_category_string = $category_path;
+      }
+    }
+    $currentParrentCatId = zen_get_parent_category_id($data->productId) . ' ' . $product_master_category_string;
+
+    $currentCategories = zen_output_generated_category_path($data->productId, 'product');
+    return([
+      'currentParrentCatId' => $currentParrentCatId,
+      'currentCategories' => $currentCategories
+    ]);
+  }
+
+  /**
+   * 
+   * @global type $db
+   * @global type $messageStack
+   * @return array
+   */
+  public function moveProductConfirm()
+  {
+    global $db, $messageStack;
+    $data = new objectInfo($_POST);
+
+    $products_id = (int)$data->products_id;
+    $new_parent_id = (int)$data->move_to_category_id;
+
+    $duplicate_check = $db->Execute("SELECT COUNT(*) AS total
+                                     FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
+                                     WHERE products_id = " . (int)$products_id . "
+                                     AND categories_id = " . (int)$new_parent_id);
+
+    if ($duplicate_check->fields['total'] < 1) {
+      $db->Execute("UPDATE " . TABLE_PRODUCTS_TO_CATEGORIES . "
+                    SET categories_id = " . (int)$new_parent_id . "
+                    WHERE products_id = " . (int)$products_id . "
+                    AND categories_id = " . (int)$data->current_category_id);
+
+      // reset master_categories_id if moved from original master category
+      $check_master = $db->Execute("SELECT products_id, master_categories_id
+                                    FROM " . TABLE_PRODUCTS . "
+                                    WHERE products_id = " . (int)$products_id);
+      if ($check_master->fields['master_categories_id'] == (int)$data->current_category_id) {
+        $db->Execute("UPDATE " . TABLE_PRODUCTS . "
+                      SET master_categories_id = " . (int)$new_parent_id . "
+                      WHERE products_id = " . (int)$products_id);
+      }
+
+      // reset products_price_sorter for searches etc.
+      zen_update_products_price_sorter((int)$products_id);
+      zen_record_admin_activity('Moved product ' . (int)$products_id . ' from category ' . (int)$data->current_category_id . ' to category ' . (int)$new_parent_id, 'notice');
+    } else {
+      $messageStack->add_session(ERROR_CANNOT_MOVE_PRODUCT_TO_CATEGORY_SELF, 'error');
+    }
+    return ([
+      'pID' => $products_id
+    ]);
+  }
+
+  /**
+   * 
+   * @return array
+   */
   public function setSessionColumnValue()
   {
     $data = new objectInfo($_POST);
@@ -437,6 +570,11 @@ class zcAjaxAdminCategoriesProductListing extends base {
     return $categoryName;
   }
 
+  /**
+   * 
+   * @global type $messageStack
+   * @return array
+   */
   public function messageStack()
   {
     global $messageStack;

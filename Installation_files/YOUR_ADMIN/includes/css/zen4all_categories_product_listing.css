@@ -12,6 +12,15 @@ Collect information through tabs in new style - Cittins
     Author     : fjker
 */
 
+.panel, .panel table, .panel a, .modal {
+  font-size: 14px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 1.42857143;
+}
+.panel a.btn{
+  font-size: 12px;
+  line-height: 1.5;
+}
 .attributes-on {color: #000;}
 .pricemanager-on {color: #000;}
 .metatags-on {color: #000;}
@@ -75,4 +84,14 @@ Collect information through tabs in new style - Cittins
 .SortOrderHeaderLink {
     color: #000;
     font-weight: bold;
+}
+
+.txt-status-off{
+  color: #d9534f;
+}
+.txt-status-on{
+  color: #398439;
+}
+.txt-linked{
+  color: #f0ad4e;
 }
