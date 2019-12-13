@@ -21,6 +21,10 @@ class zcAjaxAdminCategoriesProductListing extends base {
     }
   }
 
+  /**
+   * 
+   * @return array
+   */
   public function setCategoryFlag()
   {
 
@@ -37,6 +41,11 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $db
+   * @return array
+   */
   public function setCategoryFlagConfirm()
   {
     global $db;
@@ -103,6 +112,11 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $messageStack
+   * @return array
+   */
   public function deleteAttributes()
   {
     global $messageStack;
@@ -119,6 +133,9 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   */
   public function updateAttributesSortOrder()
   {
     zen_update_attributes_products_option_values_sort_order($_GET['products_id']);
@@ -127,6 +144,9 @@ class zcAjaxAdminCategoriesProductListing extends base {
     zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
+  /**
+   * 
+   */
   public function updateAttributesCopyToProduct()
   {
     $copy_attributes_delete_first = ($_POST['copy_attributes'] == 'copy_attributes_delete' ? '1' : '0');
@@ -137,6 +157,9 @@ class zcAjaxAdminCategoriesProductListing extends base {
     zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
+  /**
+   * 
+   */
   public function updateAttributesCopyToCategory()
   {
     $copy_attributes_delete_first = ($_POST['copy_attributes'] == 'copy_attributes_delete' ? '1' : '0');
@@ -153,6 +176,10 @@ class zcAjaxAdminCategoriesProductListing extends base {
     zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
+  /**
+   * 
+   * @return array
+   */
   public function deleteCategory()
   {
     $data = new objectInfo($_POST);
@@ -168,6 +195,12 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $db
+   * @global integer $zc_products
+   * @return array
+   */
   public function deleteCategoryConfirm()
   {
     global $db, $zc_products;
@@ -233,6 +266,10 @@ class zcAjaxAdminCategoriesProductListing extends base {
     return (['cID' => $data->categories_id]);
   }
 
+  /**
+   * 
+   * @return array
+   */
   public function moveCategory()
   {
     $data = new objectInfo($_POST);
@@ -242,6 +279,12 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $db
+   * @global type $messageStack
+   * @return array
+   */
   public function moveCategoryConfirm()
   {
     global $db, $messageStack;
@@ -296,6 +339,10 @@ class zcAjaxAdminCategoriesProductListing extends base {
     }
   }
 
+  /**
+   * 
+   * @return array
+   */
   public function deleteProduct()
   {
     include DIR_FS_ADMIN . 'includes/languages/dutch/category_product_listing.php';
@@ -343,6 +390,12 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @global type $db
+   * @global integer $zc_products
+   * @return array
+   */
   public function deleteProductConfirm()
   {
     global $db, $zc_products;
@@ -484,6 +537,10 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
+  /**
+   * 
+   * @return array
+   */
   public function setSessionColumnValue()
   {
     $data = new objectInfo($_POST);
@@ -513,6 +570,11 @@ class zcAjaxAdminCategoriesProductListing extends base {
     return $categoryName;
   }
 
+  /**
+   * 
+   * @global type $messageStack
+   * @return array
+   */
   public function messageStack()
   {
     global $messageStack;
