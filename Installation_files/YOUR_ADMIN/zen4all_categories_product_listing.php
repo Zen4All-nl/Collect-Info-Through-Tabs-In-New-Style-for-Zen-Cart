@@ -16,18 +16,18 @@ $product_type = (isset($_POST['products_id']) ? zen_get_products_type($_POST['pr
 
 $type_admin_handler = $zc_products->get_admin_handler($product_type);
 
+$productId = (isset($_GET['pID']) && !empty($_GET['pID']) ? (int)$_GET['pID'] : '');
 $action = (isset($_GET['action']) ? $_GET['action'] : '');
-$search_result = isset($_GET['search']) && zen_not_null($_GET['search']) ? true : false;
-if (isset($_GET['page'])) {
-  $_GET['page'] = (int)$_GET['page'];
-}
+$searchWords = (isset($_GET['search']) && !empty($_GET['search']) ? zen_db_prepare_input($_GET['search']) : '');
+$search_result = ($searchWords != '' ? true : false);
+$currentPage = (isset($_GET['page']) && !empty($_GET['page']) ? (int)$_GET['page'] : 0);
+
 if (isset($_GET['product_type'])) {
   $_GET['product_type'] = (int)$_GET['product_type'];
 }
 if (isset($_GET['cID'])) {
   $_GET['cID'] = (int)$_GET['cID'];
 }
-
 
 $getDefaultColumnsQuery = "SELECT configuration_key, configuration_value
                            FROM " . TABLE_CONFIGURATION . "
@@ -62,7 +62,7 @@ if (zen_not_null($action)) {
     case 'set_editor':
       // Reset will be done by init_html_editor.php. Now we simply redirect to refresh page properly.
       $action = '';
-      zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $_GET['cPath'] . ((isset($_GET['pID']) && !empty($_GET['pID'])) ? '&pID=' . $_GET['pID'] : '') . ((isset($_GET['page']) && !empty($_GET['page'])) ? '&page=' . $_GET['page'] : '')));
+      zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $_GET['cPath'] . (!empty($productId) ? '&pID=' . $productId : '') . ($currentPage != 0 ? '&page=' . $currentPage : '')));
       break;
     case 'move_product_confirm':
       require(DIR_WS_MODULES . 'zen4all_move_product_confirm.php');
@@ -124,7 +124,7 @@ if ($check_products > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo TITLE; ?></title>
     <link rel="stylesheet" href="includes/stylesheet.css">
-    <link rel="stylesheet" href="includes/css/z4a_categories_product_listing.css">
+    <link rel="stylesheet" href="includes/css/zen4all_categories_product_listing.css">
     <script src="includes/general.js"></script>
   </head>
   <body>
@@ -151,114 +151,115 @@ if ($check_products > 0) {
               <tbody>
                 <tr>
                   <td></td>
-                  <td class="text-center"><span class="btn btn-xs btn-danger" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>">&nbsp;</span></td>
-                  <td class="text-center"><span class="btn btn-xs btn-success" title="<?php echo IMAGE_ICON_STATUS_ON; ?>">&nbsp;</span></td>
-                  <td class="text-center"><span class="btn btn-xs btn-warning" title="<?php echo IMAGE_ICON_LINKED; ?>">&nbsp;</span></td>
+                  <td class="text-center">
+                    <i class="fa fa-square fa-lg txt-status-off" aria-hidden="true"></i>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-square fa-lg txt-status-on" aria-hidden="true"></i>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-square fa-lg txt-linked" aria-hidden="true"></i>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="col-md-4">
-            <div>
-              <?php
-              // toggle switch for editor
-              echo zen_draw_form('set_editor_form', FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, '', 'get', 'class="form-horizontal"');
-              echo zen_draw_label(TEXT_EDITOR_INFO, 'reset_editor', 'class="col-sm-6 col-md-4 control-label"');
-              ?>
+            <?php echo zen_draw_form('set_editor_form', FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, '', 'get', 'class="form-horizontal"'); ?>
+            <div class="form-group">
+              <?php echo zen_draw_label(TEXT_EDITOR_INFO, 'reset_editor', 'class="col-sm-6 col-md-4 control-label"'); ?>
               <div class="col-sm-6 col-md-8"><?php echo zen_draw_pull_down_menu('reset_editor', $editors_pulldown, $current_editor_key, 'onchange="this.form.submit();" class="form-control"'); ?></div>
-              <?php
-              echo zen_hide_session_id();
-              echo zen_draw_hidden_field('cID', $cPath);
-              echo zen_draw_hidden_field('cPath', $cPath);
-              echo (isset($_GET['pID']) ? zen_draw_hidden_field('pID', $_GET['pID']) : '');
-              echo (isset($_GET['page']) ? zen_draw_hidden_field('page', $_GET['page']) : '');
-              echo zen_draw_hidden_field('action', 'set_editor');
-              echo '</form>';
-              ?>
             </div>
             <?php
-            if (!isset($_GET['page'])) {
-              $_GET['page'] = '';
-            }
+            echo zen_hide_session_id();
+            echo (!empty($cPath) ? zen_draw_hidden_field('cID', $cPath) : '');
+            echo (!empty($cPath) ? zen_draw_hidden_field('cPath', $cPath) : '');
+            echo (!empty($productId) ? zen_draw_hidden_field('pID', $productId) : '');
+            echo ($currentPage != 0 ? zen_draw_hidden_field('page', $currentPage) : '');
+            echo zen_draw_hidden_field('action', 'set_editor');
+            echo '</form>';
             ?>
-            <div class="row"><?php echo zen_draw_separator('pixel_trans.gif', '100%', '1'); ?></div>
-            <label class="control-label col-sm-6 col-md-4">View Settings</label>
-            <div class="dropdown" id="columnDropDown">
-              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <i class="fa fa-cog"></i>
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu checkbox-menu allow-focus" aria-labelledby="dropdownMenu1">
-                <li <?php echo ($columnVisibility['ColumnName'] == 'true' ? 'class="active"' : ''); ?>>
-                  <label>
-                    <input type="checkbox" id="chkBoxColumnName" name="ColumnName" <?php echo ($columnVisibility['ColumnName'] == 'true' ? 'checked' : ''); ?>> Name
-                  </label>
-                </li>
-                <li <?php echo ($columnVisibility['ColumnModel'] == 'true' ? 'class="active"' : ''); ?>>
-                  <label>
-                    <input type="checkbox" id="chkBoxColumnModel" name="ColumnModel" <?php echo ($columnVisibility['ColumnModel'] == 'true' ? 'checked' : ''); ?>> Model
-                  </label>
-                </li>
-                <li <?php echo ($columnVisibility['ColumnPrice'] == 'true' ? 'class="active"' : ''); ?>>
-                  <label>
-                    <input type="checkbox" id="chkBoxColumnPrice" name="ColumnPrice" <?php echo ($columnVisibility['ColumnPrice'] == 'true' ? 'checked' : ''); ?>> Price
-                  </label>
-                </li>
-                <li <?php echo ($columnVisibility['ColumnQuantity'] == 'true' ? 'class="active"' : ''); ?>>
-                  <label>
-                    <input type="checkbox" id="chkBoxColumnQuantity" name="ColumnQuantity" <?php echo ($columnVisibility['ColumnQuantity'] == 'true' ? 'checked' : ''); ?>> Quantity
-                  </label>
-                </li>
-                <li <?php echo ($columnVisibility['ColumnStatus'] == 'true' ? 'class="active"' : ''); ?>>
-                  <label>
-                    <input type="checkbox" id="chkBoxColumnStatus" name="ColumnStatus" <?php echo ($columnVisibility['ColumnStatus'] == 'true' ? 'checked' : ''); ?>> Status
-                  </label>
-                </li>
-                <li <?php echo ($columnVisibility['ColumnSort'] == 'true' ? 'class="active"' : ''); ?>>
-                  <label>
-                    <input type="checkbox" id="chkBoxColumnSort" name="ColumnSort" <?php echo ($columnVisibility['ColumnSort'] == 'true' ? 'checked' : ''); ?>> Sort order
-                  </label>
-                </li>
-                <li <?php echo ($columnVisibility['ColumnImage'] == 'true' ? 'class="active"' : ''); ?>>
-                  <label>
-                    <input type="checkbox" id="chkBoxColumnImage" name="ColumnImage" <?php echo ($columnVisibility['ColumnImage'] == 'true' ? 'checked' : ''); ?>> Image
-                  </label>
-                </li>
-              </ul>
+            <div class="form-horizontal">
+              <div class="form-group">
+                <label class="control-label col-sm-6 col-md-4"><?php echo TEXT_VIEW_SETTINGS; ?></label>
+                <div class="col-sm-6 col-md-8">
+                  <div class="dropdown" id="columnDropDown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      <i class="fa fa-cog"></i>
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu checkbox-menu allow-focus" aria-labelledby="dropdownMenu1">
+                      <li <?php echo ($columnVisibility['ColumnName'] == 'true' ? 'class="active"' : ''); ?>>
+                        <label>
+                          <input type="checkbox" id="chkBoxColumnName" name="ColumnName" <?php echo ($columnVisibility['ColumnName'] == 'true' ? 'checked' : ''); ?>> Name
+                        </label>
+                      </li>
+                      <li <?php echo ($columnVisibility['ColumnModel'] == 'true' ? 'class="active"' : ''); ?>>
+                        <label>
+                          <input type="checkbox" id="chkBoxColumnModel" name="ColumnModel" <?php echo ($columnVisibility['ColumnModel'] == 'true' ? 'checked' : ''); ?>> Model
+                        </label>
+                      </li>
+                      <li <?php echo ($columnVisibility['ColumnPrice'] == 'true' ? 'class="active"' : ''); ?>>
+                        <label>
+                          <input type="checkbox" id="chkBoxColumnPrice" name="ColumnPrice" <?php echo ($columnVisibility['ColumnPrice'] == 'true' ? 'checked' : ''); ?>> Price
+                        </label>
+                      </li>
+                      <li <?php echo ($columnVisibility['ColumnQuantity'] == 'true' ? 'class="active"' : ''); ?>>
+                        <label>
+                          <input type="checkbox" id="chkBoxColumnQuantity" name="ColumnQuantity" <?php echo ($columnVisibility['ColumnQuantity'] == 'true' ? 'checked' : ''); ?>> Quantity
+                        </label>
+                      </li>
+                      <li <?php echo ($columnVisibility['ColumnStatus'] == 'true' ? 'class="active"' : ''); ?>>
+                        <label>
+                          <input type="checkbox" id="chkBoxColumnStatus" name="ColumnStatus" <?php echo ($columnVisibility['ColumnStatus'] == 'true' ? 'checked' : ''); ?>> Status
+                        </label>
+                      </li>
+                      <li <?php echo ($columnVisibility['ColumnSort'] == 'true' ? 'class="active"' : ''); ?>>
+                        <label>
+                          <input type="checkbox" id="chkBoxColumnSort" name="ColumnSort" <?php echo ($columnVisibility['ColumnSort'] == 'true' ? 'checked' : ''); ?>> Sort order
+                        </label>
+                      </li>
+                      <li <?php echo ($columnVisibility['ColumnImage'] == 'true' ? 'class="active"' : ''); ?>>
+                        <label>
+                          <input type="checkbox" id="chkBoxColumnImage" name="ColumnImage" <?php echo ($columnVisibility['ColumnImage'] == 'true' ? 'checked' : ''); ?>> Image
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-md-4">
-            <div>
-              <?php echo zen_draw_form('searchForm', FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, '', 'get', 'class="form-horizontal"'); ?>
+            <?php echo zen_draw_form('searchForm', FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, '', 'get', 'class="form-horizontal"'); ?>
+            <div class="form-group">
               <?php echo zen_draw_label(HEADING_TITLE_SEARCH_DETAIL, 'search', 'class="col-sm-6 col-md-4 control-label"'); ?>
               <div class="col-sm-6 col-md-8"><?php echo zen_draw_input_field('search', '', ($action == '' ? 'autofocus="autofocus"' : '') . 'class="form-control"'); ?></div>
-              <div class="row"><?php echo zen_draw_separator('pixel_trans.gif', '100%', '1'); ?></div>
-              <?php
-              echo zen_hide_session_id();
-              if ($search_result) {
-                $keywords = zen_db_input(zen_db_prepare_input($_GET['search']));
-                ?>
+            </div>
+            <?php
+            echo zen_hide_session_id();
+            if ($search_result) {
+              ?>
+              <div class="form-group">
                 <div class="col-sm-6 col-md-4 control-label"><?php echo TEXT_INFO_SEARCH_DETAIL_FILTER; ?></div>
                 <div class="col-sm-6 col-md-8">
-                  <strong>"<?php echo zen_output_string_protected($_GET['search']); ?>"</strong>
+                  <strong>"<?php echo zen_output_string_protected($searchWords); ?>"</strong>
                   <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING); ?>" class="btn btn-default" role="button"><?php echo IMAGE_RESET; ?></a>
                 </div>
-                <?php
-              }
-              echo '</form>';
-              ?>
-            </div>
-            <div>
-              <div class="col-sm-6 col-md-4 text-right">
-                <?php echo zen_draw_label(HEADING_TITLE_GOTO, 'cPath', 'class="control-label"'); ?>
               </div>
+              <?php
+            }
+            echo '</form>';
+            ?>
+            <?php echo zen_draw_form('goto', FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, '', 'get', 'class="form-horizontal"'); ?>
+            <div class="form-group">
+              <?php echo zen_draw_label(HEADING_TITLE_GOTO, 'cPath', 'class="control-label col-sm-6 col-md-4"'); ?>
               <div class="col-sm-6 col-md-8">
-                <?php echo zen_draw_form('goto', FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, '', 'get', 'class="form-horizontal"'); ?>
                 <?php echo zen_hide_session_id(); ?>
                 <?php echo zen_draw_pull_down_menu('cPath', zen_get_category_tree(), $current_category_id, 'onchange="this.form.submit();" class="form-control"'); ?>
-                <?php echo '</form>'; ?>
               </div>
             </div>
+            <?php echo '</form>'; ?>
           </div>
           <div class="row"><?php echo zen_draw_separator('pixel_black.gif', '100%', '1px'); ?></div>
           <?php //echo zen_draw_form('listing', FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, zen_get_all_get_params(), 'post', 'class="form-horizontal"'); ?>
@@ -268,24 +269,24 @@ if ($check_products > 0) {
                 <tr valign="middle">
                   <th><?php echo zen_draw_checkbox_field('', '', false, '', 'id="select_all"'); ?></th>
                   <th class="text-right shrink">
-                    <span <?php echo (($columnSortOrder == '1' || $columnSortOrder == '2') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_ID; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=1'); ?>" class="<?php echo ($columnSortOrder == '1' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=2'); ?>" class="<?php echo ($columnSortOrder == '2' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
+                    <span <?php echo (($columnSortOrder == '1' || $columnSortOrder == '2') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_ID; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=1'); ?>" class="<?php echo ($columnSortOrder == '1' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-lg"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=2'); ?>" class="<?php echo ($columnSortOrder == '2' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-lg"></i></a>
                   </th>
                   <th class="ColumnName noWrap">
-                    <span <?php echo (($columnSortOrder == '3' || $columnSortOrder == '4') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_CATEGORIES_PRODUCTS; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=3'); ?>" class="<?php echo ($columnSortOrder == '3' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=4'); ?>"class="<?php echo ($columnSortOrder == '4' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
+                    <span <?php echo (($columnSortOrder == '3' || $columnSortOrder == '4') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_CATEGORIES_PRODUCTS; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=3'); ?>" class="<?php echo ($columnSortOrder == '3' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-lg"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=4'); ?>"class="<?php echo ($columnSortOrder == '4' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-lg"></i></a>
                   </th>
                   <th class="ColumnModel hidden-sm hidden-xs noWrap">
-                    <span <?php echo (($columnSortOrder == '5' || $columnSortOrder == '6') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_MODEL; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=5'); ?>" class="<?php echo ($columnSortOrder == '5' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=6'); ?>" class="<?php echo ($columnSortOrder == '6' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
+                    <span <?php echo (($columnSortOrder == '5' || $columnSortOrder == '6') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_MODEL; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=5'); ?>" class="<?php echo ($columnSortOrder == '5' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-lg"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=6'); ?>" class="<?php echo ($columnSortOrder == '6' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-lg"></i></a>
                   </th>
                   <th class="ColumnPrice text-right hidden-sm hidden-xs noWrap">
-                    <span <?php echo (($columnSortOrder == '7' || $columnSortOrder == '8') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_PRICE; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=7'); ?>" class="<?php echo ($columnSortOrder == '7' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=8'); ?>" class="<?php echo ($columnSortOrder == '8' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
+                    <span <?php echo (($columnSortOrder == '7' || $columnSortOrder == '8') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_PRICE; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=7'); ?>" class="<?php echo ($columnSortOrder == '7' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-lg"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=8'); ?>" class="<?php echo ($columnSortOrder == '8' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-lg"></i></a>
                   </th>
                   <th class="hidden"></th>
                   <th class="ColumnQuantity text-right hidden-sm hidden-xs noWrap">
-                    <span <?php echo (($columnSortOrder == '9' || $columnSortOrder == '10') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_QUANTITY; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=9'); ?>" class="<?php echo ($columnSortOrder == '9' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=10'); ?>" class="<?php echo ($columnSortOrder == '10' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
+                    <span <?php echo (($columnSortOrder == '9' || $columnSortOrder == '10') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_QUANTITY; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=9'); ?>" class="<?php echo ($columnSortOrder == '9' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-lg"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=10'); ?>" class="<?php echo ($columnSortOrder == '10' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-lg"></i></a>
                   </th>
                   <th class="ColumnStatus text-right hidden-sm hidden-xs"><?php echo TABLE_HEADING_STATUS; ?></th>
                   <th class="ColumnSort text-right hidden-sm hidden-xs noWrap">
-                    <span <?php echo (($columnSortOrder == '11' || $columnSortOrder == '12') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_CATEGORIES_SORT_ORDER; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=11'); ?>" class="<?php echo ($columnSortOrder == '11' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-2x"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=12'); ?>" class="<?php echo ($columnSortOrder == '10' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-2x"></i></a>
+                    <span <?php echo (($columnSortOrder == '11' || $columnSortOrder == '12') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_CATEGORIES_SORT_ORDER; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=11'); ?>" class="<?php echo ($columnSortOrder == '11' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-lg"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=12'); ?>" class="<?php echo ($columnSortOrder == '10' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-lg"></i></a>
                   </th>
                   <th class="text-right"><?php echo TABLE_HEADING_ACTION; ?></th>
                 </tr>
@@ -316,14 +317,12 @@ if ($check_products > 0) {
 
                 $categories_count = 0;
                 $rows = 0;
-                if (isset($_GET['search'])) {
-                  $search = zen_db_prepare_input($_GET['search']);
-
+                if ($searchWords != '') {
                   $categories = $db->Execute("SELECT c.*, cd.categories_name, cd.categories_description
                                               FROM " . TABLE_CATEGORIES . " c
                                               LEFT JOIN " . TABLE_CATEGORIES_DESCRIPTION . " cd ON cd.categories_id = c.categories_id
                                                 AND cd.language_id = " . (int)$_SESSION['languages_id'] . "
-                                              WHERE cd.categories_name LIKE '%" . zen_db_input($search) . "%'
+                                              WHERE cd.categories_name LIKE '%" . zen_db_input($searchWords) . "%'
                                               ORDER BY " . $order_by);
                 } else {
                   $categories = $db->Execute("SELECT c.*, cd.categories_name, cd.categories_description
@@ -337,7 +336,7 @@ if ($check_products > 0) {
                   $categories_count++;
                   $rows++;
 
-                  if (isset($_GET['search'])) {
+                  if ($searchWords != '') {
                     $cPath = $category['parent_id'];
                   }
                   ?>
@@ -365,18 +364,18 @@ if ($check_products > 0) {
                     </td>
                     <td class="ColumnStatus text-right hidden-sm hidden-xs">
                       <?php if (SHOW_CATEGORY_PRODUCTS_LINKED_STATUS == 'true' && zen_get_products_to_categories($category['categories_id'], true, 'products_active') == 'true') { ?>
-                        <span class="btn btn-xs btn-warning" title="<?php echo IMAGE_ICON_LINKED; ?>">&nbsp;</span>
+                        <i class="fa fa-square fa-lg txt-linked" aria-hidden="true" title="<?php echo IMAGE_ICON_LINKED; ?>"></i>
                       <?php } ?>
                       <?php if ($category['categories_status'] == '1') { ?>
-                        <button type="button" data-toggle="modal" id="cFlag_<?php echo $category['categories_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="setCategoryFlag('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>', '1')" class="btn btn-xs btn-success" data-original-title="<?php echo IMAGE_ICON_STATUS_ON; ?>" data-target="#setCategoryFlagModal">&nbsp;</button>
+                        <i role="button" data-toggle="modal" id="cFlag_<?php echo $category['categories_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="setCategoryFlag('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>', '1')" class="fa fa-square fa-lg txt-status-on" data-original-title="<?php echo IMAGE_ICON_STATUS_ON; ?>" data-target="#setCategoryFlagModal"></i>
                       <?php } else { ?>
-                        <button type="button" data-toggle="modal" id="cFlag_<?php echo $category['categories_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="setCategoryFlag('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>', '0')" class="btn btn-xs btn-danger" data-original-title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" data-target="#setCategoryFlagModal">&nbsp;</button>
+                        <i role="button" data-toggle="modal" id="cFlag_<?php echo $category['categories_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="setCategoryFlag('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>', '0')" class="fa fa-square fa-lg txt-status-off" data-original-title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" data-target="#setCategoryFlagModal"></i>
                       <?php } ?>
                     </td>
                     <td class="ColumnSort text-right hidden-sm hidden-xs"><?php echo $category['sort_order']; ?></td>
                     <td class="text-right">
                       <div class="btn-group">
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . ((isset($_GET['search']) && !empty($_GET['search'])) ? '&search=' . $_GET['search'] : '')); ?>" title="<?php echo TEXT_LISTING_EDIT; ?>" class="btn btn-sm btn-info" role="button">
+                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . ($searchWords != '' ? '&search=' . $searchWords : '')); ?>" title="<?php echo TEXT_LISTING_EDIT; ?>" class="btn btn-sm btn-info" role="button">
                           <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
                         </a>
                         <button type="button" data-toggle="modal" title="<?php echo TEXT_LISTING_DELETE; ?>" class="btn btn-sm btn-info" onclick="deleteCategory('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>');" data-original-title="<?php echo TEXT_LISTING_DELETE; ?>" data-target="#deleteCategoryModal">
@@ -386,11 +385,11 @@ if ($check_products > 0) {
                           <i class="fa fa-arrows fa-lg" aria-hidden="true"></i>
                         </button>
                         <?php if (zen_get_category_metatags_keywords($category['categories_id'], (int)$_SESSION['languages_id']) or zen_get_category_metatags_description($category['categories_id'], (int)$_SESSION['languages_id'])) { ?>
-                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=edit_category_meta_tags' . '&activeTab=categoryTabs4'); ?>" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>" class="btn btn-sm btn-info" role="button">
+                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, (!empty($cPath) ?'cPath=' . $cPath . '&': '') . 'cID=' . $category['categories_id'] . '&action=edit_category_meta_tags' . '&activeTab=categoryTabs4'); ?>" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>" class="btn btn-sm btn-info" role="button">
                             <i class="fa fa-asterisk fa-lg" aria-hidden="true"></i>
                           </a>
                         <?php } else { ?>
-                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&cID=' . $category['categories_id'] . '&action=edit_category_meta_tags' . '&activeTab=categoryTabs4'); ?>" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>" class="btn btn-sm btn-info" role="button">
+                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, (!empty($cPath) ?'cPath=' . $cPath . '&': '') . 'cID=' . $category['categories_id'] . '&action=edit_category_meta_tags' . '&activeTab=categoryTabs4'); ?>" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>" class="btn btn-sm btn-info" role="button">
                             <i class="fa fa-asterisk fa-lg" aria-hidden="true"></i>
                           </a>
                         <?php } ?>
@@ -447,10 +446,10 @@ if ($check_products > 0) {
                                             AND pd.language_id = " . (int)$_SESSION['languages_id'] . "
                                           LEFT JOIN " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c ON p2c.products_id = p.products_id
                                           WHERE p2c.categories_id = p.master_categories_id
-                                          AND (pd.products_name LIKE '%" . zen_db_input($_GET['search']) . "%'
-                                            OR pd.products_description LIKE '%" . zen_db_input($_GET['search']) . "%'
-                                            OR p.products_id = '" . zen_db_input($_GET['search']) . "'
-                                            OR p.products_model like '%" . zen_db_input($_GET['search']) . "%'
+                                          AND (pd.products_name LIKE '%" . zen_db_input($searchWords) . "%'
+                                            OR pd.products_description LIKE '%" . zen_db_input($searchWords) . "%'
+                                            OR p.products_id = '" . zen_db_input($searchWords) . "'
+                                            OR p.products_model like '%" . zen_db_input($searchWords) . "%'
                                             )
                                           ORDER BY " . $order_by);
                 } else {
@@ -464,36 +463,27 @@ if ($check_products > 0) {
                 }
 // Split Page
 // reset page when page is unknown
-                if ((isset($_GET['page']) && ($_GET['page'] == '1' || $_GET['page'] == '')) && isset($_GET['pID']) && $_GET['pID'] != '') {
-                  $old_page = $_GET['page'];
+                if (($currentPage == 1 || $currentPage == 0) && !empty($productId)) {
                   $check_page = $db->Execute($products_query_raw);
                   if ($check_page->RecordCount() > MAX_DISPLAY_RESULTS_CATEGORIES) {
                     $check_count = 1;
                     foreach ($check_page as $item) {
-                      if ($item['products_id'] == $_GET['pID']) {
+                      if ($item['products_id'] == $productId) {
                         break;
                       }
                       $check_count++;
                     }
-                    $_GET['page'] = round((($check_count / MAX_DISPLAY_RESULTS_CATEGORIES) + (fmod_round($check_count, MAX_DISPLAY_RESULTS_CATEGORIES) != 0 ? .5 : 0)), 0);
-                    $page = $_GET['page'];
-                    if ($old_page != $_GET['page']) {
-//      zen_redirect(zen_href_link(FILENAME_CATEGORIES, 'cPath=' . $_GET['cPath'] . '&pID=' . $_GET['pID'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
-                    }
-                  } else {
-                    $_GET['page'] = 1;
+                    $currentPage = round((($check_count / MAX_DISPLAY_RESULTS_CATEGORIES) + (fmod_round($check_count, MAX_DISPLAY_RESULTS_CATEGORIES) != 0 ? .5 : 0)), 0);
                   }
                 }
-                $products_split = new splitPageResults($_GET['page'], MAX_DISPLAY_RESULTS_CATEGORIES, $products_query_raw, $products_query_numrows);
                 $products = $db->Execute($products_query_raw);
 // Split Page
-
                 foreach ($products as $product) {
                   $products_count++;
                   $rows++;
 
 // Get categories_id for product if search
-                  if (isset($_GET['search'])) {
+                  if ($searchWords != '') {
                     $cPath = $product['categories_id'];
                   }
 
@@ -502,44 +492,43 @@ if ($check_products > 0) {
                   <tr id="pID_<?php echo $product['products_id']; ?>">
                     <td><?php echo zen_draw_checkbox_field('selected_products[]', $product['products_id']); ?></td>
                     <td class="text-right"><?php echo $product['products_id']; ?></td>
-                    <td class="ColumnName"><a href="<?php echo zen_catalog_href_link($type_handler . '_info', 'cPath=' . $cPath . '&products_id=' . $product['products_id'] . '&language=' . $_SESSION['languages_code'] . '&product_type=' . $product['products_type']); ?>" target="_blank"><?php echo zen_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW); ?></a>&nbsp;<?php echo $product['products_name']; ?></td>
+                    <td class="ColumnName"><a href="<?php echo zen_catalog_href_link($type_handler . '_info', (!empty($cPath) ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $product['products_id'] . '&language=' . $_SESSION['languages_code'] . '&product_type=' . $product['products_type']); ?>" target="_blank"><?php echo zen_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW); ?></a>&nbsp;<a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, (!empty($cPath)?'cPath=' . $cPath . '&': '').'product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=new_product' . ($searchWords != '' ? '&search=' . $searchWords : '')); ?>" title="<?php echo TEXT_LISTING_EDIT; ?>"><?php echo $product['products_name']; ?></a></td>
                     <td class="ColumnModel hidden-sm hidden-xs"><?php echo $product['products_model']; ?></td>
                     <td class="ColumnPrice text-right hidden-sm hidden-xs"><?php echo zen_get_products_display_price($product['products_id']); ?></td>
                     <td class="hidden"></td>
                     <td class="ColumnQuantity text-right hidden-sm hidden-xs"><?php echo $product['products_quantity']; ?></td>
                     <td class="ColumnStatus text-right hidden-sm hidden-xs text-nowrap">
                       <?php if (zen_get_product_is_linked($product['products_id']) == 'true') { ?>
-                        <span class="btn btn-xs btn-warning" title="<?php echo IMAGE_ICON_LINKED; ?>">&nbsp;</span>&nbsp;
+                        <i class="fa fa-square fa-lg txt-linked" title="<?php echo IMAGE_ICON_LINKED; ?>"></i>
                       <?php } ?>
                       <?php if ($product['products_status'] == '1') { ?>
-                        <button type="button" id="pFlag_<?php echo $product['products_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="setProductFlag('<?php echo $product['products_id']; ?>', '0')" class="btn btn-xs btn-success">&nbsp;</button>
+                        <i role="button" id="pFlag_<?php echo $product['products_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_ON; ?>" onclick="setProductFlag('<?php echo $product['products_id']; ?>', '0')" class="fa fa-square fa-lg txt-status-on"></i>
                       <?php } else { ?>
-                        <button type="button" id="pFlag_<?php echo $product['products_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="setProductFlag('<?php echo $product['products_id']; ?>', '1')" class="btn btn-xs btn-danger">&nbsp;</button>
+                        <i role="button" id="pFlag_<?php echo $product['products_id']; ?>" title="<?php echo IMAGE_ICON_STATUS_OFF; ?>" onclick="setProductFlag('<?php echo $product['products_id']; ?>', '1')" class="fa fa-square fa-lg txt-status-off"></i>
                       <?php } ?>
                     </td>
                     <td class="ColumnSort text-right hidden-sm hidden-xs"><?php echo $product['products_sort_order']; ?></td>
                     <td class="text-right">
                       <div class="btn-group">
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=new_product' . (isset($_GET['search']) ? '&search=' . $_GET['search'] : '')); ?>" title="<?php echo TEXT_LISTING_EDIT; ?>" class="btn btn-sm btn-info" role="button">
+                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, (!empty($cPath)?'cPath=' . $cPath . '&': '').'product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=new_product' . ($searchWords != '' ? '&search=' . $searchWords : '')); ?>" title="<?php echo TEXT_LISTING_EDIT; ?>" class="btn btn-sm btn-info" role="button">
                           <i class="fa fa-pencil fa-lg" aria-hidden="true"></i>
                         </a>
                         <button type="button" data-toggle="modal" title="<?php echo TEXT_LISTING_DELETE; ?>" class="btn btn-sm btn-info" onclick="deleteProduct('<?php echo $product['products_id']; ?>', '<?php echo $product['products_type']; ?>');" data-original-title="<?php echo TEXT_LISTING_DELETE; ?>" data-target="#deleteProductModal">
                           <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
                         </button>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=move_product'); ?>" title="<?php echo TEXT_LISTING_MOVE; ?>" class="btn btn-sm btn-info" role="button">
+                        <button type="button" data-toggle="modal" title="<?php echo TEXT_LISTING_MOVE; ?>" class="btn btn-sm btn-info" onclick="moveProduct('<?php echo $product['products_id']; ?>');" data-original-title="<?php echo TEXT_LISTING_MOVE; ?>" data-target="#moveProductModal">
                           <i class="fa fa-arrows fa-lg" aria-hidden="true"></i>
-                        </a>
+                        </button>
                         <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=copy_product'); ?>" title="<?php echo TEXT_LISTING_COPY; ?>" class="btn btn-sm btn-info" role="button">
                           <i class="fa fa-copy fa-lg" aria-hidden="true"></i>
-                        </a>
-
+                        </button>
                         <?php if (defined('FILENAME_IMAGE_HANDLER') && file_exists(DIR_FS_ADMIN . FILENAME_IMAGE_HANDLER . '.php')) { ?>
                           <a href="<?php echo zen_href_link(FILENAME_IMAGE_HANDLER, 'products_filter=' . $product['products_id'] . '&current_category_id=' . $current_category_id); ?>" title="<?php echo TEXT_LISTING_IMAGE_HANDLER; ?>" class="btn btn-sm btn-info" role="button">
                             <i class="fa fa-lg fa-image" aria-hidden="true"></i>
                           </a>
                         <?php } ?>
                         <?php if (zen_has_product_attributes($product['products_id'], 'false')) { ?>
-                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $product['products_id'] . '&action=attribute_features' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" title="<?php echo TEXT_LISTING_ATTRIBUTES; ?>" class="btn btn-sm btn-info" role="button">
+                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $product['products_id'] . '&action=attribute_features' . ($currentPage != 0 ? '&page=' . $currentPage : '')); ?>" title="<?php echo TEXT_LISTING_ATTRIBUTES; ?>" class="btn btn-sm btn-info" role="button">
                             <i class="fa fa-list fa-lg attributes-on" aria-hidden="true"></i>
                           </a>
                         <?php } else { ?>
@@ -559,11 +548,11 @@ if ($check_products > 0) {
                         }
                         if (zen_get_metatags_keywords($product['products_id'], (int)$_SESSION['languages_id']) || zen_get_metatags_description($product['products_id'], (int)$_SESSION['languages_id'])) {
                           ?>
-                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'page=' . $_GET['page'] . '&product_type=' . $product['products_type'] . '&cPath=' . $cPath . '&pID=' . $product['products_id']); ?>" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>" class="btn btn-sm btn-info" role="button">
+                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, ($currentPage != 0 ? 'page=' . $currentPage . '&' : '') . 'product_type=' . $product['products_type'] . '&cPath=' . $cPath . '&pID=' . $product['products_id']); ?>" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>" class="btn btn-sm btn-info" role="button">
                             <i class="fa fa-asterisk fa-lg metatags-on" aria-hidden="true"></i>
                           </a>
                         <?php } else { ?>
-                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, 'page=' . $_GET['page'] . '&product_type=' . $product['products_type'] . '&cPath=' . $cPath . '&pID=' . $product['products_id']); ?>" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>" class="btn btn-sm btn-info" role="button">
+                          <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, ($currentPage != 0 ? 'page=' . $currentPage . '&' : '') . 'product_type=' . $product['products_type'] . '&cPath=' . $cPath . '&pID=' . $product['products_id']); ?>" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>" class="btn btn-sm btn-info" role="button">
                             <i class="fa fa-asterisk fa-lg" aria-hidden="true"></i>
                           </a>
                         <?php } ?>
@@ -584,38 +573,6 @@ if ($check_products > 0) {
             </table>
           </form>
           <?php
-          $heading = [];
-          $contents = [];
-          switch ($action) {
-            case 'delete_product':
-              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product.php')) {
-                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product.php');
-              } else {
-                require(DIR_WS_MODULES . 'zen4all_delete_product.php');
-              }
-              break;
-            case 'move_product':
-              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_move_product.php')) {
-                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_move_product.php');
-              } else {
-                require(DIR_WS_MODULES . 'zen4all_move_product.php');
-              }
-              break;
-            case 'copy_product':
-              if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_copy_product.php')) {
-                require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_copy_product.php');
-              } else {
-                require(DIR_WS_MODULES . 'zen4all_copy_product.php');
-              }
-              break;
-          }
-          if ((zen_not_null($heading)) && (zen_not_null($contents))) {
-            $box = new box;
-            echo '<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 configurationColumnRight">';
-            echo $box->infoBox($heading, $contents);
-            echo '</div>';
-          }
-
           $cPathBackRaw = '';
           if (sizeof($cPath_array) > 0) {
             for ($i = 0, $n = sizeof($cPath_array) - 1; $i < $n; $i++) {
@@ -637,7 +594,7 @@ if ($check_products > 0) {
                 </td>
                 <?php
               }
-              if (!isset($_GET['search']) && !$zc_skip_categories) {
+              if (empty($searchWords) && !$zc_skip_categories) {
                 ?>
                 <td class="text-right">
                   <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES, 'cPath=' . $cPath . '&action=new_category'); ?>" class="btn btn-primary" role="button"><?php echo IMAGE_NEW_CATEGORY; ?></a>
@@ -646,7 +603,7 @@ if ($check_products > 0) {
               }
               if ($zc_skip_products == false) {
                 echo zen_draw_form('newproduct', FILENAME_ZEN4ALL_PRODUCT, 'action=new_product', 'post', 'class="form-horizontal"');
-                if (empty($_GET['search'])) {
+                if (empty($searchWords)) {
                   ?>
                   <td class="text-right"><button type="submit" class="btn btn-primary"><?php echo IMAGE_NEW_PRODUCT; ?></button></td>
                   <?php
@@ -708,11 +665,12 @@ if ($check_products > 0) {
               </tr>
               <?php
             }
+            $products_split = new splitPageResults($currentPage, MAX_DISPLAY_RESULTS_CATEGORIES, $products_query_raw, $products_query_numrows);
             if ($products_query_numrows > 0) {
               ?>
               <tr>
-                <td><?php echo $products_split->display_count($products_query_numrows, MAX_DISPLAY_RESULTS_CATEGORIES, $_GET['page'], TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
-                <td class="text-right"><?php echo $products_split->display_links($products_query_numrows, MAX_DISPLAY_RESULTS_CATEGORIES, MAX_DISPLAY_PAGE_LINKS, $_GET['page'], zen_get_all_get_params(array('page', 'info', 'x', 'y', 'pID'))); ?></td>
+                <td><?php echo $products_split->display_count($products_query_numrows, MAX_DISPLAY_RESULTS_CATEGORIES, $currentPage, TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
+                <td class="text-right"><?php echo $products_split->display_links($products_query_numrows, MAX_DISPLAY_RESULTS_CATEGORIES, MAX_DISPLAY_PAGE_LINKS, $currentPage, zen_get_all_get_params(array('page', 'pID'))); ?></td>
               </tr>
             <?php } ?>
           </table>
@@ -726,6 +684,7 @@ if ($check_products > 0) {
     <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalMoveCategory.php'; ?>
     <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalSetFlagCategories.php'; ?>
     <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalDeleteProduct.php'; ?>
+    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalMoveProduct.php'; ?>
     <?php require_once DIR_WS_MODALS . 'messageStackModal.php'; ?>
     <?php require_once 'includes/javascript/zen4all_jscript_CategoriesProductListing.php'; ?>
     <?php

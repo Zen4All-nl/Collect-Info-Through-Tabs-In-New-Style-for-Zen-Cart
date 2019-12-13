@@ -235,6 +235,36 @@
       });
     }));
   }
+  function moveProduct(productId){
+    $('#moveProductId').val(productId);
+    zcJS.ajax({
+      url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=moveProduct',
+      data: {
+        'productId': productId
+      }
+    }).done(function (resultArray) {
+      console.log(resultArray);
+      $('#currentParentCatId').html(resultArray.currentParrentCatId);
+      $('#moveProdModalCurrentCat').html('<strong>' + resultArray.currentCategories + '</strong>');
+    });
+    $('#moveProductModal').on('hidden.bs.modal', function () {
+    });
+  }
+  function moveProductConfirm() {
+    $("#moveProductForm").off('submit').on('submit', (function (e) {
+      e.preventDefault();
+      var formData;
+      formData = $('#moveProductForm').serializeArray();
+      zcJS.ajax({
+        url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=moveProductConfirm',
+        data: formData
+      }).done(function (resultArray) {
+        $('#moveProductModal').modal('hide');
+        $('#pID_' + resultArray.pID).empty();
+      });
+    }));
+    getMessageStack()
+  }
   function getMessageStack() {
     zcJS.ajax({
       url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=messageStack'

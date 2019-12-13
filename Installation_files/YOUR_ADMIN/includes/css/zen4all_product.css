@@ -5,6 +5,17 @@
  * @version $Id: collect_info.css Zen4All $
  */
 
+
+.panel, .panel table, .panel a {
+  font-size: 14px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 1.42857143;
+}
+.panel a.btn{
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 /* Navs */
 .nav > li.disabled > a {
     color: #999;
