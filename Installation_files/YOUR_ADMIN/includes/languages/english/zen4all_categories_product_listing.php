@@ -30,3 +30,4 @@ define('TEXT_DELETE_WARNING_PRODUCTS_END', 'products still linked to this catego
 define('TEXT_MOVE_CATEGORIES_INTRO_START', 'Please select which category you wish');
 define('TEXT_MOVE_CATEGORIES_INTRO_END', 'to reside in.');
 define('TEXT_MOVE_CATEGORY', '; move to:');
+define('TXT_LABEL_SELECT_NEW_CAT', 'Choose the new Category');
