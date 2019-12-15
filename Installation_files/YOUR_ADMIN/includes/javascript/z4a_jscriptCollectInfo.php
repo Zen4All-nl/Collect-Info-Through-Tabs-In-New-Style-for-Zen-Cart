@@ -58,10 +58,10 @@
       }).done(function (resultArray) {
           //console.log(resultArray);
           if (resultArray) {
-              $('#collectInfoMessageStackText').html(resultArray.modalMessageStack);
-              $('#collectInfoMessageStack').modal('show');
+              $('#MessageStackText').html(resultArray.modalMessageStack);
+              $('#MessageStackModal').modal('show');
               setTimeout(function () {
-                  $('#collectInfoMessageStack').modal('hide');
+                  $('#MessageStackModal').modal('hide');
               }, 4000);
           }
       });

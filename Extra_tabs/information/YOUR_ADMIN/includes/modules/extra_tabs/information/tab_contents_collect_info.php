@@ -21,7 +21,7 @@ foreach ($view as $item) {
 ?>
 <div class="form-group">
   <ul class="list-group col-sm-3">
-    <li class="list-group-item justify-content-between">Numbers in stock:<span class="badge badge-default badge-pill"><?php echo $pInfo->products_quantity; ?></span></li>
+    <li class="list-group-item justify-content-between">Numbers in stock:<span class="badge badge-default badge-pill"><?php echo $productInfo['products_quantity']['value']; ?></span></li>
     <li class="list-group-item justify-content-between">Numbers sold: <span class="badge badge-default badge-pill"><?php echo $ordered->fields['products_ordered']; ?></span></li>
     <li class="list-group-item justify-content-between">Times viewed: 
         <?php

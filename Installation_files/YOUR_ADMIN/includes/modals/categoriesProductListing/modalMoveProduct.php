@@ -18,23 +18,29 @@
       <form name="formMoveProductConfirm" method="post" enctype="multipart/form-data" id="moveProductForm" class="form-horizontal">
         <?php echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']); ?>
         <div class="modal-body">
-          <div class="row">
-            <?php echo zen_draw_hidden_field('products_id', '', 'id="moveProductId"'); ?>
-            <?php echo zen_draw_hidden_field('current_category_id', $current_category_id); ?>
+          <?php echo zen_draw_hidden_field('products_id', '', 'id="moveProductId"'); ?>
+          <?php echo zen_draw_hidden_field('current_category_id', $current_category_id); ?>
+          <div class="form-group">
             <div class="col-sm-12">
               <p><?php echo TEXT_MOVE_PRODUCTS_INTRO; ?></p>
             </div>
-            <div id="moveProductNewCat">
-              <?php echo zen_draw_label(TXT_LABEL_SELECT_NEW_CAT, 'move_to_category_id', 'class="col-sm-3"'); ?>
+          </div>
+          <div id="moveProductNewCat" class="form-group">
+            <?php echo zen_draw_label(TXT_LABEL_SELECT_NEW_CAT, 'move_to_category_id', 'class="controls-label col-sm-3"'); ?>
+            <div class="col-sm-9">
+              <?php echo zen_draw_pull_down_menu('move_to_category_id', zen_get_category_tree(), $current_category_id, 'id="moveToCategoryId" class="form-control"'); ?>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label class="control-label col-sm-3"><?php echo TEXT_INFO_CURRENT_CATEGORIES; ?></label>
               <div class="col-sm-9">
-                <?php echo zen_draw_pull_down_menu('move_to_category_id', zen_get_category_tree(), $current_category_id, 'id="moveToCategoryId" class="form-control"'); ?>
+                <p class="text-danger"><strong><?php echo TEXT_MASTER_CATEGORIES_ID; ?> ID#<span id="currentParentCatId"></span></strong></p>
+                <p id="moveProdModalCurrentCat"></p>
               </div>
             </div>
-            <div class="col-sm-12">
-              <p><?php echo TEXT_INFO_CURRENT_CATEGORIES; ?></p>
-              <p class="text-danger"><strong><?php echo TEXT_MASTER_CATEGORIES_ID; ?> ID#<span id="currentParentCatId"></span></strong></p>
-              <p id="moveProdModalCurrentCat"></p>
-            </div>
+          </div>
+          <div class="form-group">
             <div class="col-sm-12 text-center">
               <button type="submit" class="btn btn-danger" onclick="moveProductConfirm();"><?php echo IMAGE_MOVE; ?></button> <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo IMAGE_CANCEL; ?></button>
             </div>
