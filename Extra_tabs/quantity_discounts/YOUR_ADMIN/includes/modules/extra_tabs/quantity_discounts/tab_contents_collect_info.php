@@ -38,9 +38,9 @@ if (isset($discounts_qty) && $discounts_qty->RecordCount() > 0) {
       'discount_qty' => $item['discount_qty'],
       'discount_price' => $item['discount_price']];
   }
-} elseif (isset($pInfo->discount_qty) && $pInfo->discount_qty != '') {
-  $tempDiscountQty = $pInfo->discount_qty;
-  $tempDiscountPrice = $pInfo->discount_price;
+} elseif (isset($productInfo['discount_qty']['value']) && $productInfo['discount_qty']['value'] != '') {
+  $tempDiscountQty = $productInfo['discount_qty']['value'];
+  $tempDiscountPrice = $productInfo['discount_price']['value'];
   for ($i = 0, $n = sizeof($tempDiscountQty); $i < $n; $i++) {
     $tempDiscount[$i + 1] = array(
       'discount_qty' => $tempDiscountQty[$i + 1],
@@ -77,10 +77,10 @@ $disqountRow = sizeof($discount_name);
             <?php echo TEXT_DISCOUNT_TYPE_INFO; ?>
         </td>
         <td colspan="2" class="main">
-            <?php echo TEXT_DISCOUNT_TYPE . ' ' . zen_draw_pull_down_menu('products_discount_type', $discount_type_array, $pInfo->products_discount_type, 'class="form-control"'); ?>
+            <?php echo TEXT_DISCOUNT_TYPE . ' ' . zen_draw_pull_down_menu('products_discount_type', $discount_type_array, $productInfo['products_discount_type']['value'], 'class="form-control"'); ?>
         </td>
         <td colspan="2" class="main">
-            <?php echo TEXT_DISCOUNT_TYPE_FROM . ' ' . zen_draw_pull_down_menu('products_discount_type_from', $discount_type_from_array, $pInfo->products_discount_type_from, 'class="form-control"'); ?>
+            <?php echo TEXT_DISCOUNT_TYPE_FROM . ' ' . zen_draw_pull_down_menu('products_discount_type_from', $discount_type_from_array, $productInfo['products_discount_type_from']['value'], 'class="form-control"'); ?>
         </td>
       </tr>
       <tr>
@@ -102,14 +102,14 @@ $disqountRow = sizeof($discount_name);
     <tbody>
         <?php
         foreach ($discount_name as $row) {
-          switch ($pInfo->products_discount_type) {
+          switch ($productInfo['products_discount_type']['value']) {
             // none
             case '0':
               $discounted_price = 0;
               break;
             // percentage discount
             case '1':
-              if ($pInfo->products_discount_type_from == '0') {
+              if ($productInfo['products_discount_type_from']['value'] == '0') {
                 $discounted_price = $display_price - ($display_price * ($row['discount_price'] / 100));
               } else {
                 if (!$display_specials_price) {
@@ -122,7 +122,7 @@ $disqountRow = sizeof($discount_name);
               break;
             // actual price
             case '2':
-              if ($pInfo->products_discount_type_from == '0') {
+              if ($productInfo['products_discount_type_from']['value'] == '0') {
                 $discounted_price = $row['discount_price'];
               } else {
                 $discounted_price = $row['discount_price'];
@@ -130,7 +130,7 @@ $disqountRow = sizeof($discount_name);
               break;
             // amount offprice
             case '3':
-              if ($pInfo->products_discount_type_from == '0') {
+              if ($productInfo['products_discount_type_from']['value'] == '0') {
                 $discounted_price = $display_price - $row['discount_price'];
               } else {
                 if (!$display_specials_price) {
