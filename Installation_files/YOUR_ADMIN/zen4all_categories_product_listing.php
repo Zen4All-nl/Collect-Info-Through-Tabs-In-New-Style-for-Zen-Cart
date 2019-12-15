@@ -519,7 +519,7 @@ if ($check_products > 0) {
                         <button type="button" data-toggle="modal" title="<?php echo TEXT_LISTING_MOVE; ?>" class="btn btn-sm btn-info" onclick="moveProduct('<?php echo $product['products_id']; ?>');" data-original-title="<?php echo TEXT_LISTING_MOVE; ?>" data-target="#moveProductModal">
                           <i class="fa fa-arrows fa-lg" aria-hidden="true"></i>
                         </button>
-                        <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=copy_product'); ?>" title="<?php echo TEXT_LISTING_COPY; ?>" class="btn btn-sm btn-info" role="button">
+                        <button type="button" data-toggle="modal" title="<?php echo TEXT_LISTING_COPY; ?>" class="btn btn-sm btn-info" onclick="copyProduct('<?php echo $product['products_id']; ?>', '<?php echo $product['products_type']; ?>');" data-original-title="<?php echo TEXT_LISTING_COPY; ?>" data-target="#copyProductModal">
                           <i class="fa fa-copy fa-lg" aria-hidden="true"></i>
                         </button>
                         <?php if (defined('FILENAME_IMAGE_HANDLER') && file_exists(DIR_FS_ADMIN . FILENAME_IMAGE_HANDLER . '.php')) { ?>
@@ -680,12 +680,13 @@ if ($check_products > 0) {
     <!-- footer //-->
     <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
     <!-- footer_eof //-->
-    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalDeleteCategory.php'; ?>
-    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalMoveCategory.php'; ?>
-    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalSetFlagCategories.php'; ?>
-    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalDeleteProduct.php'; ?>
-    <?php require_once DIR_WS_MODALS . 'categoriesProductListing/modalMoveProduct.php'; ?>
     <?php require_once DIR_WS_MODALS . 'messageStackModal.php'; ?>
+    <!-- Autoload Category Product Listing modals -->
+    <?php
+    foreach (glob(DIR_WS_MODALS . 'categoriesProductListing/*.php') as $filename) {
+      include $filename;
+    }
+    ?>
     <?php require_once 'includes/javascript/zen4all_jscript_CategoriesProductListing.php'; ?>
     <?php
     if ($action != 'edit_category_meta_tags') { // bof: categories meta tags

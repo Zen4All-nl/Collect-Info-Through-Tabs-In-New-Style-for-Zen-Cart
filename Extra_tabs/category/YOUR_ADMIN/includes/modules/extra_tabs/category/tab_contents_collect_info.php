@@ -20,22 +20,20 @@ if (zen_get_product_is_linked($_GET['pID']) == 'true' and $_GET['pID'] > 0) {
   <div class="row">
     <div class="col-sm-4">
       <?php echo zen_image(DIR_WS_IMAGES . 'icon_yellow_on.gif', IMAGE_ICON_LINKED); ?>&nbsp;&nbsp;<strong><?php echo TEXT_MASTER_CATEGORIES_ID; ?></strong>
-      <?php echo zen_draw_pull_down_menu('master_category', zen_get_master_categories_pulldown($_GET['pID']), $pInfo->master_categories_id, 'class="form-control"'); ?>
+      <?php echo zen_draw_pull_down_menu('master_category', zen_get_master_categories_pulldown($_GET['pID']), $productInfo['master_categories_id']['value'], 'class="form-control"'); ?>
     </div>
-    <?php
-    if ($pInfo->master_categories_id <= 0) {
-      echo '</div><div class="col-sm-4 text-wanring">' . WARNING_MASTER_CATEGORIES_ID . '</div>';
-    }
-    ?>
+    <?php if ($productInfo['master_categories_id']['value'] <= 0) { ?>
+      <div class="col-sm-4 text-warning"><?php echo WARNING_MASTER_CATEGORIES_ID; ?></div>
+    <?php } ?>
     <div class="col-sm-4"><?php echo TEXT_INFO_LINKED_TO_COUNT . $products_list->RecordCount(); ?></div>
   </div>
 <?php } else { ?>
   <div class="row">
     <p>
-        <?php
-        echo TEXT_MASTER_CATEGORIES_ID;
-        echo TEXT_INFO_ID . ($_GET['pID'] > 0 ? $pInfo->master_categories_id . ' ' . zen_get_category_name($pInfo->master_categories_id, $_SESSION['languages_id']) : $current_category_id . ' ' . zen_get_category_name($current_category_id, $_SESSION['languages_id']));
-        ?>
+      <?php
+      echo TEXT_MASTER_CATEGORIES_ID;
+      echo TEXT_INFO_ID . ($_GET['pID'] > 0 ? $productInfo['master_categories_id']['value'] . ' ' . zen_get_category_name($productInfo['master_categories_id']['value'], $_SESSION['languages_id']) : $current_category_id . ' ' . zen_get_category_name($current_category_id, $_SESSION['languages_id']));
+      ?>
     </p>
   </div>
 <?php } ?>
@@ -79,13 +77,13 @@ if (zen_get_product_is_linked($_GET['pID']) == 'true' and $_GET['pID'] > 0) {
           echo '<tr>';
         }
         echo '  <td align="right">' . $categories_list->fields['categories_id'] . '</td>' . "\n";
-        if ($pInfo->master_categories_id == $categories_list->fields['categories_id']) {
+        if ($productInfo['master_categories_id']['value'] == $categories_list->fields['categories_id']) {
           echo '  <td align="left">' . zen_image(DIR_WS_IMAGES . 'icon_yellow_on.gif', IMAGE_ICON_LINKED) . '&nbsp;' . $categories_list->fields['categories_name'] . zen_draw_hidden_field('current_master_categories_id', $categories_list->fields['categories_id']) . '</td>' . "\n";
         } else {
           echo '  <td align="left">' . ($selected ? '<strong>' : '') . $zc_categories_checkbox . '&nbsp;' . $categories_list->fields['categories_name'] . ($selected ? '</strong>' : '') . '</td>' . "\n";
         }
         $categories_list->MoveNext();
-        if ($cnt_columns == MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS or $categories_list->EOF) {
+        if ($cnt_columns == MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS || $categories_list->EOF) {
           if ($categories_list->EOF and $cnt_columns != MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS) {
             while ($cnt_columns < MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS) {
               $cnt_columns++;
