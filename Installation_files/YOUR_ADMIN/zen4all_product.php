@@ -21,7 +21,6 @@ $parameters = [
   'products_last_modified' => ['value' => ''],
   'master_categories_id' => ['value' => '']];
 
-$sqlParametersFileList = dirListProductFields(PRODUCT_FIELDS_INCLUDES_SQL_FOLDER);
 $fields = '';
 $tables = '';
 
