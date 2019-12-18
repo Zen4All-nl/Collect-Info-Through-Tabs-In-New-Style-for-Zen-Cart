@@ -1,6 +1,6 @@
 <?php
 
-class zcAjaxAdminCollectInfo extends base {
+class zcAjaxAdminProduct extends base {
 
   private function setProductId($productId, $current_category_id)
   {
@@ -44,6 +44,7 @@ class zcAjaxAdminCollectInfo extends base {
 
   public function setImage()
   {
+    global $db;
     $data = new objectInfo($_POST);
 
     $productId = $this->setProductId($data->productId, $data->current_category_id);
