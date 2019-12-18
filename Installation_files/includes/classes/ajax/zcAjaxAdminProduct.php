@@ -49,12 +49,7 @@ class zcAjaxAdminProduct extends base {
 
     $productId = $this->setProductId($data->productId, $data->current_category_id);
 
-    $products_image_name = $newImage['products_image']['name'];
-    /*   if ($data->products_image_manual'] != '') {
-      $products_image_name_manual = $data->img_dir . $data->products_image_manual;
-      $products_image_name = $products_image_name_manual;
-      }
-      $new_products_image_name = $products_image_name; */
+    //    $new_products_image_name = $products_image_name;
     $products_image = new upload('products_image');
     $products_image->set_extensions(array('jpg', 'jpeg', 'gif', 'png', 'webp', 'flv', 'webm', 'ogg'));
     $products_image->set_destination(DIR_FS_CATALOG_IMAGES . $data->img_dir);
@@ -63,14 +58,23 @@ class zcAjaxAdminProduct extends base {
     } else {
       $products_image_name = (isset($data->products_previous_image) ? $data->products_previous_image : '');
     }
-    $sql_data_array['products_image'] = zen_db_prepare_input($data->products_image);
+
+    if ($data->products_image_manual != '') {
+      $products_image_name_manual = $data->img_dir . $data->products_image_manual;
+      $products_image_name = $products_image_name_manual;
+    }
+
     $new_image = 'true';
 
     if ($data->image_delete == 1) {
-      $sql_data_array['products_image'] = '';
+      $products_image_name = '';
       $new_image = 'false';
     }
-    zen_db_perform(TABLE_PRODUCTS, $sql_data_array);
+
+    $db_filename = zen_limit_image_filename($products_image_name, TABLE_PRODUCTS, 'products_image');
+    $db->Execute("UPDATE " . TABLE_PRODUCTS . "
+                  SET products_image = '" . $db_filename . "'
+                  WHERE products_id = " . $productId);
     return([
       'data' => $data,
       'products_image_name' => $products_image_name,
@@ -102,8 +106,8 @@ class zcAjaxAdminProduct extends base {
       }
     }
 
-  // Data-cleaning to prevent data-type mismatch errors:
-  $sql_data_array['products_quantity'] = convertToFloat($sql_data_array['products_quantity']);
+    // Data-cleaning to prevent data-type mismatch errors:
+    $sql_data_array['products_quantity'] = convertToFloat($sql_data_array['products_quantity']);
     $sql_data_array['products_type'] = (int)$sql_data_array['products_type'];
     $sql_data_array['products_model'] = zen_db_prepare_input($sql_data_array['products_model']);
     $sql_data_array['products_price'] = convertToFloat($sql_data_array['products_price']);

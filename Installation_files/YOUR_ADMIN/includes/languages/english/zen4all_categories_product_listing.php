@@ -35,3 +35,4 @@ define('TEXT_VIEW_SETTINGS', 'View Settings');
 define('TXT_LABEL_SELECT_NEW_CAT', 'Choose the new Category');
 
 define('TABLE_HEADING_IMAGE', 'Image');
+define('TEXT_IMAGE_NONEXISTENT', 'Image does not exist');
