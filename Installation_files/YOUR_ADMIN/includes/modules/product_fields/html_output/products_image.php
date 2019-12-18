@@ -73,7 +73,6 @@ if ($productInfo['products_image']['value'] != '' && $productInfo['products_id']
         }
       }
       ?>
-      <p>leeg</p>
     </div>
     <div class="panel-footer">
       <button type="button" id="button-add-additional-image-1" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button>
