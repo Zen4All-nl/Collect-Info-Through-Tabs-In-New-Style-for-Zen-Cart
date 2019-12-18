@@ -61,7 +61,7 @@ $default_directory = substr($productInfo['products_image']['value'], 0, strpos($
         </button>
         <h4 class="modal-title" id="imageModalLabel">Image Edit</h4>
       </div>
-      <form name="mainImageSelect" method="post" enctype="multipart/form-data" id="mainImageSelect">
+      <form name="mainImageSelect" method="post" enctype="multipart/form-data" id="mainImageSelect" class="form-horizontal">
         <?php echo zen_draw_hidden_field('securityToken', $_SESSION['securityToken']); ?>
         <div class="modal-body">
 
