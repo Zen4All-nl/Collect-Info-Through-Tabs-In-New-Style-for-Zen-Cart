@@ -33,3 +33,5 @@ define('TEXT_MOVE_CATEGORY', '; move to:');
 define('TEXT_VIEW_SETTINGS', 'View Settings');
 
 define('TXT_LABEL_SELECT_NEW_CAT', 'Choose the new Category');
+
+define('TABLE_HEADING_IMAGE', 'Image');

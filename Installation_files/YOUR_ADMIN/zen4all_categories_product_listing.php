@@ -274,6 +274,9 @@ if ($check_products > 0) {
                   <th class="ColumnName noWrap">
                     <span <?php echo (($columnSortOrder == '3' || $columnSortOrder == '4') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_CATEGORIES_PRODUCTS; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=3'); ?>" class="<?php echo ($columnSortOrder == '3' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-lg"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=4'); ?>"class="<?php echo ($columnSortOrder == '4' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-lg"></i></a>
                   </th>
+                  <th class="ColumnImage">
+                    <?php echo TABLE_HEADING_IMAGE; ?>
+                  </th>
                   <th class="ColumnModel hidden-sm hidden-xs noWrap">
                     <span <?php echo (($columnSortOrder == '5' || $columnSortOrder == '6') ? 'class="SortOrderHeader"' : ''); ?>><?php echo TABLE_HEADING_MODEL; ?></span>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=5'); ?>" class="<?php echo ($columnSortOrder == '5' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-down fa-lg"></i></a>&nbsp;<a href="<?php echo zen_href_link(basename($PHP_SELF), zen_get_all_get_params(array('list_order', 'page')) . 'list_order=6'); ?>" class="<?php echo ($columnSortOrder == '6' ? 'SortOrderHeader' : 'SortOrderHeaderLink'); ?>"><i class="fa fa-caret-up fa-lg"></i></a>
                   </th>
@@ -346,6 +349,9 @@ if ($check_products > 0) {
                     <td class="ColumnName">
                       <a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, zen_get_path($category['categories_id'])); ?>" class="folder">
                         <i class="fa fa-lg fa-folder"></i>&nbsp;<strong><?php echo $category['categories_name']; ?></strong></a>
+                    </td>
+                    <td class="ColumnImage">
+                      <?php echo zen_info_image($category['categories_image'], $category['categories_name'], HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?>
                     </td>
                     <td class="ColumnModel text-center hidden-sm hidden-xs">&nbsp;</td>
                     <td class="ColumnPrice text-right hidden-sm hidden-xs"><?php echo zen_get_products_sale_discount('', $category['categories_id'], true); ?></td>
@@ -493,6 +499,9 @@ if ($check_products > 0) {
                     <td><?php echo zen_draw_checkbox_field('selected_products[]', $product['products_id']); ?></td>
                     <td class="text-right"><?php echo $product['products_id']; ?></td>
                     <td class="ColumnName"><a href="<?php echo zen_catalog_href_link($type_handler . '_info', (!empty($cPath) ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $product['products_id'] . '&language=' . $_SESSION['languages_code'] . '&product_type=' . $product['products_type']); ?>" target="_blank"><?php echo zen_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW); ?></a>&nbsp;<a href="<?php echo zen_href_link(FILENAME_ZEN4ALL_PRODUCT, (!empty($cPath)?'cPath=' . $cPath . '&': '').'product_type=' . $product['products_type'] . '&pID=' . $product['products_id'] . '&action=new_product' . ($searchWords != '' ? '&search=' . $searchWords : '')); ?>" title="<?php echo TEXT_LISTING_EDIT; ?>"><?php echo $product['products_name']; ?></a></td>
+                    <td class="ColumnImage">
+                      <?php echo zen_info_image($product['products_image'], $product['products_name'], HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?>
+                    </td>
                     <td class="ColumnModel hidden-sm hidden-xs"><?php echo $product['products_model']; ?></td>
                     <td class="ColumnPrice text-right hidden-sm hidden-xs"><?php echo zen_get_products_display_price($product['products_id']); ?></td>
                     <td class="hidden"></td>
