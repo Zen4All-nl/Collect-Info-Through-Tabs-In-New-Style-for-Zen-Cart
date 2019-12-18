@@ -22,55 +22,15 @@ if ($categoryId != '') {
 ?>
 <!doctype html>
 <html <?php echo HTML_PARAMS; ?>>
-  <?php  require('includes/admin_html_head.php');  ?>
+  <head>
+    <meta charset="<?php echo CHARSET; ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><?php echo TITLE; ?></title>
+    <link rel="stylesheet" href="includes/stylesheet.css">
+    <link rel="stylesheet" href="includes/css/zen4all_categories.css">
+    <script src="includes/general.js"></script>
+  </head>
   <body>
-    <style>
-      /*
-       * @package admin
-       * @copyright Copyright 2008-2017 Zen4All
-       * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
-       * @version $Id: collect_info.css Zen4All $
-       */
-
-      /* Navs */
-      .nav > li.disabled > a {
-        color: #999;
-      }
-      .nav > li.disabled > a:hover, .nav > li.disabled > a:focus {
-        color: #999;
-      }
-      /* Tabs */
-      .nav-tabs > li > a {
-        color: #666;
-        border-radius: 2px 2px 0 0;
-        font-size: 1.2em;
-      }
-      .nav-tabs > li > a:hover {
-        border-color: #eee #eee #ddd;
-      }
-      .nav-tabs {
-        margin-bottom: 25px;
-      }
-      .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-        font-weight: bold;
-        color: #333;
-      }
-      .form-control:hover {
-        border: 1px solid #b9b9b9;
-        border-top-color: #a0a0a0;
-        -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
-      }
-      .table thead td span[data-toggle="tooltip"]:after, label.control-label span:after {
-        font-family: FontAwesome;
-        color: #1E91CF;
-        content: "\f059";
-        margin-left: 4px;
-      }
-      .fa-question-circle {
-        color: #008cba;
-      }
-    </style>
     <?php require(DIR_WS_INCLUDES . 'header.php'); ?>
     <div class="container-fluid">
       <div class="panel panel-default">
@@ -316,7 +276,7 @@ if ($categoryId != '') {
 
     </script>
     <!-- load main javascript for category_info -->
-    <?php require_once 'includes/javascript/z4a_jscriptCategories.php'; ?>
+    <?php require_once 'includes/javascript/zen4all_jscriptCategories.php'; ?>
     <!-- footer //-->
     <?php include ($editor_handler); ?>
     <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
