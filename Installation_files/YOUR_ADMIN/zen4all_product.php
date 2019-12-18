@@ -266,7 +266,7 @@ if (!$category_lookup->EOF) {
       }));
     </script>
     <!-- load main javascript for collect_info -->
-    <?php require_once 'includes/javascript/z4a_jscriptCollectInfo.php'; ?>
+    <?php require_once 'includes/javascript/zen4all_jscriptProduct.php'; ?>
     <!-- Autoload Additional JavaScripts -->
     <?php
     $jscriptNeedle = 'jscript_';
