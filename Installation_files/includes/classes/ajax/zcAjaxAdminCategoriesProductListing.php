@@ -791,18 +791,4 @@ class zcAjaxAdminCategoriesProductListing extends base {
     return $categoryName;
   }
 
-  /**
-   * 
-   * @global type $messageStack
-   * @return array
-   */
-  public function messageStack()
-  {
-    global $messageStack;
-    if ($messageStack->size > 0) {
-      return([
-        'modalMessageStack' => $messageStack->output()]);
-    }
-  }
-
 }

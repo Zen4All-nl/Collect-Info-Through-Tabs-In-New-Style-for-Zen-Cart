@@ -352,7 +352,7 @@
       var column = "table ." + $(this).attr("name");
       $(column).toggle();
       zcJS.ajax({
-        url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=setSessionColumnValue',
+        url: 'ajax.php?act=ajaxAdminMessageStack&method=setSessionColumnValue',
         data: {
           'column': $(this).attr("name")
         }

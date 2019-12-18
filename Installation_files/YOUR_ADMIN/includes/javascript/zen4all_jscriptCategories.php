@@ -67,7 +67,7 @@
   }
   function getMessageStack() {
       zcJS.ajax({
-          url: 'ajax.php?act=ajaxAdminCategories&metod=messageStack'
+          url: 'ajax.php?act=ajaxAdminMessageStack&metod=messageStack'
       }).done(function (resultArray) {
           //console.log(resultArray);
           $('#categoryMessageStackText').html(resultArray.modalMessageStack);
