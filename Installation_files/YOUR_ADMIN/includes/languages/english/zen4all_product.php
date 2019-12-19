@@ -14,10 +14,10 @@ include DIR_FS_ADMIN . 'includes/languages/english/product.php';
 /* BOF Zen4All - CITTINS - 2 of 2 */
 define('TEXT_ACTION', 'Action');
 define('TEXT_CLICK_TO_ENLARGE', 'larger image');
-define('TEXT_IMAGES_DELETE_NOTE', '');
 define('IMAGE_PREVIEW', 'Image preview');
 define('TEXT_CHANGE_IMAGE', 'Change image');
 define('TEXT_ADD_IMAGE', 'Add image');
 define('TEXT_RENAME_ADDITIONAL_IMAGES', 'Rename additional images');
 define('TEXT_ADDITIONAL_IMAGES', 'Additional images');
-/* EOF Zen4All - CITTINS - 2 of 2 */
+
+define('TEXT_PRODUCTS_IMAGE_MANUAL', '<strong>Or, select an existing image file from server, filename:</strong>');

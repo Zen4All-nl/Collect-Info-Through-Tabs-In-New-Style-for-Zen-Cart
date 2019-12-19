@@ -82,6 +82,14 @@ class zcAjaxAdminProduct extends base {
       'productId' => $productId]);
   }
 
+  public function deleteMainImage()
+  {
+    global $db;
+    $data = new objectInfo($_POST);
+    $db->Execute("UPDATE " . TABLE_PRODUCTS . "
+                  SET products_image = ''
+                  WHERE products_id = " . $data->productId);
+  }
   public function saveProduct()
   {
     global $db, $messageStack;

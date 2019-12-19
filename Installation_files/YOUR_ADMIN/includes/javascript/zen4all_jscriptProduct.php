@@ -45,6 +45,23 @@
   function getAdditionalImages() {
 
   }
+  function deleteMainImage() {
+    const productId = <?php echo $productId; ?>;
+    zcJS.ajax({
+      url: 'ajax.php?act=ajaxAdminProduct&method=deleteMainImage',
+      data: {
+        'productId': productId
+      }
+    }).done(function () {
+      $('#mainImageDeleteModal').modal('hide');
+      getMessageStack();
+      $('#mainImageThumb').html('<?php echo NONE; ?>');
+      $('#mainImagePath').html('<?php echo NONE; ?>');
+      $('#button-add-main-image i').removeClass('fa-pencil').addClass('fa-plus-circle');
+      $('#button-delete-main-image').hide();
+      $('#additionalImages').hide();
+    });
+  }
   function saveProduct() {
     $("#productInfo").off('submit').on('submit', (function (e) {
       e.preventDefault();

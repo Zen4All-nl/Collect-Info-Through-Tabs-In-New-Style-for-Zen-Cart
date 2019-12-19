@@ -22,10 +22,10 @@
           <div role="group">
             <?php if ($productInfo['products_image']['value'] != '') { ?>
               <button type="button" id="button-edit-main-image" class="btn btn-primary" data-original-title="<?php echo TEXT_CHANGE_IMAGE; ?>" data-toggle="modal" data-target="#mainImageEditModal"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-              <button type="button" id="button-delete-main-image-1" class="btn btn-danger" data-original-title="<?php ?>" data-toggle="modal" data-target="#mainImageDeleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
             <?php } else { ?>
               <button type="button" id="button-add-main-image" class="btn btn-primary" data-original-title="<?php echo TEXT_ADD_IMAGE; ?>" data-toggle="modal" data-target="#mainImageEditModal"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
             <?php } ?>
+              <button type="button" id="button-delete-main-image" class="btn btn-danger" data-original-title="<?php ?>" data-toggle="modal" data-target="#mainImageDeleteModal"<?php echo($productInfo['products_image']['value'] == '' ? 'style="display: none"' : ''); ?>><i class="fa fa-trash-o" aria-hidden="true"></i></button>
           </div>
         </div>
       </div>
