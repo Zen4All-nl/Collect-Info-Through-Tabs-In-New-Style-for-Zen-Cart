@@ -1,7 +1,18 @@
 <?php
 
+/**
+ * 
+ */
 class zcAjaxAdminProduct extends base {
 
+  /**
+   * 
+   * @global type $db
+   * @global array $messageStack
+   * @param integer $productId
+   * @param integer $current_category_id
+   * @return integer
+   */
   private function setProductId($productId, $current_category_id)
   {
     global $db, $messageStack;
@@ -42,6 +53,11 @@ class zcAjaxAdminProduct extends base {
     }
   }
 
+  /**
+   * 
+   * @global type $db
+   * @return array
+   */
   public function setImage()
   {
     global $db;
@@ -82,6 +98,10 @@ class zcAjaxAdminProduct extends base {
       'productId' => $productId]);
   }
 
+  /**
+   * 
+   * @global type $db
+   */
   public function deleteMainImage()
   {
     global $db;
@@ -90,6 +110,13 @@ class zcAjaxAdminProduct extends base {
                   SET products_image = ''
                   WHERE products_id = " . $data->productId);
   }
+
+  /**
+   * 
+   * @global type $db
+   * @global array $messageStack
+   * @return type
+   */
   public function saveProduct()
   {
     global $db, $messageStack;

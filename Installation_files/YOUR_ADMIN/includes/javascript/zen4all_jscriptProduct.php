@@ -28,13 +28,14 @@
             $('#productId').val(resultArray);
             $('#mainImageEditModal').modal('hide');
             mainImageHtml = '<img src="<?php echo DIR_WS_CATALOG_IMAGES; ?>' + resultArray['products_image_name'] + '" border="0" alt="" width="<?php echo SMALL_IMAGE_WIDTH; ?>" height="<?php echo SMALL_IMAGE_HEIGHT; ?>" class="img-thumbnail" id="mainImage">';
-            mainImageHtml += '<br/>';
+            mainImageHtml += '<br>';
             mainImageHtml += '<?php echo TEXT_CLICK_TO_ENLARGE; ?>';
             $('#mainImageThumb').html(mainImageHtml);
             $('#mainProductImage').val(resultArray['products_image_name']);
             $('#mainImagePath').html(resultArray['products_image_name']);
             $('#mainImageLarger').html('<img src="<?php echo DIR_WS_CATALOG_IMAGES; ?>' + resultArray['products_image_name'] + '" border="0" alt="" width="<?php echo $width; ?>" height="<?php echo $height; ?>">');
             $('#button-add-main-image i').removeClass('fa-plus-circle').addClass('fa-pencil');
+            $('#button-delete-main-image').show();
             getAdditionalImages();
             $('#additionalImages').show();
           }
