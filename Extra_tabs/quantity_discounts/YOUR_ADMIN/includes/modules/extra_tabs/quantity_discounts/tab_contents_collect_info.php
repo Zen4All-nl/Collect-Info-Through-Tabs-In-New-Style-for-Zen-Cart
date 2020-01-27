@@ -62,7 +62,7 @@ $disqountRow = sizeof($discount_name);
     <thead>
       <tr>
         <td colspan="6">
-          <?php echo zen_draw_label(TEXT_PRODUCTS_MIXED_DISCOUNT_QUANTITY, 'products_mixed_discount_quantity'); ?>
+          <p><strong><?php echo TEXT_PRODUCTS_MIXED_DISCOUNT_QUANTITY; ?></strong></p>
           <div class="input-group">
             <div class="radioBtn btn-group">
               <a class="btn btn-info <?php echo($productInfo['products_mixed_discount_quantity']['value'] == '1' ? 'active' : 'notActive'); ?>" data-toggle="products_mixed_discount_quantity" data-title="1"><?php echo TEXT_YES; ?></a>

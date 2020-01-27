@@ -13,5 +13,5 @@ foreach ($music_genres as $music_genre) {
 ?>
 <?php echo zen_draw_label(TEXT_PRODUCTS_MUSIC_GENRE, 'music_genre_id', 'class="col-sm-3 control-label"'); ?>
 <div class="col-sm-9 col-md-6">
-  <?php echo zen_draw_pull_down_menu('music_genre_id', $music_genre_array, $pInfo->music_genre_id, 'class="form-control"'); ?>
+  <?php echo zen_draw_pull_down_menu('music_genre_id', $music_genre_array, $productInformation->music_genre_id['value'], 'class="form-control" id="music_genre_id"'); ?>
 </div>

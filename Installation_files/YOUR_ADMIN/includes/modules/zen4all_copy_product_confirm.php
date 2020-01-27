@@ -110,7 +110,7 @@ if (isset($_POST['products_id']) && isset($_POST['categories_id'])) {
     $products_id = $dup_products_id;
 
   if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_copy_product_confirm.php')) {
-    require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_copy_product_confirm.php');
+    require DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_copy_product_confirm.php';
   }
 
 // FIX HERE
@@ -150,4 +150,4 @@ if (isset($_POST['products_id']) && isset($_POST['categories_id'])) {
   // reset products_price_sorter for searches etc.
   zen_update_products_price_sorter($products_id);
 }
-zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $categories_id . '&pID=' . $products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
+zen_redirect(zen_href_link(FILENAME_CITTINS_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $categories_id . '&pID=' . $products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));

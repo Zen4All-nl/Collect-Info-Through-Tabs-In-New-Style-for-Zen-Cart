@@ -1,0 +1,166 @@
+/*
+ * @package admin
+ * @copyright Copyright 2008-2017 Zen4All
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: collect_info.css Zen4All $
+ */
+
+
+.panel, .panel table, .panel a {
+  font-size: 14px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  line-height: 1.42857143;
+}
+.panel a.btn-sm{
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Navs */
+.nav > li.disabled > a {
+    color: #999;
+}
+.nav > li.disabled > a:hover, .nav > li.disabled > a:focus {
+    color: #999;
+}
+/* Tabs */
+.nav-tabs > li > a {
+    color: #666;
+    border-radius: 2px 2px 0 0;
+    font-size: 1.2em;
+}
+.nav-tabs > li > a:hover {
+    border-color: #eee #eee #ddd;
+}
+.nav-tabs {
+    margin-bottom: 25px;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    font-weight: bold;
+    color: #333;
+}
+.form-control{
+  width: 100%;
+  display: block;
+}
+.form-control:hover {
+    border: 1px solid #b9b9b9;
+    border-top-color: #a0a0a0;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+}
+.table thead td span[data-toggle="tooltip"]:after, label.control-label span:after {
+    font-family: FontAwesome;
+    color: #1E91CF;
+    content: "\f059";
+    margin-left: 4px;
+}
+.fa-question-circle {
+    color: #008cba;
+}
+#modalImageManager {
+    margin: 10px auto;
+}
+.directory {
+    color: #f8f5e1
+}
+.directory:hover {
+    color: #ffd700;
+}
+.fa-folder {
+    text-shadow: 1px 1px 1px rgba(1,1,1,0.5);
+}
+/*
+#datepicker i {
+    position: absolute;
+    bottom: 10px;
+    right: 24px;
+    top: auto;
+    cursor: pointer;
+}
+*/
+/*
+  label.btn span {
+        font-size: 1.5em;
+  }
+*/
+label input[type="radio"] ~ i.fa.fa-circle-o {
+    color: #c8c8c8;
+    display: inline;
+}
+label input[type="radio"] ~ i.fa.fa-dot-circle-o {
+    display: none;
+}
+label input[type="radio"]:checked ~ i.fa.fa-circle-o {
+    display: none;
+}
+label input[type="radio"]:checked ~ i.fa.fa-dot-circle-o {
+    color: #337ab7;
+    display: inline;
+}
+label:hover input[type="radio"] ~ i.fa {
+    color: #337ab7;
+}
+div[data-toggle="buttons"] label.active {
+    color: #337ab7;
+}
+div[data-toggle="buttons"] label {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 2em;
+    text-align: left;
+    white-space: nowrap;
+    vertical-align: top;
+    cursor: pointer;
+    background-color: none;
+    border: 0px solid #c8c8c8;
+    border-radius: 3px;
+    color: #c8c8c8;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+div[data-toggle="buttons"] label:hover {
+    color: #337ab7;
+}
+div[data-toggle="buttons"] label:active, div[data-toggle="buttons"] label.active {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.radioBtn .notActive{
+    color: #333;
+    background-color: #fff;
+}
+.align-middle{
+    vertical-align: middle !important;
+}
+.flagNotActive {
+    opacity:0.50;
+}
+#editAttributeValueModal .modal-lg, #addAttributeModal .modal-lg{
+    width: auto;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+#mainImagePath, div[id^="additionalImagePath"] {
+  word-break: break-all;
+}
+.ui-widget {
+  font-size: 16px;
+}
+.ui-widget a{
+  font-size: inherit;
+}
+@media (min-width: 768px) {
+    .row-eq-height {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+}

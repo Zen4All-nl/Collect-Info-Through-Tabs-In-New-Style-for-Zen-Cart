@@ -54,7 +54,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
     if (!isset($data->categories_id)) {
       return(['error' => 'ERROR']);
     }
-    $categories_id = zen_db_prepare_input($data->categories_id);
+    $categories_id = (int)$data->categories_id;
 
     $categories = zen_get_category_tree($categories_id, '', '0', '', true);
 
@@ -70,7 +70,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
       $products_status = isset($data->set_products_status) && $data->set_products_status == 'set_products_status_on' ? '1' : ''; //Disable products or no change?
     }
 
-    for ($i = 0, $n = sizeof($categories); $i < $n; $i++) {
+    for ($i = 0, $n = count($categories); $i < $n; $i++) {
 
       //set categories_status
       if ($categories[$i]['id'] == $categories_id) {//always update THIS category
@@ -141,7 +141,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
     zen_update_attributes_products_option_values_sort_order($_GET['products_id']);
     $messageStack->add_session(SUCCESS_ATTRIBUTES_UPDATE . ' ID#' . $_GET['products_id'], 'success');
     $action = '';
-    zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
+    zen_redirect(zen_href_link(FILENAME_CITTINS_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
   /**
@@ -154,7 +154,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
     $copy_attributes_duplicates_overwrite = ($_POST['copy_attributes'] == 'copy_attributes_update' ? '1' : '0');
     zen_copy_products_attributes($_POST['products_id'], $_POST['products_update_id']);
     $_GET['action'] = '';
-    zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
+    zen_redirect(zen_href_link(FILENAME_CITTINS_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
   /**
@@ -173,7 +173,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
     }
 
     $_GET['action'] = '';
-    zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
+    zen_redirect(zen_href_link(FILENAME_CITTINS_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . '&pID=' . $_GET['products_id'] . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
   }
 
   /**
@@ -220,7 +220,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
 
       zen_set_time_limit(600);
 
-      for ($i = 0, $n = sizeof($categories); $i < $n; $i++) {
+      for ($i = 0, $n = count($categories); $i < $n; $i++) {
         $sql = "SELECT products_id
                 FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
                 WHERE categories_id = " . $categories[$i]['id'];
@@ -242,11 +242,11 @@ class zcAjaxAdminCategoriesProductListing extends base {
           if ($do_delete_flag) {
 //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__BELOW_HERE--------------------------------------------------------
             if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product_confirm.php')) {
-              require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product_confirm.php');
+              require DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/zen4all_delete_product_confirm.php';
             }
 //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__ABOVE__HERE--------------------------------------------------------
 
-            for ($k = 0, $m = sizeof($product_categories); $k < $m; $k++) {
+            for ($k = 0, $m = count($product_categories); $k < $m; $k++) {
               $db->Execute("DELETE FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
                             WHERE products_id = " . (int)$product_id . "
                             AND categories_id = " . (int)$product_categories[$k]);
@@ -354,25 +354,25 @@ class zcAjaxAdminCategoriesProductListing extends base {
     }
     $productCategoriesString = '';
 
-    for ($i = 0, $n = sizeof($productCategories); $i < $n; $i++) {
+    for ($i = 0, $n = count($productCategories); $i < $n; $i++) {
       $categoryPath = '';
-      for ($j = 0, $k = sizeof($productCategories[$i]); $j < $k; $j++) {
+      for ($j = 0, $k = count($productCategories[$i]); $j < $k; $j++) {
         $categoryPath .= $productCategories[$i][$j]['text'];
         if ($j + 1 < $k) {
           $categoryPath .= '&nbsp;&gt;&nbsp;';
         }
       }
-      if (sizeof($productCategories) > 1 && zen_get_parent_category_id($data->productId) == $productCategories[$i][sizeof($productCategories[$i]) - 1]['id']) {
+      if (count($productCategories) > 1 && zen_get_parent_category_id($data->productId) == $productCategories[$i][count($productCategories[$i]) - 1]['id']) {
         $productCategoriesString .= '<div class="checkbox">' . "\n";
         $productCategoriesString .= '  <label>' . "\n";
-        $productCategoriesString .= '    <strong><span class="text-danger">' . zen_draw_checkbox_field('product_categories[]', $productCategories[$i][sizeof($productCategories[$i]) - 1]['id'], false) . $categoryPath . '</span></strong>' . "\n";
+        $productCategoriesString .= '    <strong><span class="text-danger">' . zen_draw_checkbox_field('product_categories[]', $productCategories[$i][count($productCategories[$i]) - 1]['id'], false) . $categoryPath . '</span></strong>' . "\n";
         $productCategoriesString .= '  </label>' . "\n";
         $productCategoriesString .= '</div>' . "\n";
         $productMasterCategoryString = $categoryPath;
       } else {
         $productCategoriesString .= '<div class="checkbox">' . "\n";
         $productCategoriesString .= '  <label>' . "\n";
-        $productCategoriesString .= '    <strong>' . zen_draw_checkbox_field('product_categories[]', $productCategories[$i][sizeof($productCategories[$i]) - 1]['id'], true) . $categoryPath . '</strong>' . "\n";
+        $productCategoriesString .= '    <strong>' . zen_draw_checkbox_field('product_categories[]', $productCategories[$i][count($productCategories[$i]) - 1]['id'], true) . $categoryPath . '</strong>' . "\n";
         $productCategoriesString .= '  </label>' . "\n";
         $productCategoriesString .= '</div>' . "\n";
       }
@@ -431,7 +431,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
        * PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__BELOW_HERE
        */
       if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($data->product_type) . '/zen4all_delete_product_confirm.php')) {
-        require(DIR_WS_MODULES . $zc_products->get_handler($data->product_type) . '/zen4all_delete_product_confirm.php');
+        require DIR_WS_MODULES . $zc_products->get_handler($data->product_type) . '/zen4all_delete_product_confirm.php';
       }
       /*
        * PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__ABOVE__HERE
@@ -441,7 +441,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
        * now do regular non-type-specific delete:
        * remove product from all its categories:
        */
-      for ($k = 0, $m = sizeof($product_categories); $k < $m; $k++) {
+      for ($k = 0, $m = count($product_categories); $k < $m; $k++) {
         $db->Execute("DELETE FROM " . TABLE_PRODUCTS_TO_CATEGORIES . "
                       WHERE products_id = " . (int)$product_id . "
                       AND categories_id = " . (int)$product_categories[$k]);
@@ -470,15 +470,15 @@ class zcAjaxAdminCategoriesProductListing extends base {
     $data = new objectInfo($_POST);
 
     $product_categories = zen_generate_category_path($data->productId, 'product');
-    for ($i = 0, $n = sizeof($product_categories); $i < $n; $i++) {
+    for ($i = 0, $n = count($product_categories); $i < $n; $i++) {
       $category_path = '';
-      for ($j = 0, $k = sizeof($product_categories[$i]); $j < $k; $j++) {
+      for ($j = 0, $k = count($product_categories[$i]); $j < $k; $j++) {
         $category_path .= $product_categories[$i][$j]['text'];
         if ($j + 1 < $k) {
           $category_path .= '&nbsp;&gt;&nbsp;';
         }
       }
-      if (sizeof($product_categories) > 1 && zen_get_parent_category_id($data->productId) == $product_categories[$i][sizeof($product_categories[$i]) - 1]['id']) {
+      if (count($product_categories) > 1 && zen_get_parent_category_id($data->productId) == $product_categories[$i][count($product_categories[$i]) - 1]['id']) {
         $product_master_category_string = $category_path;
       }
     }
@@ -550,11 +550,12 @@ class zcAjaxAdminCategoriesProductListing extends base {
     $productName = zen_get_products_name((int)$data->productId, (int)$_SESSION['languages_id']);
     $currentCategories = zen_output_generated_category_path($data->productId, 'product');
 
+    $languages = zen_get_languages();
 // only ask about attributes if defined
     $productHasAttributes = zen_has_product_attributes($data->productId, 'false');
 //are any metatags defined
     $metatagsDefined = false;
-    for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
+    for ($i = 0, $n = count($languages); $i < $n; $i++) {
       if (zen_get_metatags_description($data->productId,
                       $languages[$i]['id']) . zen_get_metatags_keywords($data->productId,
                       $languages[$i]['id']) . zen_get_metatags_title($data->productId, $languages[$i]['id']) != '') {
@@ -771,6 +772,30 @@ class zcAjaxAdminCategoriesProductListing extends base {
       'data' => $data,
       'session' => $_SESSION['columnVisibility']
     ]);
+  }
+
+  public function multiSelect()
+  {
+    $data = new objectInfo($_POST);
+    if ($data->action_select == '') {
+      return;
+    } else {
+      switch ($data->action_select) {
+        case 'move' :
+          $action = 'move';
+          break;
+        case 'delete' :
+          $action = 'delete';
+          break;
+        case 'copy' :
+          $action = 'copy';
+          break;
+      }
+      return([
+        'data' => $data,
+        'action' => $action
+      ]);
+    }
   }
 
   /**

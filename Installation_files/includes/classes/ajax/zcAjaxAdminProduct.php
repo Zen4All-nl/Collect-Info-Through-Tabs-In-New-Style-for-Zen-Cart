@@ -111,6 +111,16 @@ class zcAjaxAdminProduct extends base {
                   WHERE products_id = " . $data->productId);
   }
 
+  public function getAdditionalImages()
+  {
+    global $db;
+    $data = new objectInfo($_POST);
+
+    $additionalImages = getAdditionalImages($data->productId, $data->productImage);
+
+    return $additionalImages;
+  }
+
   /**
    * 
    * @global type $db
@@ -130,7 +140,8 @@ class zcAjaxAdminProduct extends base {
       'products_price_gross',
       'products_previous_image',
       'products_last_modified',
-      'master_categories_id'
+      'master_categories_id',
+      'current_master_categories_id',
     ];
     $languages = zen_get_languages();
     $productId = $this->setProductId($data->productId, $data->current_category_id);
@@ -142,28 +153,28 @@ class zcAjaxAdminProduct extends base {
     }
 
     // Data-cleaning to prevent data-type mismatch errors:
-    $sql_data_array['products_quantity'] = convertToFloat($sql_data_array['products_quantity']);
+    $sql_data_array['products_quantity'] = (float)$sql_data_array['products_quantity'];
     $sql_data_array['products_type'] = (int)$sql_data_array['products_type'];
     $sql_data_array['products_model'] = zen_db_prepare_input($sql_data_array['products_model']);
-    $sql_data_array['products_price'] = convertToFloat($sql_data_array['products_price']);
-    $sql_data_array['products_weight'] = convertToFloat($sql_data_array['products_weight']);
+    $sql_data_array['products_price'] = (float)$sql_data_array['products_price'];
+    $sql_data_array['products_weight'] = (float)$sql_data_array['products_weight'];
     $sql_data_array['products_status'] = (int)$sql_data_array['products_status'];
     $sql_data_array['products_virtual'] = (int)$sql_data_array['products_virtual'];
     $sql_data_array['products_tax_class_id'] = (int)$sql_data_array['products_tax_class_id'];
     $sql_data_array['manufacturers_id'] = (int)$sql_data_array['manufacturers_id'];
-    $sql_data_array['products_quantity_order_min'] = convertToFloat($sql_data_array['products_quantity_order_min']) == 0 ? 1 : convertToFloat($sql_data_array['products_quantity_order_min']);
-    $sql_data_array['products_quantity_order_units'] = convertToFloat($sql_data_array['products_quantity_order_units']) == 0 ? 1 : convertToFloat($sql_data_array['products_quantity_order_units']);
+    $sql_data_array['products_quantity_order_min'] = (float)$sql_data_array['products_quantity_order_min'] == 0 ? 1 : (float)$sql_data_array['products_quantity_order_min'];
+    $sql_data_array['products_quantity_order_units'] = (float)$sql_data_array['products_quantity_order_units'] == 0 ? 1 : (float)$sql_data_array['products_quantity_order_units'];
     $sql_data_array['products_priced_by_attribute'] = (int)$sql_data_array['products_priced_by_attribute'];
     $sql_data_array['product_is_free'] = (int)$sql_data_array['product_is_free'];
     $sql_data_array['product_is_call'] = (int)$sql_data_array['product_is_call'];
     $sql_data_array['products_quantity_mixed'] = (int)$sql_data_array['products_quantity_mixed'];
     $sql_data_array['product_is_always_free_shipping'] = (int)$sql_data_array['product_is_always_free_shipping'];
     $sql_data_array['products_qty_box_status'] = (int)$sql_data_array['products_qty_box_status'];
-    $sql_data_array['products_quantity_order_max'] = convertToFloat($sql_data_array['products_quantity_order_max']);
+    $sql_data_array['products_quantity_order_max'] = (float)$sql_data_array['products_quantity_order_max'];
     $sql_data_array['products_sort_order'] = (int)$sql_data_array['products_sort_order'];
     $sql_data_array['products_discount_type'] = (int)$sql_data_array['products_discount_type'];
     $sql_data_array['products_discount_type_from'] = (int)$sql_data_array['products_discount_type_from'];
-    $sql_data_array['products_price_sorter'] = convertToFloat($sql_data_array['products_price_sorter']);
+    $sql_data_array['products_price_sorter'] = (float)$sql_data_array['products_price_sorter'];
 
     $products_date_available = zen_db_prepare_input($data->products_date_available);
     $sql_data_array['products_date_available'] = (date('Y-m-d') < $products_date_available) ? $products_date_available : 'null';
@@ -233,7 +244,7 @@ class zcAjaxAdminProduct extends base {
     $extraTabsupate = dirList(DIR_WS_MODULES . 'extra_tabs/', 'tab_update_product.php');
     if (isset($extraTabsupate) && $extraTabsupate != '') {
       foreach ($extraTabsupate as $tabUpdate) {
-        include($tabUpdate);
+        include $tabUpdate;
       }
     }
 

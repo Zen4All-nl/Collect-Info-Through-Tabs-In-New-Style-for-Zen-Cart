@@ -9,7 +9,7 @@
             "homepage": "https://zen4all.nl/index.php?main_page=product_info&cPath=12_14&products_id=16"
         }
     ],
-    "_comment": "compatible with PHP 5.5-7.3",
+    "_comment": "compatible with PHP 5.5-7.3-7.4",
     "require": {
         "php": ">=5.6"
     }
