@@ -17,7 +17,7 @@ if ($attributeValuesArray['attributes_image'] != '') {
             <i class="fa fa-times" aria-hidden="true"></i>
             <span class="sr-only"><?php echo TEXT_CLOSE; ?></span>
           </button>
-          <h4 class="modal-title" id="EditAttributeValueModalLabel"><?php echo TITLE_EDIT_ATTRIBUTE; ?></h4>
+          <h4 class="modal-title" id="editAttributeValueModalLabel"><?php echo TITLE_EDIT_ATTRIBUTE; ?></h4>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -93,7 +93,7 @@ if ($attributeValuesArray['attributes_image'] != '') {
                   <?php echo zen_draw_input_field('attributes_qty_prices', '', 'class="form-control"'); ?>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
-                  <?php echo zen_draw_label(TABLE_HEADING_ATTRIBUTES_QTY_PRICES_ONETIME, '', 'class="control-label"'); ?>
+                  <?php echo zen_draw_label(TABLE_HEADING_ATTRIBUTES_QTY_PRICES_ONETIME, 'attributes_qty_prices_onetime', 'class="control-label"'); ?>
                   <?php echo zen_draw_input_field('attributes_qty_prices_onetime', '', 'class="form-control"'); ?>
               </div>
             </div>

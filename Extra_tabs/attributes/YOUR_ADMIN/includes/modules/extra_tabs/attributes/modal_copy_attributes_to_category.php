@@ -1,5 +1,5 @@
 
-<div id="update_attributes_copy_to_category" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="updateAttributesCopyToCategory" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <?php echo zen_draw_form('product_copy_to_category', FILENAME_ATTRIBUTES_CONTROLLER, 'action=update_attributes_copy_to_category'); ?>
   <div class="modal-dialog">
     <div class="modal-content">
@@ -27,7 +27,7 @@
           <span class="alert">
             <?php echo zen_draw_label(TEXT_INFO_ATTRIBUTES_FEATURE_CATEGORIES_COPY_TO, 'categories_update_id', 'class="control-label"'); ?>
           </span>
-          <?php echo zen_draw_products_pull_down_categories('categories_update_id', 'size="5" class="form-control"', '', true, true); ?>
+          <?php echo zen_draw_products_pull_down_categories('categories_update_id', 'size="5" class="form-control" id="categories_update_id"', '', true, true); ?>
         </div>
         <?php echo zen_draw_hidden_field('products_filter', $_GET['pID']); ?>
         <?php echo zen_draw_hidden_field('products_update_id', $_GET['products_update_id']); ?>

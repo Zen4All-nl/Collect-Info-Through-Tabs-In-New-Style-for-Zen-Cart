@@ -222,13 +222,4 @@ class zcAjaxAdminCategories extends base {
     return (['categoryId' => (int)$categories_id]);
   }
 
-  public function messageStack()
-  {
-    global $messageStack;
-    if ($messageStack->size > 0) {
-      $modalMessageStack = $messageStack->output();
-    }
-    return (['modalMessageStack' => $modalMessageStack]);
-  }
-
 }
