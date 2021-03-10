@@ -4,7 +4,7 @@
 
 This module is build for the Zen Cart versions mentioned below.
 
-|   | CITTINS Version | 1.2 | 2.0 (beta)|
+|   | CITTINS Version | 1.0.2 | 2.0.0 (beta 8)|
 | ---: | --- | :---: | :---: |
 | **Zen Cart Version** |   |   |   |
 | =<1.5.4 |   | :x: | :x: |
