@@ -1,12 +1,17 @@
 <?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/*
+ *
+ * @copyright Copyright 2008-2021 Zen4All
+ * @license https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/blob/stable/LICENSE GNU Public License V2.0
+ * @version Cittins 2.0.0 by Zen4All
+ * 
  */
 
-if (!defined('DIR_WS_MODALS')){ define('DIR_WS_MODALS', DIR_WS_INCLUDES . 'modals/');}
+
+if (!defined('DIR_WS_MODALS')) {
+  define('DIR_WS_MODALS', DIR_WS_INCLUDES . 'modals/');
+}
 
 define('FILENAME_CITTINS_CATEGORIES', 'cittinsCategories');
 define('FILENAME_CITTINS_CATEGORIES_PRODUCT_LISTING', 'cittinsCategoriesProductListing');

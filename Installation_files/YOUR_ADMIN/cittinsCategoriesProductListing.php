@@ -1,8 +1,7 @@
 <?php
-/**
- * @package admin
+/*
  * @copyright (c) 2008-2020, Zen4All
- * @copyright Copyright 2003-2019 Zen Cart Development Team
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
  * @version $Id: Author: Zen4All
@@ -30,8 +29,8 @@ if (isset($_GET['cID'])) {
 }
 
 $cPathBackRaw = '';
-if (sizeof($cPath_array) > 0) {
-  for ($i = 0, $n = sizeof($cPath_array) - 1; $i < $n; $i++) {
+if (count($cPath_array) > 0) {
+  for ($i = 0, $n = count($cPath_array) - 1; $i < $n; $i++) {
     if (empty($cPathBackRaw)) {
       $cPathBackRaw .= $cPath_array[$i];
     } else {
@@ -46,8 +45,8 @@ $getDefaultColumnsQuery = "SELECT configuration_key, configuration_value
                            FROM " . TABLE_CONFIGURATION . "
                            WHERE configuration_key LIKE '%ZEN4ALL_CITTINS_COLUMN_%'";
 $getDefaultColumns = $db->Execute($getDefaultColumnsQuery);
-if (!isset($_SESSION['columnVisibility']) || empty($_SESSION['columnVisibility'])) {
-  $_SESSION['columnVisibility'] = [];
+if (!isset($_SESSION['cittins']['columnVisibility']) || empty($_SESSION['cittins']['columnVisibility'])) {
+  $_SESSION['cittins']['columnVisibility'] = [];
   foreach ($getDefaultColumns as $item) {
     $strToLower = strtolower(substr($item['configuration_key'], strlen('ZEN4ALL_CITTINS_')));
     $splitArray = explode('_', $strToLower);
@@ -56,19 +55,19 @@ if (!isset($_SESSION['columnVisibility']) || empty($_SESSION['columnVisibility']
       $stringArray[] = ucfirst($split);
     }
     $str = implode('', $stringArray);
-    $_SESSION['columnVisibility'][$str] = $item['configuration_value'];
+    $_SESSION['cittins']['columnVisibility'][$str] = $item['configuration_value'];
   }
 }
-$columnVisibility = $_SESSION['columnVisibility'];
+$columnVisibility = $_SESSION['cittins']['columnVisibility'];
 
 $zco_notifier->notify('NOTIFY_BEGIN_ADMIN_CATEGORIES', $action);
 
-if (!isset($_SESSION['cittinsCategoriesProductsSortOrder']) || empty($_SESSION['cittinsCategoriesProductsSortOrder'])) {
-  $_SESSION['cittinsCategoriesProductsSortOrder'] = ZEN4ALL_CITTINS_DEFAULT_LISTING_SORTORDER;
+if (!isset($_SESSION['cittins']['CategoriesProductsSortOrder']) || empty($_SESSION['cittins']['CategoriesProductsSortOrder'])) {
+  $_SESSION['cittins']['CategoriesProductsSortOrder'] = ZEN4ALL_CITTINS_DEFAULT_LISTING_SORTORDER;
 } elseif (isset($_GET['list_order'])) {
-  $_SESSION['cittinsCategoriesProductsSortOrder'] = (int)$_GET['list_order'];
+  $_SESSION['cittins']['CategoriesProductsSortOrder'] = (int)$_GET['list_order'];
 }
-$columnSortOrder = $_SESSION['cittinsCategoriesProductsSortOrder'];
+$columnSortOrder = $_SESSION['cittins']['CategoriesProductsSortOrder'];
 
 if (zen_not_null($action)) {
   switch ($action) {
@@ -314,7 +313,7 @@ if ($check_products > 0) {
                   <td>&nbsp;</td>
                 </tr>
                 <?php
-                switch ($_SESSION['cittinsCategoriesProductsSortOrder']) {
+                switch ($_SESSION['cittins']['CategoriesProductsSortOrder']) {
                   case (1) :
                     $order_by = "c.categories_id ASC, cd.categories_name ASC";
                     break;
@@ -337,7 +336,6 @@ if ($check_products > 0) {
                 }
 
                 $categories_count = 0;
-                $rows = 0;
                 if ($searchWords != '') {
                   $categories = $db->Execute("SELECT c.*, cd.categories_name, cd.categories_description
                                               FROM " . TABLE_CATEGORIES . " c
@@ -355,7 +353,6 @@ if ($check_products > 0) {
                 }
                 foreach ($categories as $category) {
                   $categories_count++;
-                  $rows++;
 
                   if ($searchWords != '') {
                     $cPath = $category['parent_id'];
@@ -372,7 +369,7 @@ if ($check_products > 0) {
                       <?php echo zen_info_image($category['categories_image'], $category['categories_name'], HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?>
                     </td>
                     <td class="ColumnModel text-center hidden-sm hidden-xs">&nbsp;</td>
-                    <td class="ColumnPrice text-right hidden-sm hidden-xs"><?php echo zen_get_products_sale_discount('', $category['categories_id'], true); ?></td>
+                    <td class="ColumnPrice text-right hidden-sm hidden-xs"><?php echo ($search_result || $categories->EOF ? zen_get_discount_calc('', $category['categories_id'], true): ''); ?></td>
                     <?php if ($search_result || SHOW_COUNTS_ADMIN == 'true') { ?>
                       <td class="ColumnQuantity text-right hidden-sm hidden-xs">
                         <?php
@@ -407,7 +404,7 @@ if ($check_products > 0) {
                         <button type="button" data-toggle="modal" title="<?php echo TEXT_LISTING_MOVE; ?>" class="btn btn-sm btn-info" onclick="moveCategory('<?php echo $category['categories_id']; ?>', '<?php echo $cPath; ?>');" data-original-title="<?php echo TEXT_LISTING_MOVE; ?>" data-target="#moveCategoryModal">
                           <i class="fa fa-arrows fa-lg" aria-hidden="true"></i>
                         </button>
-                        <?php if (zen_get_category_metatags_keywords($category['categories_id'], (int)$_SESSION['languages_id']) or zen_get_category_metatags_description($category['categories_id'], (int)$_SESSION['languages_id'])) { ?>
+                        <?php if (zen_get_category_metatag_fields($category['categories_id'], (int)$_SESSION['languages_id'], 'metatags_keywords') || zen_get_category_metatag_fields($category['categories_id'], (int)$_SESSION['languages_id'], 'metatags_description')) { ?>
                           <a href="<?php echo zen_href_link(FILENAME_CITTINS_CATEGORIES, (!empty($cPath) ? 'cPath=' . $cPath . '&' : '') . 'cID=' . $category['categories_id'] . '&action=edit_category_meta_tags' . '&activeTab=categoryTabs4'); ?>" title="<?php echo TEXT_LISTING_EDIT_META_TAGS; ?>" class="btn btn-sm btn-info" role="button">
                             <i class="fa fa-asterisk fa-lg" aria-hidden="true"></i>
                           </a>
@@ -422,7 +419,7 @@ if ($check_products > 0) {
                   <?php
                 }
 
-                switch ($_SESSION['cittinsCategoriesProductsSortOrder']) {
+                switch ($_SESSION['cittins']['CategoriesProductsSortOrder']) {
                   case (1):
                     $order_by = "p.products_id ASC, pd.products_name ASC";
                     break;
@@ -503,7 +500,6 @@ if ($check_products > 0) {
 // Split Page
                 foreach ($products as $product) {
                   $products_count++;
-                  $rows++;
 
 // Get categories_id for product if search
                   if ($searchWords != '') {

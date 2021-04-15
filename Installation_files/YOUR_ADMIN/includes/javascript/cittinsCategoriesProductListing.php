@@ -1,9 +1,12 @@
 <?php
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *
+ * @copyright Copyright 2008-2021 Zen4All
+ * @license https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/blob/stable/LICENSE GNU Public License V2.0
+ * @version Cittins 2.0.0 by Zen4All
+ * 
  */
+
 ?>
 <script>
   function setProductFlag(productId, flag) {
@@ -39,7 +42,7 @@
       if (flag === '1' && resultArray.hasCategorySubcategories === true) {
         $('#FlagRadioHasCategorySubcategories').html(
                 '\n<div class="col-sm-3">\n' +
-                '  <p class="control-label"><strong><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></strong></p>\n' +
+                '  <p class="control-label"><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></p>\n' +
                 '</div>\n' +
                 '<div class="col-sm-9">\n' +
                 '  <div class="radio">\n' +
@@ -54,7 +57,7 @@
       if (flag === '1' && resultArray.getProductsToCategories > 0) {
         $('#FlagRadioGetProductsToCategories').html(
                 '\n<div class="col-sm-3">\n' +
-                '  <p class="control-label"><strong><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></strong></p>\n' +
+                '  <p class="control-label"><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></p>\n' +
                 '</div>\n' +
                 '<div class="col-sm-9">\n' +
                 '  <div class="radio">\n' +
@@ -69,7 +72,7 @@
       if (flag === '0' && resultArray.hasCategorySubcategories === true) {
         $('#FlagRadioHasCategorySubcategories').html(
                 '\n<div class="col-sm-3">\n' +
-                '  <p class="control-label"><strong><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></strong></p>\n' +
+                '  <p class="control-label"><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></p>\n' +
                 '</div>\n' +
                 '<div class="col-sm-9">\n' +
                 '  <div class="radio">\n' +
@@ -84,7 +87,7 @@
       if (flag === '0' && resultArray.getProductsToCategories > 0) {
         $('#FlagRadioGetProductsToCategories').html(
                 '\n<div class="col-sm-3">\n' +
-                '  <p class="control-label"><strong><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></strong></p>\n' +
+                '  <p class="control-label"><?php echo TEXT_PRODUCTS_STATUS_INFO; ?></p>\n' +
                 '</div>\n' +
                 '<div class="col-sm-9">\n' +
                 '  <div class="radio">\n' +
@@ -103,7 +106,7 @@
     });
   }
   function setCategoryFlagConfirm() {
-    $("#setCategoryFlagForm").off('submit').on('submit', (function (e) {
+    $('#setCategoryFlagForm').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = $('#setCategoryFlagForm').serializeArray();
       zcJS.ajax({
@@ -152,7 +155,7 @@
   }
   function deleteCategoryConfirm() {
 
-    $("#deleteCategoryForm").off('submit').on('submit', (function (e) {
+    $('#deleteCategoryForm').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = $('#deleteCategoryForm').serializeArray();
       zcJS.ajax({
@@ -172,7 +175,7 @@
   function moveCategory(categoryId, cPath) {
     $('#cPath').val(cPath);
     $('#moveCategoryId').val(categoryId);
-    $("#moveCategoryForm select").val(categoryId);
+    $('#moveCategoryForm select').val(categoryId);
     zcJS.ajax({
       url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=moveCategory',
       data: {
@@ -186,7 +189,7 @@
     });
   }
   function moveCategoryConfirm() {
-    $("#moveCategoryForm").off('submit').on('submit', (function (e) {
+    $('#moveCategoryForm').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = $('#moveCategoryForm').serializeArray();
       zcJS.ajax({
@@ -227,7 +230,7 @@
     });
   }
   function deleteProductConfirm() {
-    $("#deleteProductForm").off('submit').on('submit', (function (e) {
+    $('#deleteProductForm').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = $('#deleteProductForm').serializeArray();
       zcJS.ajax({
@@ -239,7 +242,7 @@
       });
     }));
   }
-  function moveProduct(productId){
+  function moveProduct(productId) {
     $('#moveProductId').val(productId);
     zcJS.ajax({
       url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=moveProduct',
@@ -255,7 +258,7 @@
     });
   }
   function moveProductConfirm() {
-    $("#moveProductForm").off('submit').on('submit', (function (e) {
+    $('#moveProductForm').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = $('#moveProductForm').serializeArray();
       zcJS.ajax({
@@ -278,38 +281,38 @@
       }
     }).done(function (resultArray) {
       console.log(resultArray);
-    $('#copyProductCurrentInfo').html(resultArray.productModel + ' - ' + resultArray.productName + '[ ID#' + resultArray.productId + ' ]');
+      $('#copyProductCurrentInfo').html(resultArray.productModel + ' - ' + resultArray.productName + '[ ID#' + resultArray.productId + ' ]');
       $('#copyProdModalCurrentCat').html('<strong>' + resultArray.currentCategories + '</strong>');
-      if(resultArray.productHasAttributes === false){
+      if (resultArray.productHasAttributes === false) {
         $('#copyProductModalAttributes').hide();
         $('#copyProductModalAttributes :radio').attr('disabled', true);
       }
-      if(resultArray.metatagsDefined === false){
+      if (resultArray.metatagsDefined === false) {
         $('#copyProductModalMetaTags').hide();
         $('#copyProductModalMetaTags :radio').attr('disabled', true);
       }
-      if(resultArray.productIsLinked === false){
+      if (resultArray.productIsLinked === false) {
         $('#copyProductModalLinked').hide();
         $('#copyProductModalLinked :radio').attr('disabled', true);
       }
-      if(resultArray.productHasDiscounts === false){
+      if (resultArray.productHasDiscounts === false) {
         $('#copyProductModalDiscounts').hide();
         $('#copyProductModalDiscounts :radio').attr('disabled', true);
       }
     });
     $('#copyProductModal').on('hidden.bs.modal', function () {
-        $('#copyProductModalAttributes').show();
-        $('#copyProductModalAttributes :radio').attr('disabled', false);
-        $('#copyProductModalMetaTags').show();
-        $('#copyProductModalMetaTags :radio').attr('disabled', false);
-        $('#copyProductModalLinked').show();
-        $('#copyProductModalLinked :radio').attr('disabled', false);
-        $('#copyProductModalDiscounts').show();
-        $('#copyProductModalDiscounts :radio').attr('disabled', false);
+      $('#copyProductModalAttributes').show();
+      $('#copyProductModalAttributes :radio').attr('disabled', false);
+      $('#copyProductModalMetaTags').show();
+      $('#copyProductModalMetaTags :radio').attr('disabled', false);
+      $('#copyProductModalLinked').show();
+      $('#copyProductModalLinked :radio').attr('disabled', false);
+      $('#copyProductModalDiscounts').show();
+      $('#copyProductModalDiscounts :radio').attr('disabled', false);
     });
   }
   function copyProductConfirm() {
-    $("#copyProductForm").off('submit').on('submit', (function (e) {
+    $('#copyProductForm').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = $('#copyProductForm').serializeArray();
       zcJS.ajax({
@@ -321,25 +324,25 @@
       });
     }));
   }
-  function multiSelect() {
-    $("#multiSelectListingActionsForm").off('submit').on('submit', (function (e) {
+  function multiSelectAction() {
+    $('#multiSelectListingActionsForm').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = $('#multiSelectListingActionsForm').serializeArray();
       console.log(formData);
       zcJS.ajax({
-        url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=multiSelect',
+        url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=multiSelectAction',
         data: formData
       }).done(function (resultArray) {
         console.log(resultArray);
-       // $('#multiSelectModal').modal('hide');
-       // getMessageStack();
+        // $('#multiSelectModal').modal('hide');
+        // getMessageStack();
       });
     }));
-    }
-  
+  }
+
   function getMessageStack() {
     zcJS.ajax({
-      url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=messageStack'
+      url: 'ajax.php?act=ajaxAdminMessageStack&method=messageStack'
     }).done(function (resultArray) {
       if (resultArray) {
         $('#MessageStackText').html(resultArray.modalMessageStack);
@@ -356,23 +359,23 @@
       checkboxes.prop('checked', $(this).is(':checked'));
     });
     /* BOF Column hiding*/
-    $(".checkbox-menu").on("change", "input[type='checkbox']", function () {
-      $(this).closest("li").toggleClass("active", this.checked);
+    $('.checkbox-menu').on('change', 'input[type="checkbox"]', function () {
+      $(this).closest('li').toggleClass('active', this.checked);
     });
     $(document).on('click', '.allow-focus', function (e) {
       e.stopPropagation();
     });
-    $("#columnDropDown input:checkbox:not(:checked)").each(function () {
-      const column = 'table .' + $(this).attr("name");
+    $('#columnDropDown input:checkbox:not(:checked)').each(function () {
+      const column = 'table .' + $(this).attr('name');
       $(column).hide();
     });
-    $("#columnDropDown input:checkbox").click(function () {
-      const column = "table ." + $(this).attr("name");
+    $('#columnDropDown input:checkbox').click(function () {
+      const column = 'table .' + $(this).attr('name');
       $(column).toggle();
       zcJS.ajax({
         url: 'ajax.php?act=ajaxAdminCategoriesProductListing&method=setSessionColumnValue',
         data: {
-          'column': $(this).attr("name")
+          'column': $(this).attr('name')
         }
       }).done(function (result) {
         console.log(result);

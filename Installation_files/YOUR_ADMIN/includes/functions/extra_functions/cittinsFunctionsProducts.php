@@ -2,9 +2,9 @@
 
 /*
  * @package admin
- * @copyright Copyright 2008-2017 Zen4All
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: functionsCollectProductInfoExtra.php Zen4All $
+ * @copyright Copyright 2008-2021 Zen4All
+ * @license https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/blob/stable/LICENSE GNU Public License V2.0
+ * @version Cittins 2.0.0 by Zen4All
  */
 
 /**
@@ -36,8 +36,8 @@ if (!function_exists('zen_html_button')) {
    * @param string $type The button type: submit, button
    * @param string $text The text on the button: Submit, Cancel, Save
    * @param string $class The Button color: default, primary, succes, info, warning, danger, link
-   * @param string $size The button size: xs, sm, lg For normal size leave empty
    * @param string $parameters Things like an id, or a name
+   * @param string $size The button size: xs, sm, lg For normal size leave empty
    * @return string The html button code
    */
   function zen_html_button(string $type = 'button', string $text = '', string $class = 'default', string $parameters = '', string $size = '') :string

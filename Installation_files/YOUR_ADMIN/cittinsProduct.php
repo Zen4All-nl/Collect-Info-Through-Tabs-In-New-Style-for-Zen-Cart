@@ -1,11 +1,10 @@
 <?php
-/**
- * @package admin
- * @copyright (c) 2008-2018, Zen4All
- * @copyright Copyright 2003-2019 Zen Cart Development Team
+/*
+ * @copyright (c) 2008-2021, Zen4All
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: Author: Zen4All  Aug 2018  Modified in v1.5.6 $
+ * @version $Id: Author: Zen4All
  */
 require 'includes/application_top.php';
 $languages = zen_get_languages();
@@ -19,7 +18,8 @@ $parameters = [
   'products_id' => ['value' => ''],
   'products_date_added' => ['value' => ''],
   'products_last_modified' => ['value' => ''],
-  'master_categories_id' => ['value' => '']];
+  'master_categories_id' => ['value' => '']
+];
 
 $fields = '';
 $tables = '';
@@ -195,7 +195,7 @@ if (!$category_lookup->EOF) {
               </a>
               <button name="<?php echo ($productId != '' ? 'insertButton' : 'updateButton'); ?>" id="btnsubmit" class="btn btn-success" onclick="saveProduct()" type="submit">
                 <i class="fa fa-save"></i> <?php echo ($productId != '' ? IMAGE_SAVE : IMAGE_INSERT); ?>
-              </button> <a href="<?php echo zen_href_link(FILENAME_CITTINS_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (!empty($productId) ? '&pID=' . $productId : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-default" id="btncancel" role="button"><i class="fa fa-undo"></i> Back </a>
+              </button> <a href="<?php echo zen_href_link(FILENAME_CITTINS_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $cPath . (!empty($productId) ? '&pID=' . $productId : '') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')); ?>" class="btn btn-default" id="btncancel" role="button"><i class="fa fa-undo"></i> <?php echo TEXT_BACK; ?></a>
             </div>
           </form>
         </div>

@@ -17,12 +17,14 @@
     $('#previewmodal').modal('show');
   }));
   // script for sliding checkbox
-  $('body').on('click', '.radioBtn a', function () {
-    const sel = $(this).data('title');
-    const tog = $(this).data('toggle');
-    $(this).parent().next('.' + tog).prop('value', sel);
-    $(this).parent().find('a[data-toggle="' + tog + '"]').not('[data-title="' + sel + '"]').removeClass('active').addClass('notActive');
-    $(this).parent().find('a[data-toggle="' + tog + '"][data-title="' + sel + '"]').removeClass('notActive').addClass('active');
+  $(document).ready(function () {
+    $('body').on('click', '.radioBtn a', function () {
+      const sel = $(this).data('title');
+      const tog = $(this).data('toggle');
+      $(this).parent().next('.' + tog).prop('value', sel);
+      $(this).parent().find('a[data-toggle="' + tog + '"]').not('[data-title="' + sel + '"]').removeClass('active').addClass('notActive');
+      $(this).parent().find('a[data-toggle="' + tog + '"][data-title="' + sel + '"]').removeClass('notActive').addClass('active');
+    });
   });
   // Change Save button color on page info change
   $('#productInfo').change(function () {
@@ -36,7 +38,7 @@
 <script>
   const productId = <?php echo $productId; ?>;
   function saveMainImage() {
-    $("#mainImageSelect").off('submit').on('submit', (function (e) {
+    $('#mainImageSelect').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = new FormData($('#mainImageSelect')[0]);
       const productsImage = $('input#fileField').val();
@@ -125,7 +127,7 @@
     });
   }
   function saveProduct() {
-    $("#productInfo").off('submit').on('submit', (function (e) {
+    $('#productInfo').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = $('#productInfo').serializeArray();
       zcJS.ajax({

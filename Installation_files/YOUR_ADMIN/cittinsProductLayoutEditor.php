@@ -1,8 +1,10 @@
 <?php
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * @copyright (c) 2008-2020, Zen4All
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
+ * @copyright Portions Copyright 2003 osCommerce
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id: Author: Zen4All
  */
 require 'includes/application_top.php';
 // temp language file loading
@@ -113,7 +115,7 @@ if (zen_not_null($action)) {
       for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
         $language_id = $languages[$i]['id'];
 
-        $db->Execute("INSERT INTO " . TABLE_PRODUCT_TABS_NAMES . " (id, language_id, tab_name)
+        $db->Execute("INSERT INTO " . TABLE_PRODUCT_TAB_NAMES . " (id, language_id, tab_name)
                       VALUES (" . (int)$tabId . ", " . (int)$language_id . " , '" . $data->tab_name[$language_id] . "')");
       }
       $action = '';
@@ -137,9 +139,9 @@ if (zen_not_null($action)) {
                                  WHERE id = " . (int)$tabId['id']);
         $sortOrder++;
 
-        for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
+        for ($i = 0, $n = count($languages); $i < $n; $i++) {
           $language_id = $languages[$i]['id'];
-          $db->Execute("UPDATE " . TABLE_PRODUCT_TABS_NAMES . "
+          $db->Execute("UPDATE " . TABLE_PRODUCT_TAB_NAMES . "
                         SET tab_name = '" . $tabId['tab_name'][$language_id] . "'
                         WHERE id = " . (int)$tabId['id'] . "
                         AND language_id = " . (int)$language_id);
@@ -521,7 +523,7 @@ $fieldTypesArray = [
                   <div class="form-group">
                     <?php echo zen_draw_label(TEXT_TAB_TITLE, 'tab-name', 'class="col-sm-3 control-label"'); ?>
                     <div class="col-sm-9">
-                      <?php for ($i = 0, $n = sizeof($languages); $i < $n; $i++) { ?>
+                      <?php for ($i = 0, $n = count($languages); $i < $n; $i++) { ?>
                         <div class="input-group">
                           <span class="input-group-addon">
                             <?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']); ?>

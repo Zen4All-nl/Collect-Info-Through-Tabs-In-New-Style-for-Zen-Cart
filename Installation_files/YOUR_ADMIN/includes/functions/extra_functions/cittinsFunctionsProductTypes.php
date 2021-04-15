@@ -85,7 +85,7 @@ function getAllTabs()
   global $db;
   $availableTabsQuery = "SELECT pt.*, ptn.tab_name
                          FROM " . TABLE_PRODUCT_TABS . " pt
-                         LEFT JOIN " . TABLE_PRODUCT_TABS_NAMES . " ptn ON pt.id = ptn.id
+                         LEFT JOIN " . TABLE_PRODUCT_TAB_NAMES . " ptn ON pt.id = ptn.id
                            AND language_id = " . $_SESSION['languages_id'] . "
                          ORDER BY pt.sort_order, ptn.tab_name";
   $availableTabs = $db->Execute($availableTabsQuery);
@@ -156,7 +156,7 @@ function getTabName(int $id, int $languageId)
 {
   global $db;
   $tabNameQuery = "SELECT tab_name
-                   FROM " . TABLE_PRODUCT_TABS_NAMES . "
+                   FROM " . TABLE_PRODUCT_TAB_NAMES . "
                    WHERE id = " . (int)$id . "
                    AND language_id = " . (int)$languageId;
   $tabName = $db->Execute($tabNameQuery);

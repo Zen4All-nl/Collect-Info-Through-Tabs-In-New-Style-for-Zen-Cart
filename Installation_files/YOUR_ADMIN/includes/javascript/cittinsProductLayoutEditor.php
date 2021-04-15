@@ -40,7 +40,7 @@
   }
   function updateTabSortOrder() {
       var SortOrder = document.getElementById('tabs');
-      $("#tabs").off('submit').on('submit', (function (e) {
+      $('#tabs').off('submit').on('submit', (function (e) {
           e.preventDefault();
           console.log(SortOrder);
           zcJS.ajax({
@@ -52,7 +52,7 @@
       }));
   }
 
-  if (typeof jQuery.fn.sortable !== "undefined") {
+  if (typeof jQuery.fn.sortable !== 'undefined') {
       $(function () {
           $('#sortableTabRows').sortable({
               placeholder: 'ui-state-highlight',
@@ -76,7 +76,7 @@
                       }
                   } else {
                       //update the items after the re-ordered item
-                      for (var i = index + 2; i <= $("#sortableTabRows tr .sortOrder").length; i++) {
+                      for (var i = index + 2; i <= $('#sortableTabRows tr .sortOrder').length; i++) {
                           $('#sortableTabRows tr:nth-child(' + i + ') .sortOrder').html(i - 1);
                           $('#sortableTabRows tr:nth-child(' + i + ') .sortOrderValue').val(i - 1);
                       }

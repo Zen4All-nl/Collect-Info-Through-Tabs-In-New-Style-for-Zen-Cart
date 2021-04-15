@@ -774,7 +774,7 @@ class zcAjaxAdminCategoriesProductListing extends base {
     ]);
   }
 
-  public function multiSelect()
+  public function multiSelectAction()
   {
     $data = new objectInfo($_POST);
     if ($data->action_select == '') {

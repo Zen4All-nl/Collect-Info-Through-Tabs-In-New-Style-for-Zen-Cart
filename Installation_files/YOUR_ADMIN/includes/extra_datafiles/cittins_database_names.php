@@ -9,4 +9,4 @@
 define('TABLE_PRODUCT_FIELDS_TO_TYPE', DB_PREFIX . 'product_fields_to_type');
 
 define('TABLE_PRODUCT_TABS', DB_PREFIX . 'product_tabs');
-define('TABLE_PRODUCT_TABS_NAMES', DB_PREFIX . 'product_tabs_names');
+define('TABLE_PRODUCT_TAB_NAMES', DB_PREFIX . 'product_tab_names');

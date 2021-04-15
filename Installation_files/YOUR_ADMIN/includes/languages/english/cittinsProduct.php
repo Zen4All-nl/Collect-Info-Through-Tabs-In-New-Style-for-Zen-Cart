@@ -11,6 +11,7 @@ include DIR_FS_ADMIN . 'includes/languages/english/product.php';
 define('TEXT_PRODUCTS_URL_WITHOUT_HTTP', 'without http://');
 
 define('TEXT_ACTION', 'Action');
+define('TEXT_BACK', 'Back');
 define('TEXT_CLICK_TO_ENLARGE', 'larger image');
 define('IMAGE_PREVIEW', 'Image preview');
 define('TEXT_CHANGE_IMAGE', 'Change image');

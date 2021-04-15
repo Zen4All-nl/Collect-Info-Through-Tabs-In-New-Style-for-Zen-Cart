@@ -1,7 +1,6 @@
 <?php
-/**
- * @package admin
- * @copyright (c) 2008-2020, Zen4All
+/*
+ * @copyright (c) 2008-2021, Zen4All
  * @copyright Copyright 2003-2020 Zen Cart Development Team
  * @copyright Portions Copyright 2003 osCommerce
  * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
@@ -58,7 +57,7 @@ if ($categoryId != '') {
             <div class="tab-content">
               <div id="categoryTabs1" class="tab-pane fade in active">
                 <ul class="nav nav-tabs" data-tabs="tabs">
-                  <?php for ($i = 0, $n = sizeof($languages); $i < $n; $i++) { ?>
+                  <?php for ($i = 0, $n = count($languages); $i < $n; $i++) { ?>
                     <li<?php echo ($i == 0 ? ' class="active"' : ''); ?>>
                       <a data-toggle="tab" href="#categoryNameTabs<?php echo $i + 1; ?>">
                         <?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']) . '&nbsp;' . $languages[$i]['name']; ?>
@@ -67,7 +66,7 @@ if ($categoryId != '') {
                   <?php } ?>
                 </ul>
                 <div class="tab-content">
-                  <?php for ($i = 0, $n = sizeof($languages); $i < $n; $i++) { ?>
+                  <?php for ($i = 0, $n = count($languages); $i < $n; $i++) { ?>
                     <div class="tab-pane fade in<?php echo ($i == 0 ? ' active' : ''); ?>" <?php echo 'id="categoryNameTabs' . ($i + 1) . '"'; ?>>
                       <div class="form-group">
                         <?php echo zen_draw_label(TEXT_CATEGORIES_NAME, 'categories_name[' . $languages[$i]['id'] . ']', 'class="col-sm-3 control-label"'); ?>
@@ -168,7 +167,7 @@ if ($categoryId != '') {
                   </div>
                 </div>
                 <div class="form-group">
-                  <p class="col-sm-3 control-label"><strong><?php echo TEXT_IMAGES_DELETE; ?></strong></p>
+                  <p class="col-sm-3 control-label"><?php echo TEXT_IMAGES_DELETE; ?></p>
                   <div class="col-sm-9 col-md-6">
                     <label class="radio-inline"><?php echo zen_draw_radio_field('image_delete', '0', true) . TABLE_HEADING_NO; ?></label>
                     <label class="radio-inline"><?php echo zen_draw_radio_field('image_delete', '1', false) . TABLE_HEADING_YES; ?></label>
@@ -177,7 +176,7 @@ if ($categoryId != '') {
               </div>
               <div id="categoryTabs4" class="tab-pane fade in">
                 <ul class="nav nav-tabs" data-tabs="tabs">
-                  <?php for ($i = 0, $n = sizeof($languages); $i < $n; $i++) { ?>
+                  <?php for ($i = 0, $n = count($languages); $i < $n; $i++) { ?>
                     <li<?php echo ($i == 0 ? ' class="active"' : ''); ?>>
                       <a data-toggle="tab" href="#categoryMetaTagTabs<?php echo $i + 1; ?>">
                         <?php echo zen_image(DIR_WS_CATALOG_LANGUAGES . $languages[$i]['directory'] . '/images/' . $languages[$i]['image'], $languages[$i]['name']) . '&nbsp;' . $languages[$i]['name']; ?>
@@ -186,7 +185,7 @@ if ($categoryId != '') {
                   <?php } ?>
                 </ul>
                 <div class="tab-content">
-                  <?php for ($i = 0, $n = sizeof($languages); $i < $n; $i++) { ?>
+                  <?php for ($i = 0, $n = count($languages); $i < $n; $i++) { ?>
                     <div class="tab-pane fade in<?php echo ($i == 0 ? ' active' : ''); ?>" <?php echo 'id="categoryMetaTagTabs' . ($i + 1) . '"'; ?>>
                       <div class="form-group">
                         <?php echo zen_draw_label(TEXT_EDIT_CATEGORIES_META_TAGS_TITLE, 'metatags_title[' . $languages[$i]['id'] . ']', 'class="col-sm-3 control-label"'); ?>

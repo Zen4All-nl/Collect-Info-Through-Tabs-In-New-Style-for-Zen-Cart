@@ -1,30 +1,34 @@
 <?php
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *
+ * @copyright Copyright 2008-2021 Zen4All
+ * @license https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/blob/stable/LICENSE GNU Public License V2.0
+ * @version Cittins 2.0.0 by Zen4All
+ * 
  */
+
 ?>
 <script>
   // this is for activting the correct tab when comming from another page
-  const getUrlParameter = function getUrlParameter(sParam) {
-    const sPageURL = decodeURIComponent(window.location.search.substring(1)),
-            sURLVariables = sPageURL.split('&'),
-            sParameterName,
-            i;
+  $(document).ready(function () {
+    const getUrlParameter = function getUrlParameter(sParam) {
+      const sPageURL = decodeURIComponent(window.location.search.substring(1));
+      const  sURLVariables = sPageURL.split('&');
+      let sParameterName;
 
-    for (i = 0; i < sURLVariables.length; i++) {
-      sParameterName = sURLVariables[i].split('=');
+      for (let i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
 
-      if (sParameterName[0] === sParam) {
-        return sParameterName[1] === undefined ? true : sParameterName[1];
+        if (sParameterName[0] === sParam) {
+          return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
       }
+    };
+    const hash = '#' + getUrlParameter('activeTab');
+    if (hash) {
+      $('.nav-tabs a[href="' + hash + '"]').tab('show');
     }
-  };
-  const hash = '#' + getUrlParameter('activeTab');
-  if (hash) {
-    $('.nav-tabs a[href="' + hash + '"]').tab('show');
-  }
+  });
 
 </script>
 <script>
@@ -68,7 +72,7 @@
   }
   function saveCategory() {
 
-    $("#categoryInfo").off('submit').on('submit', (function (e) {
+    $('#categoryInfo').off('submit').on('submit', (function (e) {
       e.preventDefault();
       const formData = $('#categoryInfo').serializeArray();
       zcJS.ajax({
