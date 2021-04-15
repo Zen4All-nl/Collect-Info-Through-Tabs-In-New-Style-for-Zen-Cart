@@ -45,7 +45,7 @@ $attributesRequired = (zen_get_show_product_switch($_GET['pID'], 'ATTRIBUTES_REQ
             <i class="fa fa-times" aria-hidden="true"></i>
             <span class="sr-only"><?php echo TEXT_CLOSE; ?></span>
           </button>
-          <h4 class="modal-title" id="EditAttributeValueModalLabel"><?php echo TITLE_ADD_ATTRIBUTE; ?></h4>
+          <h4 class="modal-title" id="addAttributeValueModalLabel"><?php echo TITLE_ADD_ATTRIBUTE; ?></h4>
         </div>
         <div class="modal-body">
           <div class="row">
@@ -122,7 +122,7 @@ $attributesRequired = (zen_get_show_product_switch($_GET['pID'], 'ATTRIBUTES_REQ
                   <?php echo zen_draw_input_field('attributes_qty_prices', '', 'class="form-control"'); ?>
               </div>
               <div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
-                  <?php echo zen_draw_label(TABLE_HEADING_ATTRIBUTES_QTY_PRICES_ONETIME, '', 'class="control-label"'); ?>
+                  <?php echo zen_draw_label(TABLE_HEADING_ATTRIBUTES_QTY_PRICES_ONETIME, 'attributes_qty_prices_onetime', 'class="control-label"'); ?>
                   <?php echo zen_draw_input_field('attributes_qty_prices_onetime', '', 'class="form-control"'); ?>
               </div>
             </div>
@@ -231,7 +231,7 @@ $attributesRequired = (zen_get_show_product_switch($_GET['pID'], 'ATTRIBUTES_REQ
               <div class="row">
                 <div class="col-sm-6"><?php echo zen_draw_label(TEXT_ATTRIBUTES_IMAGE_DIR, 'img_dir', 'class="control-label"') . zen_draw_pull_down_menu('img_dir', zen_build_subdirectories_array(DIR_FS_CATALOG_IMAGES), 'attributes/', 'class="form-control"'); ?></div>
                 <div class="col-sm-6">
-                    <?php echo zen_draw_label(TEXT_IMAGES_OVERWRITE, 'attributes_overwrite', 'çlass="control-label"'); ?>
+                    <?php echo zen_draw_label(TEXT_IMAGES_OVERWRITE, 'attributes_overwrite', 'class="control-label"'); ?>
                   <div class="input-group">
                     <div class="radioBtn btn-group">
                       <a class="btn btn-info active" data-toggle="attributes_overwrite" data-title="0"><?php echo TEXT_NO; ?></a>

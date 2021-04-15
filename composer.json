@@ -1,0 +1,16 @@
+{
+    "name": "zen4all-nl/zen-cart-collect-info-through-tabs-in-new-style",
+    "description": "Collect Info Through Tabs In New Style (Cittins)",
+    "homepage": "https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Zen4All",
+            "homepage": "https://zen4all.nl/index.php?main_page=product_info&cPath=12_14&products_id=16"
+        }
+    ],
+    "_comment": "compatible with PHP 5.6-7.3-7.4-8.0",
+    "require": {
+        "php": ">=5.6"
+    }
+}

@@ -38,7 +38,7 @@ if ($duplicate_check->fields['total'] < 1) {
 
   //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__BELOW_HERE--------------------------------------------------------
   if (file_exists(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_move_product_confirm.php')) {
-    require(DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_move_product_confirm.php');
+    require DIR_WS_MODULES . $zc_products->get_handler($product_type) . '/z4a_move_product_confirm.php';
   }
   //--------------PRODUCT_TYPE_SPECIFIC_INSTRUCTIONS_GO__ABOVE__HERE--------------------------------------------------------
 
@@ -49,4 +49,4 @@ if ($duplicate_check->fields['total'] < 1) {
   $messageStack->add_session(ERROR_CANNOT_MOVE_PRODUCT_TO_CATEGORY_SELF, 'error');
 }
 
-zen_redirect(zen_href_link(FILENAME_ZEN4ALL_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $new_parent_id . '&pID=' . $products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));
+zen_redirect(zen_href_link(FILENAME_CITTINS_CATEGORIES_PRODUCT_LISTING, 'cPath=' . $new_parent_id . '&pID=' . $products_id . (isset($_GET['page']) ? '&page=' . $_GET['page'] : '')));

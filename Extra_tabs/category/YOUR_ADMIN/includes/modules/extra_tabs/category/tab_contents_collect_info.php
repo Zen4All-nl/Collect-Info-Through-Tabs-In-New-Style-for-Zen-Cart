@@ -54,16 +54,17 @@ if (zen_get_product_is_linked($_GET['pID']) == 'true' and $_GET['pID'] > 0) {
       }
       $selected_categories = explode(',', $selected_categories_check);
       ?>
+      <?php $cnt_columns = 0; ?>
+      <tr>
+        <?php
+        while ($cnt_columns != MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS) {
+          $cnt_columns++;
+          ?>
+          <td class="text-right"><?php echo TEXT_INFO_ID; ?></td>
+          <td>Categories Name</td>
+        <?php } ?>
+      </tr>
       <?php
-      $cnt_columns = 0;
-      echo '<tr>';
-      while ($cnt_columns != MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS) {
-        $cnt_columns++;
-        echo '<td align="right">' . TEXT_INFO_ID . '</td>' . '<td align="left">' . 'Categories Name' . '</td>';
-      }
-      echo '</tr>';
-//        echo '<tr class="dataTableHeadingRow">';
-
       $cnt_columns = 0;
       while (!$categories_list->EOF) {
         $cnt_columns++;
@@ -74,28 +75,33 @@ if (zen_get_product_is_linked($_GET['pID']) == 'true' and $_GET['pID'] > 0) {
         }
         $zc_categories_checkbox = zen_draw_checkbox_field('categories_add[]', $categories_list->fields['categories_id'], $selected);
         if ($cnt_columns == 1) {
-          echo '<tr>';
-        }
-        echo '  <td align="right">' . $categories_list->fields['categories_id'] . '</td>' . "\n";
-        if ($productInfo['master_categories_id']['value'] == $categories_list->fields['categories_id']) {
-          echo '  <td align="left">' . zen_image(DIR_WS_IMAGES . 'icon_yellow_on.gif', IMAGE_ICON_LINKED) . '&nbsp;' . $categories_list->fields['categories_name'] . zen_draw_hidden_field('current_master_categories_id', $categories_list->fields['categories_id']) . '</td>' . "\n";
-        } else {
-          echo '  <td align="left">' . ($selected ? '<strong>' : '') . $zc_categories_checkbox . '&nbsp;' . $categories_list->fields['categories_name'] . ($selected ? '</strong>' : '') . '</td>' . "\n";
-        }
-        $categories_list->MoveNext();
-        if ($cnt_columns == MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS || $categories_list->EOF) {
-          if ($categories_list->EOF and $cnt_columns != MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS) {
-            while ($cnt_columns < MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS) {
-              $cnt_columns++;
-              echo '  <td align="right">' . '&nbsp;' . '</td>' . "\n";
-              echo '  <td align="left">' . '&nbsp;' . '</td>' . "\n";
-            }
+          ?>
+          <tr>
+          <?php } ?>
+          <td class="text-right"><?php echo $categories_list->fields['categories_id']; ?></td>
+          <?php if ($productInfo['master_categories_id']['value'] == $categories_list->fields['categories_id']) { ?>
+            <td><?php echo zen_image(DIR_WS_IMAGES . 'icon_yellow_on.gif', IMAGE_ICON_LINKED) . '&nbsp;' . $categories_list->fields['categories_name'] . zen_draw_hidden_field('current_master_categories_id', $categories_list->fields['categories_id']); ?></td>
+          <?php } else { ?>
+            <td><?php echo ($selected ? '<strong>' : '') . $zc_categories_checkbox . '&nbsp;' . $categories_list->fields['categories_name'] . ($selected ? '</strong>' : ''); ?></td>
+            <?php
           }
-          echo '</tr>' . "\n";
-          $cnt_columns = 0;
+          $categories_list->MoveNext();
+          if ($cnt_columns == MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS || $categories_list->EOF) {
+            if ($categories_list->EOF && $cnt_columns != MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS) {
+              while ($cnt_columns < MAX_DISPLAY_PRODUCTS_TO_CATEGORIES_COLUMNS) {
+                $cnt_columns++;
+                ?>
+                <td class="text-right">&nbsp;</td>
+                <td>&nbsp;</td>
+                <?php
+              }
+            }
+            echo '</tr>' . "\n";
+            $cnt_columns = 0;
+          }
         }
-      }
-      ?>
+        ?>
     </table>
   </div>
-<?php } ?>
+  <?php
+}
