@@ -1,7 +1,7 @@
 # Zen Cart Collect Info Through Tabs In New Style (CITTINS)
 
 ## Attention
-This module is still under development. Currently we are at version [2.0.0 beta9](https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/tree/2.0.0-beta.9).
+This module is still under development. Currently we are at version [2.0.0 beta9](https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/releases/tag/2.0.0-beta.9).
 
 The latest stable version is 1.0.2 found [here](https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/releases/latest).
 
