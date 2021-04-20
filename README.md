@@ -1,7 +1,7 @@
 # Zen Cart Collect Info Through Tabs In New Style (CITTINS)
 
 ## Attention
-This module is still under development. Currently we are at version [2.0.0 beta9](https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/releases/tag/2.0.0-beta.9).
+This module is still under development. Currently we are at version [2.0.0 beta 9](https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/releases/tag/2.0.0-beta.9).
 
 The latest stable version is 1.0.2 found [here](https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/releases/latest).
 
@@ -15,7 +15,7 @@ It became a page with tabs for different categories of information. The default 
  - Manufacturer
  - Image
  - Metatags
- 
+
 This is the information that is currently available by default on the product collect info pages.
 
 New tabs can easily be added. I added a few available in the "Extra_tabs" folder.
@@ -23,21 +23,21 @@ These are:
  - attributes
  - category
  - information
- - quantity_dicounts
+ - quantity discounts
 
-Copy these folders to your server, and Cittins will pick them up, and display them. 
+Copy these folders to your server, and Cittins will pick them up, and display them.
 
 Additional information can be found in the documentation folder.
 
 ## Features
-There are many new features added to the Zen Cart functionallity. Below I mentioned some per page.
+There are many new features added to the Zen Cart functionality. Below I mentioned some per page.
 
 ### Category and Product Listing
  - Improved page layout and styling
  - Easy sorting by using the arrows in the table heading
- - Set which collumns you want to see on screen
+ - Set which columns you want to see on screen
  - Added buttons to navigate up on folder, or go to the top level
- - Checkboxex to delete move or copy multiple categories or products at once.
+ - Checkboxes to delete move or copy multiple categories or products at once.
 ### Category edit
  - Tabs are added to split the shown data into smaller blocks
  - After saving you stay on the edit page. This makes storing you edits easier on long edit sessions
@@ -45,9 +45,9 @@ There are many new features added to the Zen Cart functionallity. Below I mentio
 ### Product edit
  - Tabs are added to split the shown data into smaller blocks
  - After saving you stay on the edit page. This makes storing you edits easier on long edit sessions
- - Extra tabs can be added to show more data, and alowing to edit it in one go. Without the need to go to a separate page
+ - Extra tabs can be added to show more data, and allowing to edit it in one go. Without the need to go to a separate page
  - Add/Edit/Delete Main image, and additional images
- 
+
 ### Product Layout Editor
  - Select which fields show in the collect info page
  - Edit the sort order and tabs, fields are shown on
@@ -64,4 +64,4 @@ Installation is simple:
 
 1. [Download CITTINS](https://github.com/Zen4All-nl/Zen-Cart-Collect-Info-Through-Tabs-In-New-Style/releases)
 2. Unzip the downloaded zip file
-3. Read the instructions from the readme found in the documentation folder.
+3. Read the instructions from the readme found in the documentation folder, or [here](https://cittins.zen4all.nl).
