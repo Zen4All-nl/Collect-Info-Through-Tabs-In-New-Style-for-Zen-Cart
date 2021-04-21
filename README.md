@@ -1,8 +1,14 @@
 # Zen Cart Collect Info Through Tabs In New Style (CITTINS)
 ## Table of Contents
- + [Attention](#attention)
- + [Information](#information)
- + [Features](#features)
+ - [Attention](#attention)
+ - [Information](#information)
+ - [Features](#features)
+   - [Category and Product Listing](#category-and-product-listing)
+   - [Category edit](#category-edit)
+   - [Product edit](#product-edit)
+   - [Product Layout Editor](#product-layout-editor)
+ - [Some screen shots](#some-screen-shots)
+ - [Installation](#installation)
 
 
 ## Attention
