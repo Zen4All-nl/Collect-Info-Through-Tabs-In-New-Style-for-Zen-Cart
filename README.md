@@ -1,4 +1,15 @@
 # Zen Cart Collect Info Through Tabs In New Style (CITTINS)
+## Table of Contents
+ - [Attention](#attention)
+ - [Information](#information)
+ - [Features](#features)
+   - [Category and Product Listing](#category-and-product-listing)
+   - [Category edit](#category-edit)
+   - [Product edit](#product-edit)
+   - [Product Layout Editor](#product-layout-editor)
+ - [Some screen shots](#some-screen-shots)
+ - [Installation](#installation)
+
 
 ## Attention
 This module is still under development. Currently we are at version [2.0.0 beta 9](https://github.com/Zen4All-nl/Collect-Info-Through-Tabs-In-New-Style-for-Zen-Cart/releases/tag/2.0.0-beta.9).
