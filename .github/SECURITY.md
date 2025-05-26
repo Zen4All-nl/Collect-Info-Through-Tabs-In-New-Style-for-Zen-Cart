@@ -10,8 +10,10 @@ This module is build for the Zen Cart versions mentioned below.
 | =<1.5.4 |   | :x: | :x: |
 | 1.5.5 |   | :white_check_mark: | :x: |
 | 1.5.6 |   | :white_check_mark: | :x: |
-| 1.5.7 |   | :x: | :white_check_mark: |
-| 1.5.8 |   | :x: | :white_check_mark: |
+| 1.5.7 |   | :x: | :x: |
+| 1.5.8 |   | :x: | :x: |
+| 2.0.0 |   | :x: | :white_check_mark: |
+| 2.1.0 |   | :x: | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
